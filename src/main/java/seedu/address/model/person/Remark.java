@@ -11,7 +11,7 @@ public class Remark {
 
     /**
      * Constructs a {@code Remark}.
-     * 
+     *
      * @param remark A remark string.
      */
     public Remark(String remark) {
