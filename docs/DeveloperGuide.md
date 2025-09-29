@@ -263,28 +263,40 @@ _{Explain here how the data archiving feature will be implemented}_
 **Target user profile**:
 
 * has a need to manage a significant number of contacts
+* has a need to filter contacts based on certain criteria
+* needs to compare contacts based on certain criteria
+* needs to view and add appointments to schedules of contacts
 * prefer desktop apps over other types
 * can type fast
 * prefers typing to mouse interactions
 * is reasonably comfortable using CLI apps
 
-**Value proposition**: manage contacts faster than a typical mouse/GUI driven app
+**Value proposition**: Helps leaders to keep track of their team of relationship professionals’ strengths, along with their schedules. With FirstImpressions, no client request is too hard to handle as our system is able to search through multiple preferences, ensuring the perfect match for our customers.
 
 
 ### User stories
 
 Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unlikely to have) - `*`
 
-| Priority | As a …​                                    | I want to …​                     | So that I can…​                                                        |
-| -------- | ------------------------------------------ | ------------------------------ | ---------------------------------------------------------------------- |
-| `* * *`  | new user                                   | see usage instructions         | refer to instructions when I forget how to use the App                 |
-| `* * *`  | user                                       | add a new person               |                                                                        |
-| `* * *`  | user                                       | delete a person                | remove entries that I no longer need                                   |
-| `* * *`  | user                                       | find a person by name          | locate details of persons without having to go through the entire list |
-| `* *`    | user                                       | hide private contact details   | minimize chance of someone else seeing them by accident                |
-| `*`      | user with many persons in the address book | sort persons by name           | locate a person easily                                                 |
-
-*{More to be added}*
+| Priority | As a …​                                     | I want to …​                                          | So that I can…​                                                         |
+| -------- | ------------------------------------------ | ---------------------------------------------------- | ---------------------------------------------------------------------- |
+| `*`      | potential user                             | preview the app's features and interface             | evaluate if it meets my needs before committing to use it              |
+| `* * *`  | new user                                   | see usage instructions                               | refer to instructions when I forget how to use the app                 |
+| `* * *`  | new user                                   | see all the different available team members         | I can see the options for what I need                                  |
+| `* * *`  | new user                                   | have quick scheduling tools                          | I can plan my time smoothly and efficiently                            |
+| `* *`    | new user                                   | import my existing contact list in bulk              | start using the app immediately without manual data entry              |
+| `*`      | new user                                   | have the system remember my initial choices          | I don’t have to re-enter them each time                                |
+| `* * *`  | regular user                               | monitor team members' current booking status         | make informed decisions about workload distribution                    |
+| `* *`    | regular user                               | view my booking history and past matches             | quickly rebook the same professionals for repeat clients               |
+| `* * *`  | long-time user                             | reschedule appointments with minimal clicks          | save time when managing multiple booking changes                       |
+| `*`      | long-time user                             | receive suggestions based on the allocations I made  | make faster decisions with personalized recommendations                |
+| `*`      | long-time user                             | update my search preferences easily                  | adapt to changing business needs without losing efficiency             |
+| `*`      | at-risk user                               | report issues and receive prompt responses           | resolve problems quickly and continue using the service                |
+| `*`      | at-risk user                               | receive updates on how my feedback was addressed     | know that my input contributes to service improvement                  |
+| `* * *`  | user                                       | add new team members with their details              | maintain an up-to-date roster of available professionals               |
+| `* * *`  | user                                       | delete a person                                      | remove entries that I no longer need                                   |
+| `* * *`  | user                                       | find a person by name or tag                         | locate details of persons without having to go through the entire list |
+| `*`      | user with many persons in the address book | sort persons by name                                 | locate a person easily                                                 |
 
 ### Use cases
 
