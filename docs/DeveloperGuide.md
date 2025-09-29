@@ -288,32 +288,126 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 ### Use cases
 
-(For all use cases below, the **System** is the `AddressBook` and the **Actor** is the `user`, unless specified otherwise)
+#### **Use Case: Add a Person**
 
-**Use case: Delete a person**
+**System**: FirstImpressions 
+**Actor**: User
 
-**MSS**
+**Main Success Scenario (MSS):**
+1. User checks list of all persons
+2. User requests to add specific person in the list
+3. FirstImpressions adds person to the list
+4. Use case ends
 
-1.  User requests to list persons
-2.  AddressBook shows a list of persons
-3.  User requests to delete a specific person in the list
-4.  AddressBook deletes the person
-
-    Use case ends.
+<img src="images/addMockup.JPG" width="200px" alt="add person mockup">
 
 **Extensions**
 
-* 2a. The list is empty.
+ - 2a. Person already exists \
+    FirstImpressions rejects duplicate \
+    Use case ends
 
-  Use case ends.
+ - 2b. Name is too long \
+    FirstImpressions throws error "Name too long" \
+    Use case ends
 
-* 3a. The given index is invalid.
+ - 2c. Too many tags \
+    FirstImpressions throws error "Remove existing tag before adding new one" \
+    Use case ends
 
-    * 3a1. AddressBook shows an error message.
+ - 2d. Invalid tag \
+    FirstImpressions throws error "Tag contains invalid characters" \
+    Use case ends
 
-      Use case resumes at step 2.
 
-*{More to be added}*
+#### **Use Case: Delete a Person**
+
+**System**: FirstImpressions \
+**Actor**: User
+
+**Main Success Scenario (MSS):**
+1. User checks list of all persons
+2. User requests to delete specific person 
+3. FirstImpressions deletes person in the list
+4. Use case ends
+
+<img src="images/deleteMockup.JPG" width="200px" alt="delete person mockup">
+
+**Extensions**
+
+- 2a. Person does not exist \
+  FirstImpressions throws error "Name to delete required" \
+  Use case ends
+
+- 2b. Active appointment exists \
+  FirstImpressions prompts "Deleting [person]: [count] active appointment(s) exist past current date. These appointments will be automatically cancelled." \
+  Use case ends
+
+
+#### **Use Case: Book a Person**
+
+**System**: FirstImpressions \
+**Actor**: User
+
+**Main Success Scenario (MSS):**
+1. User checks list of all persons
+2. User requests to book client to team member at specific datetime
+3. FirstImpressions adds booking to team member
+4. Use case ends
+
+<img src="images/bookMockup.JPG" width="200px" alt="book person mockup">
+
+**Extensions**
+
+- 2a. Double Booking \
+  FirstImpressions throws error "[Team Member] is already booked at 2025-09-18 14:00 with client [Client Name] for [other consultation]." \
+  Use case ends
+
+- 2b. Missing parameters \
+  FirstImpressions throws error "Booking requires datetime, client, team member, and description." \
+  Use case ends
+
+- 2c. Duplicate parameter \
+  FirstImpressions throws error "Parameter [parameter] specified multiple times. Each parameter should appear only once." \
+  Use case ends
+
+- 3d. Unknown parameter \
+  FirstImpressions throws error "Unknown parameter: [parameter]. Valid parameters are /d, /c, /p, /desc" \
+  Use case ends
+
+
+#### **Use Case: Find a Person**
+
+**System**: FirstImpressions \
+**Actor**: User
+
+**Main Success Scenario (MSS):**
+1. User requests to find specific name, tag or scheduled date
+2. FirstImpressions prompts "[no. of matches] found"
+3. Use case ends
+
+<img src="images/findMockup.JPG" width="200px" alt="find person mockup">
+
+**Extensions**
+
+- 3a. Person not found \
+  FirstImpressions tthrows error "No matches for [prompt]." \
+  Use case ends
+
+
+#### **Use Case: Help Menu**
+
+**System**: FirstImpressions \
+**Actor**: User
+
+**Main Success Scenario (MSS):**
+1. User requests for help menu
+2. FirstImpressions shows pop-up menu with all command usage
+3. Use case ends
+
+<img src="images/helpMockup.png" width="200px" alt="help mockup">
+
+
 
 ### Non-Functional Requirements
 
