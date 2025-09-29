@@ -263,6 +263,9 @@ _{Explain here how the data archiving feature will be implemented}_
 **Target user profile**:
 
 * has a need to manage a significant number of contacts
+* has a need to filter contacts based on certain criteria
+* needs to compare contacts based on certain criteria
+* needs to view and add appointments to schedules of contacts
 * prefer desktop apps over other types
 * can type fast
 * prefers typing to mouse interactions
