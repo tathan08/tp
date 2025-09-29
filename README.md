@@ -1,5 +1,5 @@
 [![CI Status](https://github.com/se-edu/addressbook-level3/workflows/Java%20CI/badge.svg)](https://github.com/se-edu/addressbook-level3/actions)
-
+[![codecov](https://codecov.io/github/AY2526S1-CS2103T-T08-4/tp/graph/badge.svg?token=CW0F60DDS0)](https://codecov.io/github/AY2526S1-CS2103T-T08-4/tp)
 ![Ui](docs/images/Ui.png)
 
 Hello 
