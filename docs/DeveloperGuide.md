@@ -290,7 +290,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 #### **Use Case: Add a Person**
 
-**System**: FirstImpressions
+**System**: FirstImpressions 
 **Actor**: User
 
 **Main Success Scenario (MSS):**
@@ -322,7 +322,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 #### **Use Case: Delete a Person**
 
-**System**: FirstImpressions
+**System**: FirstImpressions \
 **Actor**: User
 
 **Main Success Scenario (MSS):**
@@ -346,7 +346,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 #### **Use Case: Book a Person**
 
-**System**: FirstImpressions
+**System**: FirstImpressions \
 **Actor**: User
 
 **Main Success Scenario (MSS):**
@@ -378,7 +378,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 #### **Use Case: Find a Person**
 
-**System**: FirstImpressions
+**System**: FirstImpressions \
 **Actor**: User
 
 **Main Success Scenario (MSS):**
@@ -397,7 +397,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 #### **Use Case: Help Menu**
 
-**System**: FirstImpressions
+**System**: FirstImpressions \
 **Actor**: User
 
 **Main Success Scenario (MSS):**
