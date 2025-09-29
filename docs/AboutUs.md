@@ -15,8 +15,8 @@ We are a CS2103T team based in the [School of Computing, National University of 
 [[github](https://github.com/abhijay25)]
 [[portfolio](team/johndoe.md)]
 
-* Role: Integration
-* Responsibilities: CI/CD
+* Role: Developer
+* Responsibilities: Integration
 
 ### Ian Chin
 
@@ -40,31 +40,13 @@ We are a CS2103T team based in the [School of Computing, National University of 
 * Role: Developer
 * Responsibilities: Scheduling and Tracking, Deliverables and Deadlines
 
-### Johnny Doe
+### Tan Athan
 
-<img src="images/johndoe.png" width="200px">
+<img src="images/tathan08.png" width="200px">
 
-[[github](http://github.com/johndoe)] [[portfolio](team/johndoe.md)]
-
-* Role: Developer
-* Responsibilities: Data
-
-### Jean Doe
-
-<img src="images/johndoe.png" width="200px">
-
-[[github](http://github.com/johndoe)]
+[[homepage](http://www.comp.nus.edu.sg/~damithch)]
+[[github](https://github.com/tathan08)]
 [[portfolio](team/johndoe.md)]
 
-* Role: Developer
-* Responsibilities: Dev Ops + Threading
-
-### James Doe
-
-<img src="images/johndoe.png" width="200px">
-
-[[github](http://github.com/johndoe)]
-[[portfolio](team/johndoe.md)]
-
-* Role: Developer
-* Responsibilities: UI
+* Role: Team Lead
+* Responsibilities: Documentation
