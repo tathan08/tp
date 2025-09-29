@@ -326,7 +326,9 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 ### Glossary
 
 * **Mainstream OS**: Windows, Linux, Unix, MacOS
-* **Private contact detail**: A contact detail that is not meant to be shared with others
+* **Team member**: A person recorded in our system
+* **Team manager**: The users of FirstImpressions, who find suitable team members for clients.
+* **Client**: Customers who are finding a specific person who fits certain criteria, which our team managers are finding people for.
 
 --------------------------------------------------------------------------------------------------------------------
 
