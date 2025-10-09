@@ -47,7 +47,7 @@ import seedu.address.commons.util.ToStringBuilder;
         }
 
         // instanceof handles nulls  
-        if (!(other instanceof NameContainsKeywordsPredicate)) {
+        if (!(other instanceof ClientContainsKeywordsPredicate)) {
             return false;
         }
 
