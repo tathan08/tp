@@ -62,17 +62,19 @@ public class PersonBuilder {
 
     /**
      * Sets the {@code Phone} of the {@code Person} that we are building.
+     * Pass null to set phone as absent.
      */
     public PersonBuilder withPhone(String phone) {
-        this.phone = new Phone(phone);
+        this.phone = phone != null ? new Phone(phone) : null;
         return this;
     }
 
     /**
      * Sets the {@code Email} of the {@code Person} that we are building.
+     * Pass null to set email as absent.
      */
     public PersonBuilder withEmail(String email) {
-        this.email = new Email(email);
+        this.email = email != null ? new Email(email) : null;
         return this;
     }
 

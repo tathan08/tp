@@ -15,34 +15,35 @@ import seedu.address.model.tag.Tag;
 
 /**
  * Represents a Person in the address book.
- * Guarantees: details are present and not null, field values are validated, immutable.
+ * Guarantees: name is present and not null, field values are validated, immutable.
+ * Phone and Email are optional and can be null.
  */
 public class Person {
 
     // Identity fields
     private final Name name;
-    private final Phone phone;
-    private final Email email;
+    private final Phone phone; // Can be null
+    private final Email email; // Can be null
 
     // Data fields
     private final Set<Tag> tags = new HashSet<>();
     private final List<Booking> bookings = new ArrayList<>();
 
     /**
-     * Every field must be present and not null.
+     * Name must be present. Phone and Email are optional (can be null).
      */
     public Person(Name name, Phone phone, Email email, Set<Tag> tags) {
         this(name, phone, email, tags, new ArrayList<>());
     }
 
     /**
-     * Constructor with bookings.
+     * Constructor with bookings. Phone and Email are optional (can be null).
      */
     public Person(Name name, Phone phone, Email email, Set<Tag> tags, List<Booking> bookings) {
-        requireAllNonNull(name, phone, email, tags);
+        requireAllNonNull(name, tags);
         this.name = name;
-        this.phone = phone;
-        this.email = email;
+        this.phone = phone; // Can be null
+        this.email = email; // Can be null
         this.tags.addAll(tags);
         if (bookings != null) {
             this.bookings.addAll(bookings);
@@ -107,8 +108,8 @@ public class Person {
 
         Person otherPerson = (Person) other;
         return name.equals(otherPerson.name)
-                && phone.equals(otherPerson.phone)
-                && email.equals(otherPerson.email)
+                && Objects.equals(phone, otherPerson.phone)
+                && Objects.equals(email, otherPerson.email)
                 && tags.equals(otherPerson.tags)
                 && bookings.equals(otherPerson.bookings);
     }
