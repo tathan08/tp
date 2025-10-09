@@ -98,7 +98,6 @@ public class BookCommand extends Command {
                 personToBook.getName(),
                 personToBook.getPhone(),
                 personToBook.getEmail(),
-                personToBook.getAddress(),
                 personToBook.getTags(),
                 updatedBookings
         );

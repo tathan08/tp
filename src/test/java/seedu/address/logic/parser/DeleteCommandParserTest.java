@@ -22,7 +22,7 @@ public class DeleteCommandParserTest {
 
     @Test
     public void parse_validArgs_returnsDeleteCommand() {
-        assertParseSuccess(parser, "/n Alex Yeoh",
+        assertParseSuccess(parser, " /n Alex Yeoh",
                 new DeleteCommand(new Name("Alex Yeoh")));
     }
 
@@ -39,7 +39,8 @@ public class DeleteCommandParserTest {
 
     @Test
     public void parse_invalidNameType_throwsParseException() {
-        assertParseFailure(parser, " /n 123", Name.MESSAGE_CONSTRAINTS);
+        assertParseFailure(parser, " /n R@chel",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
     }
 
 }
