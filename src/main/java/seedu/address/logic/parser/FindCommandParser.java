@@ -32,17 +32,17 @@ import seedu.address.model.person.ClientContainsKeywordsPredicate;
         List<String> keywords = Arrays.asList(argument.split("\\s+"));
 
         switch (prefix) {
-            case "/n":
-                return new FindCommand(
-                        new ClientContainsKeywordsPredicate(ClientContainsKeywordsPredicate.SearchType.NAME,
-                                keywords));
-            case "/t":
-                return new FindCommand(
-                        new ClientContainsKeywordsPredicate(ClientContainsKeywordsPredicate.SearchType.TAG,
-                                keywords));
-            default:
-                throw new ParseException(
-                        String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+        case "/n":
+            return new FindCommand(
+                    new ClientContainsKeywordsPredicate(ClientContainsKeywordsPredicate.SearchType.NAME,
+                            keywords));
+        case "/t":
+            return new FindCommand(
+                    new ClientContainsKeywordsPredicate(ClientContainsKeywordsPredicate.SearchType.TAG,
+                            keywords));
+        default:
+            throw new ParseException(
+                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
         }
     }
 
