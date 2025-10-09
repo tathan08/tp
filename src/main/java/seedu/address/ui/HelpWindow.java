@@ -15,7 +15,7 @@ import seedu.address.commons.core.LogsCenter;
  */
 public class HelpWindow extends UiPart<Stage> {
 
-    public static final String USERGUIDE_URL = "https://se-education.org/addressbook-level3/UserGuide.html";
+    public static final String USERGUIDE_URL = "https://ay2526s1-cs2103t-t08-4.github.io/tp/UserGuide.html";
 
     public static final String ADD_COMMAND = "Add: add /n <name> /p <phone> /e <email> [/t <tag1> (<tag2>)...]";
     public static final String DELETE_COMMAND = "Delete: delete /n <name> [/t <tag1> (<tag2>)...]";
