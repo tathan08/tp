@@ -16,7 +16,21 @@ import seedu.address.commons.core.LogsCenter;
 public class HelpWindow extends UiPart<Stage> {
 
     public static final String USERGUIDE_URL = "https://se-education.org/addressbook-level3/UserGuide.html";
-    public static final String HELP_MESSAGE = "Refer to the user guide: " + USERGUIDE_URL;
+
+    public static final String ADD_COMMAND = "Add: add /n <name> /p <phone> /e <email> [/t <tag1> (<tag2>)...]";
+    public static final String DELETE_COMMAND = "Delete: delete /n <name> [/t <tag1> (<tag2>)...]";
+    public static final String BOOK_COMMAND = "Book: book /d <datetime> /c <client_name> " +
+            "/n <person_name> [/desc <description>]";
+    public static final String FIND_COMMAND = "Find: find [/n <name>] [/t <tag>] [/d <date>] **";
+    public static final String ENDING_NOTE = "Note: Any fields within [] and () are optional.\n" +
+            "** Any 1 field is required for find command.";
+
+    public static final String HELP_MESSAGE = ADD_COMMAND + "\n"
+            + DELETE_COMMAND + "\n"
+            + BOOK_COMMAND + "\n"
+            + FIND_COMMAND + "\n\n"
+            + ENDING_NOTE + "\n\n"
+            + "For more information, please refer to the user guide: " + USERGUIDE_URL;
 
     private static final Logger logger = LogsCenter.getLogger(HelpWindow.class);
     private static final String FXML = "HelpWindow.fxml";
