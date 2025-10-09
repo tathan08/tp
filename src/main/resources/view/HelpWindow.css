@@ -2,16 +2,28 @@
     -fx-text-fill: white;
 }
 
-#copyButton {
+#copyButton, #quitButton {
     -fx-background-color: dimgray;
+    -fx-text-fill: white;
+    -fx-min-width: 80px;
+    -fx-pref-width: 80px;
+    -fx-padding: 8px 12px 8px 12px;
 }
 
-#copyButton:hover {
+#copyButton:hover, #quitButton:hover {
     -fx-background-color: gray;
 }
 
-#copyButton:armed {
+#copyButton:armed, #quitButton:armed {
     -fx-background-color: darkgray;
+}
+
+#copyButton:focused, #quitButton:focused {
+    -fx-background-color: #4A90E2;
+    -fx-border-color: #357ABD;
+    -fx-border-width: 2px;
+    -fx-border-radius: 3px;
+    -fx-background-radius: 3px;
 }
 
 #helpMessageContainer {
