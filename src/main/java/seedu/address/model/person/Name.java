@@ -9,14 +9,16 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
  */
 public class Name {
 
+    public static final int MAX_NAME_LENGTH = 50;
     public static final String MESSAGE_CONSTRAINTS =
-            "Names should only contain alphanumeric characters and spaces, and it should not be blank";
+            "Names should only contain alphabetic characters, spaces, apostrophes, and hyphens";
+    public static final String MESSAGE_LENGTH_CONSTRAINT = "Name too long (max 50 chars).";
 
     /*
-     * The first character of the address must not be a whitespace,
-     * otherwise " " (a blank string) becomes a valid input.
+     * The first character must be alphabetic.
+     * Subsequent characters can be alphabetic, spaces, apostrophes, or hyphens.
      */
-    public static final String VALIDATION_REGEX = "[\\p{Alnum}][\\p{Alnum} ]*";
+    public static final String VALIDATION_REGEX = "[a-zA-Z][a-zA-Z' -]*";
 
     public final String fullName;
 
@@ -28,6 +30,7 @@ public class Name {
     public Name(String name) {
         requireNonNull(name);
         checkArgument(isValidName(name), MESSAGE_CONSTRAINTS);
+        checkArgument(name.length() <= MAX_NAME_LENGTH, MESSAGE_LENGTH_CONSTRAINT);
         fullName = name;
     }
 

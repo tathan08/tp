@@ -20,6 +20,8 @@ import seedu.address.model.tag.Tag;
  */
 public class Person {
 
+    public static final int MAX_TAGS = 20;
+
     // Identity fields
     private final Name name;
     private final Phone phone; // Can be null
@@ -41,6 +43,10 @@ public class Person {
      */
     public Person(Name name, Phone phone, Email email, Set<Tag> tags, List<Booking> bookings) {
         requireAllNonNull(name, tags);
+        if (tags.size() > MAX_TAGS) {
+            throw new IllegalArgumentException("Tag limit reached for " + name
+                    + ". Maximum 20 tags allowed. Remove existing tags before adding new ones.");
+        }
         this.name = name;
         this.phone = phone; // Can be null
         this.email = email; // Can be null

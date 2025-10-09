@@ -24,6 +24,16 @@ public class PersonTest {
     }
 
     @Test
+    public void constructor_tooManyTags_throwsIllegalArgumentException() {
+        // Create 21 tags (exceeds max of 20)
+        String[] tags = new String[21];
+        for (int i = 0; i < 21; i++) {
+            tags[i] = "tag" + i;
+        }
+        assertThrows(IllegalArgumentException.class, () -> new PersonBuilder().withTags(tags).build());
+    }
+
+    @Test
     public void isSamePerson() {
         // same object -> returns true
         assertTrue(ALICE.isSamePerson(ALICE));
