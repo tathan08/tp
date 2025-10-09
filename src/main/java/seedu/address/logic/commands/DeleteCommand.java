@@ -5,7 +5,6 @@ import static java.util.Objects.requireNonNull;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
@@ -23,7 +22,7 @@ public class DeleteCommand extends Command {
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Deletes the person identified by the name saved in the displayed person list.\n"
             + "Parameters: NAME (must be a saved contact)\n"
-            + "Example: " + COMMAND_WORD + " n/" + " name";
+            + "Example: " + COMMAND_WORD + " /n" + " name";
 
     public static final String MESSAGE_DELETE_PERSON_SUCCESS = "Deleted Person: %1$s";
     public static final String MESSAGE_DELETE_PERSON_NOT_FOUND = "No such person found: %s";
@@ -52,7 +51,8 @@ public class DeleteCommand extends Command {
             String allMatches = matches.stream()
                     .map(Messages::format)
                     .collect(Collectors.joining("\n"));
-            throw new CommandException(String.format(MESSAGE_DELETE_PERSON_MULTIPLE_MATCH, targetName.fullName, allMatches));
+            throw new CommandException(
+                    String.format(MESSAGE_DELETE_PERSON_MULTIPLE_MATCH, targetName.fullName, allMatches));
         }
 
         Person personToDelete = matches.get(0);
