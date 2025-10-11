@@ -20,6 +20,12 @@ public class NameTest {
     }
 
     @Test
+    public void constructor_nameTooLong_throwsIllegalArgumentException() {
+        String longName = "a".repeat(51); // 51 characters, exceeds max of 50
+        assertThrows(IllegalArgumentException.class, () -> new Name(longName));
+    }
+
+    @Test
     public void isValidName() {
         // null name
         assertThrows(NullPointerException.class, () -> Name.isValidName(null));
@@ -27,15 +33,20 @@ public class NameTest {
         // invalid name
         assertFalse(Name.isValidName("")); // empty string
         assertFalse(Name.isValidName(" ")); // spaces only
-        assertFalse(Name.isValidName("^")); // only non-alphanumeric characters
-        assertFalse(Name.isValidName("peter*")); // contains non-alphanumeric characters
+        assertFalse(Name.isValidName("^")); // only non-alphabetic characters
+        assertFalse(Name.isValidName("peter*")); // contains invalid characters
+        assertFalse(Name.isValidName("12345")); // numbers only
+        assertFalse(Name.isValidName("peter the 2nd")); // contains numbers
+        assertFalse(Name.isValidName("David123")); // contains numbers
 
         // valid name
         assertTrue(Name.isValidName("peter jack")); // alphabets only
-        assertTrue(Name.isValidName("12345")); // numbers only
-        assertTrue(Name.isValidName("peter the 2nd")); // alphanumeric characters
         assertTrue(Name.isValidName("Capital Tan")); // with capital letters
-        assertTrue(Name.isValidName("David Roger Jackson Ray Jr 2nd")); // long names
+        assertTrue(Name.isValidName("David Roger Jackson Ray Jr")); // long names
+        assertTrue(Name.isValidName("O'Brien")); // with apostrophe
+        assertTrue(Name.isValidName("Mary-Jane")); // with hyphen
+        assertTrue(Name.isValidName("Jean-Paul O'Connor")); // with both apostrophe and hyphen
+        assertTrue(Name.isValidName("a".repeat(50))); // exactly 50 chars (max length)
     }
 
     @Test
