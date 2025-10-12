@@ -42,7 +42,6 @@ public class ClientContainsKeywordsPredicate implements Predicate<Person> {
                                 keywords.stream()
                                         .anyMatch(keyword -> tagName.equals(keyword.toLowerCase())));
 
-
         case DATE:
             return keywords.stream()
                     .anyMatch(keyword ->
@@ -51,9 +50,8 @@ public class ClientContainsKeywordsPredicate implements Predicate<Person> {
                                     .anyMatch(date -> date.equals(keyword)));
 
         default:
-            throw new IllegalStateException("Unexpected Value:" + type);    
-        }            
-        
+            throw new IllegalStateException("Unexpected Value:" + type);
+        }
     }
 
     @Override

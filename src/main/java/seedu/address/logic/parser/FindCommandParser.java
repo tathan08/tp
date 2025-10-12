@@ -45,7 +45,7 @@ public class FindCommandParser implements Parser<FindCommand> {
             return new FindCommand(
                     new ClientContainsKeywordsPredicate(ClientContainsKeywordsPredicate.SearchType.TAG,
                             keywords));
-        case "d/":    
+        case "d/":
             return new FindCommand(
                     new ClientContainsKeywordsPredicate(ClientContainsKeywordsPredicate.SearchType.DATE,
                             keywords));
