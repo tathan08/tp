@@ -36,6 +36,7 @@ public class PersonBuilder {
         phone = new Phone(DEFAULT_PHONE);
         email = new Email(DEFAULT_EMAIL);
         tags = new HashSet<>();
+        bookings = new java.util.ArrayList<>();
     }
 
     /**
@@ -46,6 +47,7 @@ public class PersonBuilder {
         phone = personToCopy.getPhone();
         email = personToCopy.getEmail();
         tags = new HashSet<>(personToCopy.getTags());
+        bookings = new java.util.ArrayList<>(personToCopy.getBookings());
     }
 
     /**
@@ -86,7 +88,12 @@ public class PersonBuilder {
      * Adds a single {@code Booking} to the {@code Person} being built.
      */
     public PersonBuilder withBooking(String dateTimeString) {
-        LocalDateTime dateTime = Booking.parseDateTime(dateTimeString);
+        // Convert from ISO format (2025-10-15T10:00) to expected format (2025-10-15 10:00)
+        String formattedDateTime = dateTimeString.replace("T", " ");
+        LocalDateTime dateTime = Booking.parseDateTime(formattedDateTime);
+        if (dateTime == null) {
+            throw new IllegalArgumentException("Invalid datetime format: " + dateTimeString);
+        }
         Booking booking = new Booking("Alice", dateTime, "Haircut appointment");
         if (this.bookings == null) {
             this.bookings = new java.util.ArrayList<>();
