@@ -21,7 +21,7 @@ public class FindCommandParserTest {
     }
 
     @Test
-    public void parse_validArgs_returnsFindCommand_name() {
+    public void parseValidArgsReturnsFindCommandName() {
         // no leading and trailing whitespaces - searching by name
         FindCommand expectedFindCommand =
                 new FindCommand(new ClientContainsKeywordsPredicate(
@@ -32,9 +32,9 @@ public class FindCommandParserTest {
         // Multiple whitespaces between keywords
         assertParseSuccess(parser, " n/ \n Alice \n \t Bob  ", expectedFindCommand);
     }
-    
-    @Test 
-    public void parse_validArgs_returnsFindCommand_tag() {
+
+    @Test
+    public void parseValidArgsReturnsFindCommandTag() {
         // no leading and trailing whitespaces - searching by tag
         FindCommand expectedFindCommand =
                 new FindCommand(new ClientContainsKeywordsPredicate(
@@ -44,11 +44,10 @@ public class FindCommandParserTest {
 
         // Multiple whitespaces between keywords
         assertParseSuccess(parser, " t/   good friend   ", expectedFindCommand);
-                        
     }
 
     @Test
-    public void parse_validDateArgs_returnsFindCommand_date() {
+    public void parseValidDateArgsReturnsFindCommandDate() {
         // no leading and trailing whitespaces - searching by booking date
         FindCommand expectedFindCommand =
                 new FindCommand(new ClientContainsKeywordsPredicate(

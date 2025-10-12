@@ -2,8 +2,8 @@ package seedu.address.testutil;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
-import java.util.Set;
 import java.util.List;
+import java.util.Set;
 
 import seedu.address.model.booking.Booking;
 import seedu.address.model.person.Email;
