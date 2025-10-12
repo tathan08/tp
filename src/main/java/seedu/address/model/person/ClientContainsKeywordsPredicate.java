@@ -32,6 +32,7 @@ public class ClientContainsKeywordsPredicate implements Predicate<Person> {
 
         case NAME:
             return keywords.stream()
+                    .filter(keyword -> !keyword.trim().isEmpty())
                     .anyMatch(keyword ->
                             person.getName().fullName.toLowerCase().contains(keyword.toLowerCase()));
 
@@ -40,10 +41,12 @@ public class ClientContainsKeywordsPredicate implements Predicate<Person> {
                     .map(tag -> tag.tagName.toLowerCase())
                         .anyMatch(tagName ->
                                 keywords.stream()
+                                        .filter(keyword -> !keyword.trim().isEmpty())
                                         .anyMatch(keyword -> tagName.equals(keyword.toLowerCase())));
 
         case DATE:
             return keywords.stream()
+                    .filter(keyword -> !keyword.trim().isEmpty())
                     .anyMatch(keyword ->
                             person.getBookings().stream()
                                     .map(booking -> booking.getDateTime().toLocalDate().toString())
