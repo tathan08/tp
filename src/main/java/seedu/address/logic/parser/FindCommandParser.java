@@ -37,13 +37,17 @@ public class FindCommandParser implements Parser<FindCommand> {
         List<String> keywords = Arrays.asList(argument.split("\\s+"));
 
         switch (prefix) {
-        case "/n":
+        case "n/":
             return new FindCommand(
                     new ClientContainsKeywordsPredicate(ClientContainsKeywordsPredicate.SearchType.NAME,
                             keywords));
-        case "/t":
+        case "t/":
             return new FindCommand(
                     new ClientContainsKeywordsPredicate(ClientContainsKeywordsPredicate.SearchType.TAG,
+                            keywords));
+        case "d/":    
+            return new FindCommand(
+                    new ClientContainsKeywordsPredicate(ClientContainsKeywordsPredicate.SearchType.DATE,
                             keywords));
         default:
             throw new ParseException(

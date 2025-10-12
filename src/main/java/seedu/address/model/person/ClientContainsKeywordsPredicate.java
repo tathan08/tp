@@ -42,9 +42,18 @@ public class ClientContainsKeywordsPredicate implements Predicate<Person> {
                                 keywords.stream()
                                         .anyMatch(keyword -> tagName.equals(keyword.toLowerCase())));
 
+
+        case DATE:
+            return keywords.stream()
+                    .anyMatch(keyword ->
+                            person.getBookings().stream()
+                                    .map(booking -> booking.getDateTime().toLocalDate().toString())
+                                    .anyMatch(date -> date.equals(keyword)));
+
         default:
-            throw new IllegalStateException("Unexpected value: " + type);
-        }
+            throw new IllegalStateException("Unexpected Value:" + type);    
+        }            
+        
     }
 
     @Override
@@ -59,7 +68,8 @@ public class ClientContainsKeywordsPredicate implements Predicate<Person> {
         }
 
         ClientContainsKeywordsPredicate otherNameContainsKeywordsPredicate = (ClientContainsKeywordsPredicate) other;
-        return keywords.equals(otherNameContainsKeywordsPredicate.keywords);
+        return (this.type == otherNameContainsKeywordsPredicate.type) && (
+                keywords.equals(otherNameContainsKeywordsPredicate.keywords));
     }
 
     @Override
