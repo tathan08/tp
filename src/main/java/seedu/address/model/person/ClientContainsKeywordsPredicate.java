@@ -1,20 +1,26 @@
 package seedu.address.model.person;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
-import seedu.address.commons.util.StringUtil;
 import seedu.address.commons.util.ToStringBuilder;
 
 /**
- * Tests that a {@code Person}'s {@code Name} matches any of the keywords given.  
- */public class ClientContainsKeywordsPredicate implements Predicate<Person> {
-    public enum SearchType { NAME, TAG, DATE}
+ * Tests that a {@code Person}'s {@code Name} matches any of the keywords given.
+ */
+public class ClientContainsKeywordsPredicate implements Predicate<Person> {
+
+    /**
+     * The type of search to be performed.
+     */
+    public enum SearchType { NAME, TAG, DATE }
 
     private final List<String> keywords;
     private final SearchType type;
 
+    /**
+     * Constructs a ClientContainsKeywordsPredicate with the given search type and keywords.
+     */
     public ClientContainsKeywordsPredicate(SearchType type, List<String> keywords) {
         this.keywords = keywords;
         this.type = type;
@@ -26,18 +32,19 @@ import seedu.address.commons.util.ToStringBuilder;
 
         case NAME:
             return keywords.stream()
-                    .anyMatch(keyword -> 
-                            person.getName().fullName.toLowerCase().contains(keyword.toLowerCase()));    
-            
+                    .anyMatch(keyword ->
+                            person.getName().fullName.toLowerCase().contains(keyword.toLowerCase()));
+
         case TAG:
             return person.getTags().stream()
                     .map(tag -> tag.tagName.toLowerCase())
                         .anyMatch(tagName ->
                                 keywords.stream()
-                                        .anyMatch(keyword -> tagName.equals(keyword.toLowerCase())));    
+                                        .anyMatch(keyword -> tagName.equals(keyword.toLowerCase())));
 
+        default:
+            throw new IllegalStateException("Unexpected value: " + type);
         }
-        return false;
     }
 
     @Override
@@ -46,7 +53,7 @@ import seedu.address.commons.util.ToStringBuilder;
             return true;
         }
 
-        // instanceof handles nulls  
+        // instanceof handles nulls
         if (!(other instanceof ClientContainsKeywordsPredicate)) {
             return false;
         }
