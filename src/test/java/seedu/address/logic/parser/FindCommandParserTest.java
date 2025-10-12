@@ -31,6 +31,10 @@ public class FindCommandParserTest {
 
         // Multiple whitespaces between keywords
         assertParseSuccess(parser, " n/ \n Alice \n \t Bob  ", expectedFindCommand);
+
+        // No space after prefix
+        assertParseSuccess(parser, "n/Alice Bob", expectedFindCommand);
+        assertParseSuccess(parser, "n/Alice  Bob", expectedFindCommand);
     }
 
     @Test
@@ -44,6 +48,9 @@ public class FindCommandParserTest {
 
         // Multiple whitespaces between keywords
         assertParseSuccess(parser, " t/   good friend   ", expectedFindCommand);
+
+        // No space after prefix
+        assertParseSuccess(parser, "t/good friend", expectedFindCommand);
     }
 
     @Test
@@ -57,6 +64,9 @@ public class FindCommandParserTest {
 
         // multiple whitespaces between keywords
         assertParseSuccess(parser, " d/    2025-10-15    2025-10-20  ", expectedFindCommand);
+
+        // No space after prefix
+        assertParseSuccess(parser, "d/2025-10-15 2025-10-20", expectedFindCommand);
     }
 
     @Test
