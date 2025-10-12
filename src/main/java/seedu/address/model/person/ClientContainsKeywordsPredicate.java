@@ -22,28 +22,30 @@ import seedu.address.commons.util.ToStringBuilder;
     public boolean test(Person person) {
         switch (type) {
 
-            case NAME:
-                return keywords.stream()
-                        .anyMatch(keyword ->
-                                person.getName().fullName.toLowerCase().contains(keyword.toLowerCase()));
+        case NAME:
+            return keywords.stream()
+                    .anyMatch(keyword ->
+                            person.getName().fullName.toLowerCase().contains(keyword.toLowerCase()));
 
-            case TAG:
-                return person.getTags().stream()
-                        .map(tag -> tag.tagName.toLowerCase())
-                        .anyMatch(tagName ->
-                                keywords.stream()
-                                        .anyMatch(keyword -> tagName.equals(keyword.toLowerCase())));
+        case TAG:
+            return person.getTags().stream()
+                    .map(tag -> tag.tagName.toLowerCase())
+                    .anyMatch(tagName ->
+                            keywords.stream()
+                                    .anyMatch(keyword -> tagName.equals(keyword.toLowerCase())));
 
 
-            case DATE:
-                return keywords.stream()
-                        .anyMatch(keyword ->
-                                person.getBookings().stream()
-                                        .map(booking -> booking.getDateTime().toLocalDate().toString())
-                                        .anyMatch(date -> date.equals(keyword)));
+        case DATE:
+            return keywords.stream()
+                    .anyMatch(keyword ->
+                            person.getBookings().stream()
+                                    .map(booking -> booking.getDateTime().toLocalDate().toString())
+                                    .anyMatch(date -> date.equals(keyword)));
 
+        default:
+            throw new IllegalStateException("Unexpected Value:" + type);    
         }            
-        return false;
+        
     }
 
     @Override

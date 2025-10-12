@@ -21,16 +21,16 @@ public class FindCommandParserTest {
     }
 
     @Test
-    public void parse_validArgs_returnsFindCommand_date() {
+    public void parse_validArgs_returnsFindCommand_name() {
         // no leading and trailing whitespaces - searching by name
         FindCommand expectedFindCommand =
                 new FindCommand(new ClientContainsKeywordsPredicate(
                         ClientContainsKeywordsPredicate.SearchType.NAME,
                         Arrays.asList("Alice", "Bob")));
-        assertParseSuccess(parser, "/n Alice Bob", expectedFindCommand);
+        assertParseSuccess(parser, "n/ Alice Bob", expectedFindCommand);
 
         // Multiple whitespaces between keywords
-        assertParseSuccess(parser, " /n \n Alice \n \t Bob  \t", expectedFindCommand);
+        assertParseSuccess(parser, " n/ \n Alice \n \t Bob  ", expectedFindCommand);
     }
     
     @Test 
@@ -38,12 +38,12 @@ public class FindCommandParserTest {
         // no leading and trailing whitespaces - searching by tag
         FindCommand expectedFindCommand =
                 new FindCommand(new ClientContainsKeywordsPredicate(
-                        ClientContainsKeywordsPredicate.SearchType.NAME,
+                        ClientContainsKeywordsPredicate.SearchType.TAG,
                         Arrays.asList("good", "friend")));
-        assertParseSuccess(parser, "/t good friend", expectedFindCommand);
+        assertParseSuccess(parser, "t/ good friend", expectedFindCommand);
 
         // Multiple whitespaces between keywords
-        assertParseSuccess(parser, " /n \n good \n \t friend  \t", expectedFindCommand);
+        assertParseSuccess(parser, " t/   good friend   ", expectedFindCommand);
                         
     }
 
@@ -54,10 +54,10 @@ public class FindCommandParserTest {
                 new FindCommand(new ClientContainsKeywordsPredicate(
                         ClientContainsKeywordsPredicate.SearchType.DATE,
                         Arrays.asList("2025-10-15", "2025-10-20")));
-        assertParseSuccess(parser, "/d 2025-10-15 2025-10-20", expectedFindCommand);
+        assertParseSuccess(parser, "d/ 2025-10-15 2025-10-20", expectedFindCommand);
 
         // multiple whitespaces between keywords
-        assertParseSuccess(parser, " /d \n 2025-10-15 \n \t 2025-10-20  \t", expectedFindCommand);
+        assertParseSuccess(parser, " d/    2025-10-15    2025-10-20  ", expectedFindCommand);
     }
 
     @Test
@@ -70,7 +70,7 @@ public class FindCommandParserTest {
     @Test
     public void parse_unknownPrefix_throwsParseException() {
         // invalid prefix for command
-        assertParseFailure(parser, "/x Alice",
+        assertParseFailure(parser, "x/ Alice",
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
     }
 
