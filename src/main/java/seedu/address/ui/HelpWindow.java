@@ -19,11 +19,11 @@ public class HelpWindow extends UiPart<Stage> {
 
     public static final String USERGUIDE_URL = "https://ay2526s1-cs2103t-t08-4.github.io/tp/UserGuide.html";
 
-    public static final String ADD_COMMAND = "Add: add /n <name> /p <phone> /e <email> [/t <tag1> (<tag2>)...]";
-    public static final String DELETE_COMMAND = "Delete: delete /n <name> [/t <tag1> (<tag2>)...]";
-    public static final String BOOK_COMMAND = "Book: book /d <datetime> /c <client_name> "
-            + "/n <person_name> [/desc <description>]";
-    public static final String FIND_COMMAND = "Find: find [/n <name>] [/t <tag>] [/d <date>] **";
+    public static final String ADD_COMMAND = "Add: add n/<name> p/<phone> e/<email> [t/<tag1> (<tag2>)...]";
+    public static final String DELETE_COMMAND = "Delete: delete n/<name> [t/<tag1> (<tag2>)...]";
+    public static final String BOOK_COMMAND = "Book: book d/<datetime> c/<client_name> "
+            + "n/<person_name> [desc/<description>]";
+    public static final String FIND_COMMAND = "Find: find [n/<name>] [t/<tag>] [d/<date>] **";
     public static final String ENDING_NOTE = "Note: Any fields within [] and () are optional.\n"
             + "** Any 1 field is required for find command.";
 
