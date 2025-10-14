@@ -21,7 +21,7 @@ public class FindCommandParserTest {
     }
 
     @Test
-    public void parse_validArgs_returnsFindCommand_name() {
+    public void parse_validArgs_returnsFindCommandName() {
         // no leading and trailing whitespaces - searching by name
         FindCommand expectedFindCommand =
                 new FindCommand(new ClientContainsKeywordsPredicate(
@@ -31,10 +31,14 @@ public class FindCommandParserTest {
 
         // Multiple whitespaces between keywords
         assertParseSuccess(parser, " n/ \n Alice \n \t Bob  ", expectedFindCommand);
+
+        // No space after prefix
+        assertParseSuccess(parser, "n/Alice Bob", expectedFindCommand);
+        assertParseSuccess(parser, "n/Alice  Bob", expectedFindCommand);
     }
-    
-    @Test 
-    public void parse_validArgs_returnsFindCommand_tag() {
+
+    @Test
+    public void parse_validArgs_returnsFindCommandTag() {
         // no leading and trailing whitespaces - searching by tag
         FindCommand expectedFindCommand =
                 new FindCommand(new ClientContainsKeywordsPredicate(
@@ -44,11 +48,13 @@ public class FindCommandParserTest {
 
         // Multiple whitespaces between keywords
         assertParseSuccess(parser, " t/   good friend   ", expectedFindCommand);
-                        
+
+        // No space after prefix
+        assertParseSuccess(parser, "t/good friend", expectedFindCommand);
     }
 
     @Test
-    public void parse_validDateArgs_returnsFindCommand_date() {
+    public void parse_validDateArgs_returnsFindCommandDate() {
         // no leading and trailing whitespaces - searching by booking date
         FindCommand expectedFindCommand =
                 new FindCommand(new ClientContainsKeywordsPredicate(
@@ -58,6 +64,9 @@ public class FindCommandParserTest {
 
         // multiple whitespaces between keywords
         assertParseSuccess(parser, " d/    2025-10-15    2025-10-20  ", expectedFindCommand);
+
+        // No space after prefix
+        assertParseSuccess(parser, "d/2025-10-15 2025-10-20", expectedFindCommand);
     }
 
     @Test

@@ -1,9 +1,8 @@
 package seedu.address.testutil;
 
-import java.time.LocalDateTime;
 import java.util.HashSet;
-import java.util.Set;
 import java.util.List;
+import java.util.Set;
 
 import seedu.address.model.booking.Booking;
 import seedu.address.model.person.Email;
@@ -79,19 +78,6 @@ public class PersonBuilder {
      */
     public PersonBuilder withEmail(String email) {
         this.email = email != null ? new Email(email) : null;
-        return this;
-    }
-
-    /**
-     * Adds a single {@code Booking} to the {@code Person} being built.
-     */
-    public PersonBuilder withBooking(String dateTimeString) {
-        LocalDateTime dateTime = Booking.parseDateTime(dateTimeString);
-        Booking booking = new Booking("Alice", dateTime, "Haircut appointment");
-        if (this.bookings == null) {
-            this.bookings = new java.util.ArrayList<>();
-        }
-        this.bookings.add(booking);
         return this;
     }
 
