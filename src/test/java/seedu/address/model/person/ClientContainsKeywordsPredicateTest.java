@@ -4,12 +4,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
+import seedu.address.model.booking.Booking;
 import seedu.address.testutil.PersonBuilder;
 
 public class ClientContainsKeywordsPredicateTest {
@@ -125,24 +127,39 @@ public class ClientContainsKeywordsPredicateTest {
         ClientContainsKeywordsPredicate predicate =
                 new ClientContainsKeywordsPredicate(ClientContainsKeywordsPredicate.SearchType.DATE,
                         Collections.singletonList("2025-10-15"));
-        assertTrue(predicate.test(new PersonBuilder().withBooking("2025-10-15T10:00").build()));
+        assertTrue(predicate.test(new PersonBuilder()
+                .withBookings(Arrays.asList(
+                        new Booking("100", "Test Client", LocalDateTime.of(2025, 10, 15, 10, 0), "Test booking")))
+                .build()));
 
         // multiple possible dates
         predicate = new ClientContainsKeywordsPredicate(ClientContainsKeywordsPredicate.SearchType.DATE,
                 Arrays.asList("2025-10-15", "2025-11-01"));
-        assertTrue(predicate.test(new PersonBuilder().withBooking("2025-11-01T09:00").build()));
+        assertTrue(predicate.test(new PersonBuilder()
+                .withBookings(Arrays.asList(
+                        new Booking("101", "Test Client", LocalDateTime.of(2025, 10, 15, 10, 0), "Test booking")))
+                .build()));
     }
 
     @Test
     public void test_dateDoesNotContainKeywords_returnsFalse() {
+        // Person with no bookings
         ClientContainsKeywordsPredicate predicate =
                 new ClientContainsKeywordsPredicate(ClientContainsKeywordsPredicate.SearchType.DATE,
                         Collections.singletonList("2025-10-15"));
-        assertFalse(predicate.test(new PersonBuilder().withBooking("2025-12-20T12:00").build()));
+        assertFalse(predicate.test(new PersonBuilder().build()));
+
+        // Person with booking on different date
+        predicate = new ClientContainsKeywordsPredicate(ClientContainsKeywordsPredicate.SearchType.DATE,
+                Collections.singletonList("2025-10-15"));
+        assertFalse(predicate.test(new PersonBuilder()
+                .withBookings(Arrays.asList(
+                        new Booking("102", "Test Client", LocalDateTime.of(2025, 11, 20, 10, 0), "Different date")))
+                .build()));
 
         predicate = new ClientContainsKeywordsPredicate(ClientContainsKeywordsPredicate.SearchType.DATE,
                 Collections.emptyList());
-        assertFalse(predicate.test(new PersonBuilder().withBooking("2025-12-20T12:00").build()));
+        assertFalse(predicate.test(new PersonBuilder().build()));
     }
 
     @Test

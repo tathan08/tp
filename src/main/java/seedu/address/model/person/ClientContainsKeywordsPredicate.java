@@ -6,13 +6,21 @@ import java.util.function.Predicate;
 import seedu.address.commons.util.ToStringBuilder;
 
 /**
- * Tests that a {@code Person}'s {@code Name} matches any of the keywords given.  
- */public class ClientContainsKeywordsPredicate implements Predicate<Person> {
-    public enum SearchType { NAME, TAG, DATE}
+ * Tests that a {@code Person}'s {@code Name} matches any of the keywords given.
+ */
+public class ClientContainsKeywordsPredicate implements Predicate<Person> {
+
+    /**
+     * The type of search to be performed.
+     */
+    public enum SearchType { NAME, TAG, DATE }
 
     private final List<String> keywords;
     private final SearchType type;
 
+    /**
+     * Constructs a ClientContainsKeywordsPredicate with the given search type and keywords.
+     */
     public ClientContainsKeywordsPredicate(SearchType type, List<String> keywords) {
         this.keywords = keywords;
         this.type = type;
@@ -24,28 +32,29 @@ import seedu.address.commons.util.ToStringBuilder;
 
         case NAME:
             return keywords.stream()
+                    .filter(keyword -> !keyword.trim().isEmpty())
                     .anyMatch(keyword ->
                             person.getName().fullName.toLowerCase().contains(keyword.toLowerCase()));
 
         case TAG:
             return person.getTags().stream()
                     .map(tag -> tag.tagName.toLowerCase())
-                    .anyMatch(tagName ->
-                            keywords.stream()
-                                    .anyMatch(keyword -> tagName.equals(keyword.toLowerCase())));
-
+                        .anyMatch(tagName ->
+                                keywords.stream()
+                                        .filter(keyword -> !keyword.trim().isEmpty())
+                                        .anyMatch(keyword -> tagName.equals(keyword.toLowerCase())));
 
         case DATE:
             return keywords.stream()
+                    .filter(keyword -> !keyword.trim().isEmpty())
                     .anyMatch(keyword ->
                             person.getBookings().stream()
                                     .map(booking -> booking.getDateTime().toLocalDate().toString())
                                     .anyMatch(date -> date.equals(keyword)));
 
         default:
-            throw new IllegalStateException("Unexpected Value:" + type);    
-        }            
-        
+            throw new IllegalStateException("Unexpected Value:" + type);
+        }
     }
 
     @Override
@@ -54,7 +63,7 @@ import seedu.address.commons.util.ToStringBuilder;
             return true;
         }
 
-        // instanceof handles nulls  
+        // instanceof handles nulls
         if (!(other instanceof ClientContainsKeywordsPredicate)) {
             return false;
         }
@@ -66,6 +75,6 @@ import seedu.address.commons.util.ToStringBuilder;
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this).add("keywords", keywords).toString();
+        return new ToStringBuilder(this).add("searchType", type).add("keywords", keywords).toString();
     }
 }
