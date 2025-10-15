@@ -9,6 +9,8 @@ import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
@@ -26,6 +28,7 @@ import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.ClientContainsKeywordsPredicate;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
+import seedu.address.model.tag.Tag;
 import seedu.address.testutil.EditPersonDescriptorBuilder;
 import seedu.address.testutil.PersonBuilder;
 import seedu.address.testutil.PersonUtil;
@@ -33,6 +36,7 @@ import seedu.address.testutil.PersonUtil;
 public class AddressBookParserTest {
 
     private static final String PERSON_NAME = "Alex";
+    private static final String PERSON_TAG = "AlexTag";
     private final AddressBookParser parser = new AddressBookParser();
 
     @Test
@@ -51,8 +55,12 @@ public class AddressBookParserTest {
     @Test
     public void parseCommand_delete() throws Exception {
         DeleteCommand command = (DeleteCommand) parser.parseCommand(
-                DeleteCommand.COMMAND_WORD + " /n " + PERSON_NAME);
-        assertEquals(new DeleteCommand(new Name(PERSON_NAME)), command);
+                DeleteCommand.COMMAND_WORD + " n/ " + PERSON_NAME);
+        assertEquals(new DeleteCommand(new Name(PERSON_NAME), Optional.empty()), command);
+        DeleteCommand deleteTag = (DeleteCommand) parser.parseCommand(
+                        DeleteCommand.COMMAND_WORD + " n/ " + PERSON_NAME + " t/ " + PERSON_TAG);
+        Optional<Set<Tag>> personTag = Optional.of(Set.of(new Tag(PERSON_TAG)));
+        assertEquals(new DeleteCommand(new Name(PERSON_NAME), personTag), deleteTag);
     }
 
     @Test
