@@ -68,7 +68,7 @@ FirstImpressions is a **desktop app for managing contacts, optimized for use via
 
 Shows a short summary of available commands, with a link to access the User Guide.
 
-![help message](images/helpMessage.png)
+![help message](images/helpMessage.jpg)
 
 Format: `help`
 
@@ -94,11 +94,15 @@ Examples:
 * `add n/Bob Lee t/mandarinSpeaking` <br> will add a Person called `Bob Lee` with tag `mandarinSpeaking` to the contact list.
 * `add n/Germaine` <br> will add a Person called `Germaine` to the contact list.
 
+![add message](images\addMessage.jpg)
+
 ### Listing all persons : `list`
 
 Shows the list of all persons in the contact list.
 
 Format: `list`
+
+![list message](images\listMessage.jpg)
 
 ### Editing a person : `edit`
 
