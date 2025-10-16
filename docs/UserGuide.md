@@ -116,20 +116,20 @@ Examples:
 
 ### Locating persons by name: `find`
 
-Finds persons whose names contain any of the given keywords.
+Search and lists all people that match the given name or tags. <br>
+If given a date, will search all bookings and list all people with those bookings.
 
-Format: `find KEYWORD [MORE_KEYWORDS]`
+Format: `find [n/NAME] [t/TAG] [d/DATE]`
 
-* The search is case-insensitive. e.g `hans` will match `Hans`
-* The order of the keywords does not matter. e.g. `Hans Bo` will match `Bo Hans`
-* Only the name is searched.
-* Only full words will be matched e.g. `Han` will not match `Hans`
-* Persons matching at least one keyword will be returned (i.e. `OR` search).
-  e.g. `Hans Bo` will return `Hans Gruber`, `Bo Yang`
+* Only one field is allowed, subsequent fields will be ignored. e.g. `find n/Hans t/teamLead` is equivalent to `find n/Hans`
+* Only one parameter is allowed, subsequent parameters will be ignored. e.g. `find n/Ali Bob` is equivalent to `find n/Ali`
+* The search for names and tags are case-insensitive. e.g `hans` will match `Hans`
+* Partial matches will be shown e.g. `find n/Han` will find a person named `Hans`
+* Date must be in `YYYY-MM-DD` format.
 
 Examples:
-* `find John` returns `john` and `John Doe`
-* `find alex david` returns `Alex Yeoh`, `David Li`<br>
+* `find n/John` returns `john` and `John Doe`
+* `find d/2025-08-18` returns `Alex Yeoh`, `David Li`<br>
   ![result for 'find alex david'](images/findAlexDavidResult.png)
 
 ### Deleting a person : `delete`
