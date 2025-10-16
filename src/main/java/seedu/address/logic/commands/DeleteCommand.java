@@ -59,24 +59,6 @@ public class DeleteCommand extends Command {
         requireNonNull(model);
         List<Person> lastShownList = model.getFilteredPersonList();
 
-//        List<Person> matches = lastShownList.stream()
-//                                .filter(p -> containsIgnoreCase(p.getName(), targetName))
-//                                .toList();
-//
-//        if (matches.isEmpty()) {
-//            throw new CommandException(String.format(MESSAGE_DELETE_PERSON_NOT_FOUND, targetName.fullName));
-//        }
-//
-//        if (matches.size() > 1) {
-//            String allMatches = matches.stream()
-//                    .map(Messages::format)
-//                    .collect(Collectors.joining("\n"));
-//            throw new CommandException(
-//                    String.format(MESSAGE_DELETE_PERSON_MULTIPLE_MATCH, targetName.fullName, allMatches));
-//        }
-
-//        Person personToDelete = matches.get(0);
-
         Person personToDelete = findUniquePerson(lastShownList, targetName);
 
         if (tags.isEmpty()) {
@@ -162,7 +144,7 @@ public class DeleteCommand extends Command {
         return firstName.contains(targetName);
     }
 
-    private Person findUniquePerson(List<Person> list, Name name) throws CommandException{
+    private Person findUniquePerson(List<Person> list, Name name) throws CommandException {
         String queryName = name.toString().trim().replaceAll("\\s+", " ");
 
         List<Person> exactMatch = list.stream()
@@ -194,7 +176,8 @@ public class DeleteCommand extends Command {
         String containsMultiple = contains.stream()
                 .map(Messages::format)
                 .collect(Collectors.joining("\n"));
-        throw new CommandException(String.format(MESSAGE_DELETE_PERSON_MULTIPLE_MATCH, name.fullName, containsMultiple));
+        throw new CommandException(String.format(MESSAGE_DELETE_PERSON_MULTIPLE_MATCH,
+                name.fullName, containsMultiple));
     }
 
 }
