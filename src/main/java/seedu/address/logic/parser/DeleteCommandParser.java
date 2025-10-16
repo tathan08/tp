@@ -1,16 +1,24 @@
 package seedu.address.logic.parser;
 
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 import seedu.address.logic.commands.DeleteCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Name;
+import seedu.address.model.tag.Tag;
+
 
 /**
  * Parses input arguments and creates a new DeleteCommand object
  */
 public class DeleteCommandParser implements Parser<DeleteCommand> {
-    private static final Prefix PREFIX_NAME_DELIMITER = new Prefix("/n");
 
     /**
      * Parses the given {@code String} of arguments in the context of the DeleteCommand
@@ -19,21 +27,42 @@ public class DeleteCommandParser implements Parser<DeleteCommand> {
      */
     public DeleteCommand parse(String args) throws ParseException {
         try {
-            ArgumentMultimap multimap = ArgumentTokenizer.tokenize(args, PREFIX_NAME_DELIMITER);
-            String name = multimap.getValue(PREFIX_NAME_DELIMITER).orElse("").trim();
+            ArgumentMultimap multimap = ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_TAG);
+            String name = multimap.getValue(PREFIX_NAME).orElse("").trim();
+            List<String> allTags = multimap.getAllValues(PREFIX_TAG);
+            List<String> rawTags = allTags.stream()
+                    .flatMap(x -> Arrays.stream(x.trim().split(" ")))
+                    .filter(y -> !y.isEmpty())
+                    .toList();
+
             if (name.isEmpty()) {
                 throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
             }
 
             if (!Name.isValidName(name)) {
-                throw new ParseException(Name.MESSAGE_CONSTRAINTS);
+                throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, Name.MESSAGE_CONSTRAINTS));
             }
+
             Name targetName = new Name(name);
-            return new DeleteCommand(targetName);
+
+            boolean prefixTagExists = !allTags.isEmpty();
+
+            if (rawTags.isEmpty()) {
+                if (prefixTagExists) {
+                    throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                            DeleteCommand.MESSAGE_DELETE_TAG_USAGE));
+                } else {
+                    return new DeleteCommand(targetName, Optional.empty());
+                }
+            }
+
+            Set<Tag> tags = ParserUtil.parseTags(rawTags);
+            Optional<Set<Tag>> targetTag = Optional.of(tags);
+
+            return new DeleteCommand(targetName, targetTag);
 
         } catch (ParseException pe) {
-            throw new ParseException(
-                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE), pe);
+            throw new ParseException(pe.getMessage(), pe);
         }
     }
 
