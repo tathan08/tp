@@ -182,6 +182,9 @@ public class PersonCard extends UiPart<Region> {
         bookingTable.setTableMenuButtonVisible(false);
     }
 
+    /**
+     * Row model for displaying a booking in the table.
+     */
     public static class BookingRow {
         private final String id;
         private final String date;
@@ -189,6 +192,9 @@ public class PersonCard extends UiPart<Region> {
         private final String client;
         private final String desc;
 
+        /**
+         * Creates a row representation of a booking.
+         */
         public BookingRow(String id, String date, String time, String client, String desc) {
             this.id = id;
             this.date = date;
@@ -198,10 +204,24 @@ public class PersonCard extends UiPart<Region> {
         }
 
 
-        public String getId() { return id; }
-        public String getDate() { return date; }
-        public String getTime() { return time; }
-        public String getClient() { return client; }
-        public String getDesc() { return desc; }
+        public String getId() {
+            return id;
+        }
+
+        public String getDate() {
+            return date;
+        }
+
+        public String getTime() {
+            return time;
+        }
+
+        public String getClient() {
+            return client;
+        }
+
+        public String getDesc() {
+            return desc;
+        }
     }
 }
