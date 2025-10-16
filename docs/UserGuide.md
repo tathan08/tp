@@ -134,17 +134,18 @@ Examples:
 
 ### Deleting a person : `delete`
 
-Deletes the specified person from the address book.
+Remove a person from the contact list, or remove specific tag(s) from a person.
 
-Format: `delete INDEX`
+Format: `delete n/PERSON_NAME [t/TAG]…​`
 
-* Deletes the person at the specified `INDEX`.
-* The index refers to the index number shown in the displayed person list.
-* The index **must be a positive integer** 1, 2, 3, …​
+* If only `n/PERSON_NAME` is provided, then the person is removed from the contact list.
+* If both `n/PERSON_NAME` and `t/TAG` is provided, then the specific tag(s) will be removed.
+* Only tags that currently belong to the person will be deleted.
+* The name provided must exactly match (case-sensitive) a person in the contact list. e.g. `delete n/Alex` will not delete `Alex Yeoh`
 
 Examples:
-* `list` followed by `delete 2` deletes the 2nd person in the address book.
-* `find Betsy` followed by `delete 1` deletes the 1st person in the results of the `find` command.
+* `delete n/Alex` will remove `Alex` from the contact list.
+* `delete n/Alex t/vipHandler` will remove the tag `vipHandler` from `Alex` in the contact list.
 
 ### Clearing all entries : `clear`
 
