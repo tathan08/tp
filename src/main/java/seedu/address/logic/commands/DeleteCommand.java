@@ -27,7 +27,7 @@ public class DeleteCommand extends Command {
             + ": Deletes the person or tag specified from the displayed person list.\n"
             + "Parameters:\n NAME (must be a saved contact)\n"
             + "TAG (optional, an available tag saved with the contact) \n"
-            + "Example:\n" + COMMAND_WORD + " n/" + " Alex" + " (to delete a whole contact)\n"
+            + "Example:\n" + COMMAND_WORD + " n/" + "Alex" + " (to delete a whole contact)\n"
             + COMMAND_WORD + " n/" + "Alex" + " t/" + " tag_1" + " t/tag_2..."
             + " (to delete 1 or more specific tags from 'Alex')";
 
