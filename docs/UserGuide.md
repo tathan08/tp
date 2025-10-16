@@ -155,14 +155,16 @@ Format: `delete n/PERSON_NAME [t/TAG]…​`
 * The name provided must exactly match (case-sensitive) a person in the contact list. e.g. `delete n/Alex` will not delete `Alex Yeoh`
 
 Examples:
-* `delete n/Alex` will remove `Alex` from the contact list.
 * `delete n/Alex t/vipHandler` will remove the tag `vipHandler` from `Alex` in the contact list.
+* `delete n/Alex Yeoh` will remove `Alex Yeoh` from the contact list. <br> ![delete message](images\deleteMessage.jpg)
 
 ### Clearing all entries : `clear`
 
 Clears all entries from the contact list.
 
 Format: `clear`
+
+![clear message](images\clearMessage.jpg)
 
 ### Assigning a booking : `book`
 
