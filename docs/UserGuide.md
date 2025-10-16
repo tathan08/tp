@@ -123,6 +123,8 @@ Examples:
 *  `edit 1 p/91234567 e/johntan@gmail.com` Edits the phone number and email address of the 1st person to be `91234567` and `johntan@gmail.com` respectively.
 *  `edit 2 n/Betsy Crower t/` Edits the name of the 2nd person to be `Betsy Crower` and clears all existing tags.
 
+![edit message](images\editMessage.jpg)
+
 ### Locating persons by name: `find`
 
 Search and lists all people that match the given name or tags. <br>
@@ -138,8 +140,8 @@ Format: `find [n/NAME] [t/TAG] [d/DATE]`
 
 Examples:
 * `find n/John` returns `john` and `John Doe`
-* `find d/2025-08-18` returns `Alex Yeoh`, `David Li`<br>
-  ![result for 'find alex david'](images/findAlexDavidResult.png)
+* `find d/2026-08-18` returns `Alex Yeoh`, `David Li`<br>
+  ![result for 'find alex david'](images/findAlexDavidResult.jpg)
 
 ### Deleting a person : `delete`
 
