@@ -8,6 +8,8 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TableColumn?>
 
 <HBox id="cardPane" fx:id="cardPane" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
   <GridPane HBox.hgrow="ALWAYS">
@@ -30,11 +32,18 @@
       <FlowPane fx:id="tags" />
       <Label fx:id="phone" styleClass="cell_small_label" text="\$phone" />
       <Label fx:id="email" styleClass="cell_small_label" text="\$email" />
-      <VBox fx:id="bookings" spacing="3">
-        <padding>
-          <Insets top="5" right="0" bottom="0" left="0" />
-        </padding>
-      </VBox>
+      <TableView fx:id="bookingTable" prefHeight="120" maxHeight="180" styleClass="booking-table">
+        <placeholder>
+          <Label text="No bookings yet" />
+        </placeholder>
+        <columns>
+          <TableColumn fx:id="colBookingId" text="ID" maxWidth="80" minWidth="60" />
+          <TableColumn fx:id="colDate" text="Date" maxWidth="120" minWidth="90" />
+          <TableColumn fx:id="colTime" text="Time" maxWidth="90" minWidth="70" />
+          <TableColumn fx:id="colClient" text="Client" maxWidth="200" minWidth="140" />
+          <TableColumn fx:id="colDesc" text="Description" />
+        </columns>
+      </TableView>
     </VBox>
   </GridPane>
 </HBox>

@@ -1,13 +1,22 @@
 package seedu.address.ui;
 
+import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import seedu.address.model.booking.Booking;
 import seedu.address.model.person.Person;
 
@@ -29,7 +38,7 @@ public class PersonCard extends UiPart<Region> {
     // Array of color styles for tags
     private static final String[] TAG_COLORS = {
         "-fx-background-color: #FF6B6B; -fx-text-fill: white;", // Red
-        "-fx-background-color: #4ECDC4; -fx-text-fill: white;", // Teal
+        "-fx-background-color: #4ECDC4; -fx-text-fill: black;", // Teal
         "-fx-background-color: #45B7D1; -fx-text-fill: white;", // Blue
         "-fx-background-color: #FFA07A; -fx-text-fill: white;", // Light Salmon
         "-fx-background-color: #98D8C8; -fx-text-fill: white;", // Mint
@@ -41,7 +50,7 @@ public class PersonCard extends UiPart<Region> {
         "-fx-background-color: #EC7063; -fx-text-fill: white;", // Coral
         "-fx-background-color: #5DADE2; -fx-text-fill: white;", // Ocean Blue
         "-fx-background-color: #AF7AC5; -fx-text-fill: white;", // Lavender
-        "-fx-background-color: #48C9B0; -fx-text-fill: white;", // Turquoise
+        "-fx-background-color: #48C9B0; -fx-text-fill: black;", // Turquoise
         "-fx-background-color: #F5B041; -fx-text-fill: black;" // Orange
     };
 
@@ -60,7 +69,23 @@ public class PersonCard extends UiPart<Region> {
     @FXML
     private FlowPane tags;
     @FXML
-    private VBox bookings;
+    private VBox bookings; // deprecated display; retained to avoid FXML injection failures if older FXML is loaded
+
+    // Table for bookings
+    @FXML
+    private TableView<BookingRow> bookingTable;
+    @FXML
+    private TableColumn<BookingRow, String> colIndex;
+    @FXML
+    private TableColumn<BookingRow, String> colBookingId;
+    @FXML
+    private TableColumn<BookingRow, String> colDate;
+    @FXML
+    private TableColumn<BookingRow, String> colTime;
+    @FXML
+    private TableColumn<BookingRow, String> colClient;
+    @FXML
+    private TableColumn<BookingRow, String> colDesc;
 
     /**
      * Creates a {@code PersonCode} with the given {@code Person} and index to display.
@@ -80,18 +105,23 @@ public class PersonCard extends UiPart<Region> {
                     tags.getChildren().add(tagLabel);
                 });
 
-        // Display bookings
-        person.getBookings().stream()
-                .sorted(Comparator.comparing(Booking::getDateTime))
-                .forEach(booking -> {
-                    Label bookingLabel = new Label(String.format("📅 %s with %s - %s",
-                            booking.getDateTimeString(),
-                            booking.getClientName(),
-                            booking.getDescription()));
-                    bookingLabel.setWrapText(true);
-                    bookingLabel.setStyle("-fx-font-size: 11px; -fx-text-fill: #3e7b91;");
-                    bookings.getChildren().add(bookingLabel);
-                });
+        // Populate booking table (if present in FXML)
+        if (bookingTable != null) {
+            setupBookingTable(person, displayedIndex);
+        } else {
+            // Fallback to legacy label-based rendering
+            person.getBookings().stream()
+                    .sorted(Comparator.comparing(Booking::getDateTime))
+                    .forEach(booking -> {
+                        Label bookingLabel = new Label(String.format("📅 %s with %s - %s",
+                                booking.getDateTimeString(),
+                                booking.getClientName(),
+                                booking.getDescription()));
+                        bookingLabel.setWrapText(true);
+                        bookingLabel.setStyle("-fx-font-size: 6px; -fx-text-fill: #3e7b91;");
+                        bookings.getChildren().add(bookingLabel);
+                    });
+        }
     }
 
     /**
@@ -102,5 +132,76 @@ public class PersonCard extends UiPart<Region> {
         int hash = Math.abs(tagName.hashCode());
         int colorIndex = hash % TAG_COLORS.length;
         return TAG_COLORS[colorIndex];
+    }
+
+    private void setupBookingTable(Person person, int displayedIndex) {
+        // Define column mappings
+        colBookingId.setCellValueFactory(new PropertyValueFactory<>("id"));
+        colDate.setCellValueFactory(new PropertyValueFactory<>("date"));
+        colTime.setCellValueFactory(new PropertyValueFactory<>("time"));
+        colClient.setCellValueFactory(new PropertyValueFactory<>("client"));
+        colDesc.setCellValueFactory(new PropertyValueFactory<>("desc"));
+
+        colDesc.setCellFactory(column -> new TableCell<BookingRow, String>() {
+            private final Text text = new Text();
+            {
+                text.wrappingWidthProperty().bind(column.widthProperty().subtract(10));
+                text.setFill(Color.WHITE);
+                setGraphic(text);
+                setPrefHeight(Region.USE_COMPUTED_SIZE);
+            }
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setGraphic(null);
+                } else {
+                    text.setText(item);
+                    setGraphic(text);
+                }
+            }
+        });
+
+        ObservableList<BookingRow> rows = FXCollections.observableArrayList();
+        DateTimeFormatter dateFmt = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        DateTimeFormatter timeFmt = DateTimeFormatter.ofPattern("HH:mm");
+
+        final int[] counter = {1};
+        person.getBookings().stream()
+                .sorted(Comparator.comparing(Booking::getDateTime))
+                .forEach(b -> rows.add(new BookingRow(
+                        String.valueOf(counter[0]++),
+                        b.getDateTime().format(dateFmt),
+                        b.getDateTime().format(timeFmt),
+                        b.getClientName(),
+                        b.getDescription())));
+
+        bookingTable.setItems(rows);
+        bookingTable.setFixedCellSize(-1);
+        bookingTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        bookingTable.setTableMenuButtonVisible(false);
+    }
+
+    public static class BookingRow {
+        private final String id;
+        private final String date;
+        private final String time;
+        private final String client;
+        private final String desc;
+
+        public BookingRow(String id, String date, String time, String client, String desc) {
+            this.id = id;
+            this.date = date;
+            this.time = time;
+            this.client = client;
+            this.desc = desc;
+        }
+
+
+        public String getId() { return id; }
+        public String getDate() { return date; }
+        public String getTime() { return time; }
+        public String getClient() { return client; }
+        public String getDesc() { return desc; }
     }
 }
