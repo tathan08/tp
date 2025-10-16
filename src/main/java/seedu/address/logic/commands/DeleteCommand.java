@@ -28,7 +28,7 @@ public class DeleteCommand extends Command {
             + "Parameters:\n NAME (must be a saved contact)\n"
             + "TAG (optional, an available tag saved with the contact) \n"
             + "Example:\n" + COMMAND_WORD + " n/" + " Alex" + " (to delete a whole contact)\n"
-            + COMMAND_WORD + " n/" + " Alex" + " t/" + " tag_1" + " tag_2..."
+            + COMMAND_WORD + " n/" + " Alex" + " t/" + " tag_1" + " t/tag_2..."
             + " (to delete 1 or more specific tags from 'Alex')";
 
     public static final String MESSAGE_DELETE_PERSON_SUCCESS = "Deleted Person: %1$s";
