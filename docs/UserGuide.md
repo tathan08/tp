@@ -66,7 +66,7 @@ FirstImpressions is a **desktop app for managing contacts, optimized for use via
 
 ### Viewing help : `help`
 
-Shows a message explaining how to access the help page.
+Shows a short summary of available commands, with a link to access the User Guide.
 
 ![help message](images/helpMessage.png)
 
