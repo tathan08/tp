@@ -59,7 +59,7 @@ public class LogicManagerTest {
 
     @Test
     public void execute_commandExecutionError_throwsCommandException() {
-        String deleteCommand = "delete n/ NonexistentPerson";
+        String deleteCommand = "delete n/NonexistentPerson";
         assertCommandException(deleteCommand, String.format(DeleteCommand.MESSAGE_DELETE_PERSON_NOT_FOUND,
                 "NonexistentPerson"));
     }

@@ -43,20 +43,20 @@ public class DeleteCommandParserTest {
 
     @Test
     public void parse_invalidNameType_throwsParseException() {
-        assertParseFailure(parser, " /n R@chel",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
+        assertParseFailure(parser, "delete n/R@chel",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, Name.MESSAGE_CONSTRAINTS));
     }
 
     @Test
     public void parse_deleteTag_success() {
-        String input = "delete n/ Alex Yeoh t/ tag";
+        String input = "delete n/Alex Yeoh t/tag";
         DeleteCommand expected = new DeleteCommand(new Name("Alex Yeoh"), Optional.of(Set.of(new Tag(("tag")))));
         assertParseSuccess(parser, input, expected);
     }
 
     @Test
     public void parse_deleteMultipleTag_success() {
-        String input = "delete n/ Alex Yeoh t/ tag1 tag2";
+        String input = "delete n/Alex Yeoh t/tag1 t/tag2";
         DeleteCommand expected = new DeleteCommand(new Name("Alex Yeoh"),
                 Optional.of(Set.of(new Tag("tag1"), new Tag("tag2"))));
         assertParseSuccess(parser, input, expected);
@@ -64,7 +64,7 @@ public class DeleteCommandParserTest {
 
     @Test
     public void parse_deleteEmptyTag_throwsParseException() {
-        String input = "delete n/ Alex Yeoh t/ ";
+        String input = "delete n/Alex Yeoh t/ ";
         assertParseFailure(parser, input, String.format(MESSAGE_INVALID_COMMAND_FORMAT,
                 DeleteCommand.MESSAGE_DELETE_TAG_USAGE));
     }

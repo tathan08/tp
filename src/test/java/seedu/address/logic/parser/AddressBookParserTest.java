@@ -55,10 +55,10 @@ public class AddressBookParserTest {
     @Test
     public void parseCommand_delete() throws Exception {
         DeleteCommand command = (DeleteCommand) parser.parseCommand(
-                DeleteCommand.COMMAND_WORD + " n/ " + PERSON_NAME);
+                DeleteCommand.COMMAND_WORD + " n/" + PERSON_NAME);
         assertEquals(new DeleteCommand(new Name(PERSON_NAME), Optional.empty()), command);
         DeleteCommand deleteTag = (DeleteCommand) parser.parseCommand(
-                        DeleteCommand.COMMAND_WORD + " n/ " + PERSON_NAME + " t/ " + PERSON_TAG);
+                        DeleteCommand.COMMAND_WORD + " n/" + PERSON_NAME + " t/" + PERSON_TAG);
         Optional<Set<Tag>> personTag = Optional.of(Set.of(new Tag(PERSON_TAG)));
         assertEquals(new DeleteCommand(new Name(PERSON_NAME), personTag), deleteTag);
     }
