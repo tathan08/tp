@@ -91,7 +91,7 @@ Examples:
 
 ### Listing all persons : `list`
 
-Shows a list of all persons in the address book.
+Shows the list of all persons in the contact list.
 
 Format: `list`
 
