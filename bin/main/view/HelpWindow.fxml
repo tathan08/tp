@@ -28,6 +28,11 @@
           </Label>
           <Button fx:id="copyButton" mnemonicParsing="false" onAction="#copyUrl" text="Copy URL">
             <HBox.margin>
+              <Insets left="5.0" right="5.0" />
+            </HBox.margin>
+          </Button>
+          <Button fx:id="quitButton" mnemonicParsing="false" onAction="#handleQuit" text="Quit">
+            <HBox.margin>
               <Insets left="5.0" />
             </HBox.margin>
           </Button>

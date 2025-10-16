@@ -18,3 +18,9 @@
 .tooltip-text {
     -fx-text-fill: white;
 }
+
+/* Smaller header for booking table */
+.booking-table .column-header .label {
+    -fx-font-size: 15px; /* adjust size as needed */
+    -fx-font-weight: lighter;
+}
