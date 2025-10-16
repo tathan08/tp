@@ -79,15 +79,20 @@ Adds a person to the contact list.
 
 Format: `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]…​`
 
+* Consecutive spaces in name are removed. e.g. "Alice&nbsp;&nbsp;Tan" will be saved as `Alice Tan`.
+* Phone numbers must be numeric only.
+* Tags must be alphanumeric and have no spaces.
+
 <div markdown="span" class="alert alert-primary">:bulb: **Tip:**
-A person can have any number of tags (including 0)
+A person can have any number of tags (including 0). <br>
+Use camelCase for multiword tags. e.g. teamLead
 </div>
 
 Examples:
 
-* `add n/Alice Tan p/98702930 e/alicetan@gmail.com t/team-lead t/vip-handler`
-* `add n/Bob Lee t/mandarin-speaking`
-* `add n/Germaine`
+* `add n/Alice Tan p/98702930 e/alicetan@gmail.com t/teamLead t/vipHandler` <br> will add a Person called `Alice Tan`, with phone number `98702930`, with email `alicetan@gmail.com`, with tags `teamLead` and `vipHandler` to the contact list.
+* `add n/Bob Lee t/mandarinSpeaking` <br> will add a Person called `Bob Lee` with tag `mandarinSpeaking` to the contact list.
+* `add n/Germaine` <br> will add a Person called `Germaine` to the contact list.
 
 ### Listing all persons : `list`
 
