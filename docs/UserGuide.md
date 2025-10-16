@@ -75,7 +75,7 @@ Format: `help`
 
 ### Adding a person: `add`
 
-Adds a person to the address book.
+Adds a person to the contact list.
 
 Format: `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]…​`
 
@@ -84,8 +84,10 @@ A person can have any number of tags (including 0)
 </div>
 
 Examples:
-* `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01`
-* `add n/Betsy Crowe t/friend e/betsycrowe@example.com a/Newgate Prison p/1234567 t/criminal`
+
+* `add n/Alice Tan p/98702930 e/alicetan@gmail.com t/team-lead t/vip-handler`
+* `add n/Bob Lee t/mandarin-speaking`
+* `add n/Germaine`
 
 ### Listing all persons : `list`
 
