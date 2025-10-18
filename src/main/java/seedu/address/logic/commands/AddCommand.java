@@ -1,14 +1,16 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
+import java.util.logging.Logger;
+
+import seedu.address.commons.core.LogsCenter;
+import seedu.address.commons.util.ToStringBuilder;
+import seedu.address.logic.Messages;
+import seedu.address.logic.commands.exceptions.CommandException;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
-
-import seedu.address.commons.util.ToStringBuilder;
-import seedu.address.logic.Messages;
-import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.person.Person;
 
@@ -16,6 +18,8 @@ import seedu.address.model.person.Person;
  * Adds a person to the address book.
  */
 public class AddCommand extends Command {
+
+    private static final Logger logger = LogsCenter.getLogger(AddCommand.class);
 
     public static final String COMMAND_WORD = "add";
 
@@ -42,17 +46,33 @@ public class AddCommand extends Command {
     public AddCommand(Person person) {
         requireNonNull(person);
         toAdd = person;
+        
+        // Invariant assertion: person should be valid
+        assert person.getName() != null : "Person name should not be null";
+        assert person.getTags() != null : "Person tags should not be null";
     }
 
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
+        
+        logger.info(String.format("Executing AddCommand for person: %s", toAdd.getName()));
+        
+        // Invariant assertion: model should be in valid state
+        assert model.getAddressBook() != null : "Model address book should not be null";
+        assert model.getFilteredPersonList() != null : "Model filtered person list should not be null";
 
         if (model.hasPerson(toAdd)) {
+            logger.warning(String.format("Attempted to add duplicate person: %s", toAdd.getName()));
             throw new CommandException(MESSAGE_DUPLICATE_PERSON);
         }
 
         model.addPerson(toAdd);
+        
+        // Post-condition assertion: person should now exist in model
+        assert model.hasPerson(toAdd) : "Person should exist in model after adding";
+        
+        logger.info(String.format("Successfully added person: %s", toAdd.getName()));
         return new CommandResult(String.format(MESSAGE_SUCCESS, Messages.format(toAdd)));
     }
 
@@ -69,6 +89,11 @@ public class AddCommand extends Command {
 
         AddCommand otherAddCommand = (AddCommand) other;
         return toAdd.equals(otherAddCommand.toAdd);
+    }
+
+    @Override
+    public int hashCode() {
+        return java.util.Objects.hash(toAdd);
     }
 
     @Override

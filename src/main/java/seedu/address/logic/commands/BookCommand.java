@@ -1,17 +1,18 @@
 package seedu.address.logic.commands;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import static java.util.Objects.requireNonNull;
+import java.util.logging.Logger;
+
+import seedu.address.commons.core.LogsCenter;
+import seedu.address.commons.util.ToStringBuilder;
+import seedu.address.logic.commands.exceptions.CommandException;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_CLIENT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_DATETIME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_DESCRIPTION;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-
-import seedu.address.commons.util.ToStringBuilder;
-import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.booking.Booking;
 import seedu.address.model.person.Name;
@@ -21,6 +22,8 @@ import seedu.address.model.person.Person;
  * Books an appointment for a team member with a client.
  */
 public class BookCommand extends Command {
+
+    private static final Logger logger = LogsCenter.getLogger(BookCommand.class);
 
     public static final String COMMAND_WORD = "book";
 
@@ -59,11 +62,23 @@ public class BookCommand extends Command {
         this.clientName = clientName;
         this.datetime = datetime;
         this.description = description;
+        
+        // Invariant assertions: validate booking parameters
+        assert Booking.isValidClientName(clientName) : "Client name should be valid";
+        assert Booking.isValidDescription(description) : "Description should be valid";
+        assert Booking.isFutureDateTime(datetime) : "DateTime should be in the future";
     }
 
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
+        
+        logger.info(String.format("Executing BookCommand for person: %s with client: %s at %s", 
+                personName, clientName, datetime));
+        
+        // Invariant assertion: model should be in valid state
+        assert model.getAddressBook() != null : "Model address book should not be null";
+        assert model.getFilteredPersonList() != null : "Model filtered person list should not be null";
 
         // Find the person by name
         Person personToBook = null;
@@ -75,6 +90,7 @@ public class BookCommand extends Command {
         }
 
         if (personToBook == null) {
+            logger.warning(String.format("Person not found for booking: %s", personName));
             throw new CommandException(String.format(MESSAGE_PERSON_NOT_FOUND, personName));
         }
 
@@ -82,6 +98,7 @@ public class BookCommand extends Command {
         Booking newBooking = new Booking(clientName, datetime, description);
         for (Booking existingBooking : personToBook.getBookings()) {
             if (existingBooking.conflictsWith(newBooking)) {
+                logger.warning(String.format("Double booking detected for %s at %s", personName, datetime));
                 throw new CommandException(String.format(MESSAGE_DOUBLE_BOOKING,
                         personName,
                         existingBooking.getDateTimeString(),
@@ -103,6 +120,13 @@ public class BookCommand extends Command {
         );
 
         model.setPerson(personToBook, updatedPerson);
+        
+        // Post-condition assertion: booking should now exist in person's bookings
+        assert updatedPerson.getBookings().contains(newBooking) : "New booking should be in person's bookings";
+        assert updatedPerson.getBookings().size() == personToBook.getBookings().size() + 1 : "Booking count should increase by 1";
+        
+        logger.info(String.format("Successfully booked appointment for %s with %s at %s", 
+                personName, clientName, datetime));
 
         return new CommandResult(String.format(MESSAGE_SUCCESS,
                 personName,

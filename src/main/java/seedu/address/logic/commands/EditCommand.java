@@ -1,25 +1,26 @@
 package seedu.address.logic.commands;
 
-import static java.util.Objects.requireNonNull;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
-import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
-
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.Set;
+import java.util.logging.Logger;
 
+import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.CollectionUtil;
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 import seedu.address.model.Model;
+import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
@@ -30,6 +31,8 @@ import seedu.address.model.tag.Tag;
  * Edits the details of an existing person in the address book.
  */
 public class EditCommand extends Command {
+
+    private static final Logger logger = LogsCenter.getLogger(EditCommand.class);
 
     public static final String COMMAND_WORD = "edit";
 
@@ -67,9 +70,21 @@ public class EditCommand extends Command {
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
+        
+        logger.info(String.format("Executing EditCommand for index: %d", index.getOneBased()));
+        
+        // Invariant assertion: validate descriptor has at least one field to edit
+        assert editPersonDescriptor.isAnyFieldEdited() : "At least one field must be edited";
+        
+        // Invariant assertion: model should be in valid state
+        assert model.getAddressBook() != null : "Model address book should not be null";
+        assert model.getFilteredPersonList() != null : "Model filtered person list should not be null";
+        
         List<Person> lastShownList = model.getFilteredPersonList();
 
         if (index.getZeroBased() >= lastShownList.size()) {
+            logger.warning(String.format("Invalid index provided: %d (list size: %d)", 
+                    index.getOneBased(), lastShownList.size()));
             throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
         }
 
@@ -77,11 +92,20 @@ public class EditCommand extends Command {
         Person editedPerson = createEditedPerson(personToEdit, editPersonDescriptor);
 
         if (!personToEdit.isSamePerson(editedPerson) && model.hasPerson(editedPerson)) {
+            logger.warning(String.format("Attempted to edit person %s to duplicate: %s", 
+                    personToEdit.getName(), editedPerson.getName()));
             throw new CommandException(MESSAGE_DUPLICATE_PERSON);
         }
 
         model.setPerson(personToEdit, editedPerson);
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
+        
+        // Post-condition assertion: verify person was updated in model
+        assert model.hasPerson(editedPerson) : "Edited person should exist in model";
+        assert !model.hasPerson(personToEdit) || personToEdit.isSamePerson(editedPerson) : 
+                "Original person should be replaced or unchanged if same identity";
+        
+        logger.info(String.format("Successfully edited person: %s", editedPerson.getName()));
         return new CommandResult(String.format(MESSAGE_EDIT_PERSON_SUCCESS, Messages.format(editedPerson)));
     }
 
@@ -91,14 +115,21 @@ public class EditCommand extends Command {
      */
     private static Person createEditedPerson(Person personToEdit, EditPersonDescriptor editPersonDescriptor) {
         assert personToEdit != null;
+        assert editPersonDescriptor != null;
 
         Name updatedName = editPersonDescriptor.getName().orElse(personToEdit.getName());
         Phone updatedPhone = editPersonDescriptor.getPhone().orElse(personToEdit.getPhone());
         Email updatedEmail = editPersonDescriptor.getEmail().orElse(personToEdit.getEmail());
         Set<Tag> updatedTags = editPersonDescriptor.getTags().orElse(personToEdit.getTags());
 
-        return new Person(updatedName, updatedPhone, updatedEmail, updatedTags,
+        Person editedPerson = new Person(updatedName, updatedPhone, updatedEmail, updatedTags,
                 personToEdit.getBookings());
+        
+        // Post-condition assertion: edited person should have valid fields
+        assert editedPerson.getName() != null : "Edited person name should not be null";
+        assert editedPerson.getTags() != null : "Edited person tags should not be null";
+        
+        return editedPerson;
     }
 
     @Override
@@ -115,6 +146,11 @@ public class EditCommand extends Command {
         EditCommand otherEditCommand = (EditCommand) other;
         return index.equals(otherEditCommand.index)
                 && editPersonDescriptor.equals(otherEditCommand.editPersonDescriptor);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(index, editPersonDescriptor);
     }
 
     @Override
@@ -212,6 +248,11 @@ public class EditCommand extends Command {
                     && Objects.equals(phone, otherEditPersonDescriptor.phone)
                     && Objects.equals(email, otherEditPersonDescriptor.email)
                     && Objects.equals(tags, otherEditPersonDescriptor.tags);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(name, phone, email, tags);
         }
 
         @Override
