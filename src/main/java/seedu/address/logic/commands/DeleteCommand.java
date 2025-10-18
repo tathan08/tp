@@ -1,9 +1,10 @@
 package seedu.address.logic.commands;
 
+import static java.util.Objects.requireNonNull;
+
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
-import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.Set;
 import java.util.logging.Logger;
@@ -23,8 +24,6 @@ import seedu.address.model.tag.Tag;
  */
 public class DeleteCommand extends Command {
 
-    private static final Logger logger = LogsCenter.getLogger(DeleteCommand.class);
-
     public static final String COMMAND_WORD = "delete";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
@@ -42,6 +41,8 @@ public class DeleteCommand extends Command {
     public static final String MESSAGE_DELETE_TAG_PARTIAL = "Removed %1$s. Not found: %2$s from %3$s";
     public static final String MESSAGE_DELETE_TAG_NOT_FOUND = "'%1$s' does not have the tag(s) '%2$s'";
     public static final String MESSAGE_DELETE_TAG_USAGE = "Please provide a tag after 't/'!";
+
+    private static final Logger logger = LogsCenter.getLogger(DeleteCommand.class);
 
     private final Name targetName;
     private final Optional<Set<Tag>> tags;
@@ -61,9 +62,9 @@ public class DeleteCommand extends Command {
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
-        
+
         logger.info(String.format("Executing DeleteCommand for person: %s", targetName.fullName));
-        
+
         List<Person> lastShownList = model.getFilteredPersonList();
 
         Person personToDelete = findUniquePerson(lastShownList, targetName);
@@ -72,7 +73,7 @@ public class DeleteCommand extends Command {
             // Full person deletion
             logger.info(String.format("Deleting entire person: %s", personToDelete.getName()));
             model.deletePerson(personToDelete);
-            
+
             logger.info(String.format("Successfully deleted person: %s", personToDelete.getName()));
             return new CommandResult(String.format(MESSAGE_DELETE_PERSON_SUCCESS, Messages.format(personToDelete)));
         }
@@ -80,7 +81,7 @@ public class DeleteCommand extends Command {
         // Partial deletion (tags only)
         Set<Tag> tagsToRemove = tags.get();
         logger.info(String.format("Removing tags %s from person: %s", tagsToRemove, personToDelete.getName()));
-        
+
         Set<Tag> curr = new LinkedHashSet<>(personToDelete.getTags());
 
         Set<Tag> present = new LinkedHashSet<>();
@@ -112,7 +113,7 @@ public class DeleteCommand extends Command {
 
         model.setPerson(personToDelete, updatedPerson);
         model.updateFilteredPersonList(Model.PREDICATE_SHOW_ALL_PERSONS);
-        
+
         String removed = tagsToRemove.stream().map(Tag::toString).collect(Collectors.joining(", "));
         logger.info(String.format("Successfully removed tags %s from person: %s", present, personToDelete.getName()));
 
@@ -199,7 +200,7 @@ public class DeleteCommand extends Command {
             logger.warning(String.format("No person found matching: %s", targetName.fullName));
             throw new CommandException(String.format(MESSAGE_DELETE_PERSON_NOT_FOUND, targetName.fullName));
         }
-        
+
         logger.warning(String.format("Multiple partial matches found for person: %s", targetName.fullName));
         String containsMultiple = contains.stream()
                 .map(Messages::format)

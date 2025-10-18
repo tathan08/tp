@@ -1,3 +1,31 @@
 {
-    "java.configuration.updateBuildConfiguration": "interactive"
+    "java.configuration.updateBuildConfiguration": "interactive",
+    "java.checkstyle.configurationFile": "${workspaceFolder}/config/checkstyle/checkstyle.xml",
+    "java.format.settings.url": "",
+    "java.format.settings.profile": "",
+    "java.saveActions.organizeImports": false,
+    "java.saveActions.source.organizeImports": false,
+    "java.format.enabled": false,
+    "java.import.gradle.enabled": true,
+    "editor.formatOnSave": false,
+    "editor.formatOnPaste": false,
+    "editor.formatOnType": false,
+    "editor.codeActionsOnSave": {
+        "source.organizeImports": "never",
+        "source.fixAll": "never"
+    },
+    "[java]": {
+        "editor.formatOnSave": false,
+        "editor.formatOnPaste": false,
+        "editor.formatOnType": false,
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": "never"
+        }
+    },
+    "java.completion.importOrder": [],
+    "java.import.gradle.wrapper.checksums": [],
+    "java.import.gradle.offline.enabled": false,
+    "java.server.launchMode": "Standard",
+    "java.autobuild.enabled": false,
+    "java.compile.nullAnalysis.mode": "disabled"
 }

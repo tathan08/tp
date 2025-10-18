@@ -1,18 +1,19 @@
 package seedu.address.logic.commands;
 
+import static java.util.Objects.requireNonNull;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_CLIENT;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_DATETIME;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_DESCRIPTION;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import static java.util.Objects.requireNonNull;
 import java.util.logging.Logger;
 
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.commands.exceptions.CommandException;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_CLIENT;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_DATETIME;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_DESCRIPTION;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import seedu.address.model.Model;
 import seedu.address.model.booking.Booking;
 import seedu.address.model.person.Name;
@@ -22,8 +23,6 @@ import seedu.address.model.person.Person;
  * Books an appointment for a team member with a client.
  */
 public class BookCommand extends Command {
-
-    private static final Logger logger = LogsCenter.getLogger(BookCommand.class);
 
     public static final String COMMAND_WORD = "book";
 
@@ -43,6 +42,8 @@ public class BookCommand extends Command {
     public static final String MESSAGE_PERSON_NOT_FOUND = "No team member '%1$s'. Please use an existing team member "
             + "or add them first.";
     public static final String MESSAGE_DOUBLE_BOOKING = "%1$s is already booked at %2$s with client '%3$s' for [%4$s].";
+
+    private static final Logger logger = LogsCenter.getLogger(BookCommand.class);
 
     private final Name personName;
     private final String clientName;
@@ -67,8 +68,8 @@ public class BookCommand extends Command {
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
-        
-        logger.info(String.format("Executing BookCommand for person: %s with client: %s at %s", 
+
+        logger.info(String.format("Executing BookCommand for person: %s with client: %s at %s",
                 personName, clientName, datetime));
 
         // Find the person by name
@@ -111,8 +112,8 @@ public class BookCommand extends Command {
         );
 
         model.setPerson(personToBook, updatedPerson);
-        
-        logger.info(String.format("Successfully booked appointment for %s with %s at %s", 
+
+        logger.info(String.format("Successfully booked appointment for %s with %s at %s",
                 personName, clientName, datetime));
 
         return new CommandResult(String.format(MESSAGE_SUCCESS,
@@ -154,4 +155,3 @@ public class BookCommand extends Command {
                 .toString();
     }
 }
-

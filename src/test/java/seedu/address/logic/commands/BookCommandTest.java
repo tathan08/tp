@@ -34,35 +34,35 @@ public class BookCommandTest {
 
     @Test
     public void constructor_nullPersonName_throwsNullPointerException() {
-        assertThrows(NullPointerException.class, () -> new BookCommand(null, VALID_CLIENT_NAME, 
+        assertThrows(NullPointerException.class, () -> new BookCommand(null, VALID_CLIENT_NAME,
                 VALID_DATETIME, VALID_DESCRIPTION));
     }
 
     @Test
     public void constructor_nullClientName_throwsNullPointerException() {
-        assertThrows(NullPointerException.class, () -> new BookCommand(ALICE.getName(), null, 
+        assertThrows(NullPointerException.class, () -> new BookCommand(ALICE.getName(), null,
                 VALID_DATETIME, VALID_DESCRIPTION));
     }
 
     @Test
     public void constructor_nullDateTime_throwsNullPointerException() {
-        assertThrows(NullPointerException.class, () -> new BookCommand(ALICE.getName(), VALID_CLIENT_NAME, 
+        assertThrows(NullPointerException.class, () -> new BookCommand(ALICE.getName(), VALID_CLIENT_NAME,
                 null, VALID_DESCRIPTION));
     }
 
     @Test
     public void constructor_nullDescription_throwsNullPointerException() {
-        assertThrows(NullPointerException.class, () -> new BookCommand(ALICE.getName(), VALID_CLIENT_NAME, 
+        assertThrows(NullPointerException.class, () -> new BookCommand(ALICE.getName(), VALID_CLIENT_NAME,
                 VALID_DATETIME, null));
     }
 
     @Test
     public void execute_personNotFound_throwsCommandException() {
         ModelStubWithPersons modelStub = new ModelStubWithPersons();
-        BookCommand bookCommand = new BookCommand(new Name("Nonexistent Person"), VALID_CLIENT_NAME, 
+        BookCommand bookCommand = new BookCommand(new Name("Nonexistent Person"), VALID_CLIENT_NAME,
                 VALID_DATETIME, VALID_DESCRIPTION);
 
-        assertCommandFailure(bookCommand, modelStub, String.format(BookCommand.MESSAGE_PERSON_NOT_FOUND, 
+        assertCommandFailure(bookCommand, modelStub, String.format(BookCommand.MESSAGE_PERSON_NOT_FOUND,
                 "Nonexistent Person"));
     }
 
@@ -72,12 +72,12 @@ public class BookCommandTest {
         Person personWithBooking = new PersonBuilder(ALICE).build();
         modelStub.addPerson(personWithBooking);
 
-        BookCommand bookCommand = new BookCommand(ALICE.getName(), VALID_CLIENT_NAME, 
+        BookCommand bookCommand = new BookCommand(ALICE.getName(), VALID_CLIENT_NAME,
                 VALID_DATETIME, VALID_DESCRIPTION);
 
         CommandResult commandResult = bookCommand.execute(modelStub);
 
-        String expectedMessage = String.format(BookCommand.MESSAGE_SUCCESS, ALICE.getName(), 
+        String expectedMessage = String.format(BookCommand.MESSAGE_SUCCESS, ALICE.getName(),
                 VALID_CLIENT_NAME, "2025-12-25 10:00", VALID_DESCRIPTION);
         assertEquals(expectedMessage, commandResult.getFeedbackToUser());
         assertTrue(modelStub.personsUpdated.size() == 1);
@@ -91,10 +91,10 @@ public class BookCommandTest {
         modelStub.addPerson(personWithExistingBooking);
 
         // Try to book at the same time as existing booking
-        BookCommand bookCommand = new BookCommand(CARL.getName(), "Different Client", 
+        BookCommand bookCommand = new BookCommand(CARL.getName(), "Different Client",
                 LocalDateTime.of(2025, 10, 20, 10, 0), "Different Description");
 
-        String expectedMessage = String.format(BookCommand.MESSAGE_DOUBLE_BOOKING, CARL.getName(), 
+        String expectedMessage = String.format(BookCommand.MESSAGE_DOUBLE_BOOKING, CARL.getName(),
                 "2025-10-20 10:00", "Carl Kurz", "Haircut");
         assertCommandFailure(bookCommand, modelStub, expectedMessage);
     }
@@ -107,12 +107,12 @@ public class BookCommandTest {
         modelStub.addPerson(personWithExistingBooking);
 
         // Book at different time - should succeed
-        BookCommand bookCommand = new BookCommand(CARL.getName(), VALID_CLIENT_NAME, 
+        BookCommand bookCommand = new BookCommand(CARL.getName(), VALID_CLIENT_NAME,
                 VALID_DATETIME_2, VALID_DESCRIPTION);
 
         CommandResult commandResult = bookCommand.execute(modelStub);
 
-        String expectedMessage = String.format(BookCommand.MESSAGE_SUCCESS, CARL.getName(), 
+        String expectedMessage = String.format(BookCommand.MESSAGE_SUCCESS, CARL.getName(),
                 VALID_CLIENT_NAME, "2025-12-26 14:30", VALID_DESCRIPTION);
         assertEquals(expectedMessage, commandResult.getFeedbackToUser());
         assertTrue(modelStub.personsUpdated.size() == 1);
@@ -125,12 +125,12 @@ public class BookCommandTest {
         modelStub.addPerson(new PersonBuilder(FIONA).build());
 
         // Book Alice at same time as Fiona's existing booking - should succeed (different people)
-        BookCommand bookCommand = new BookCommand(ALICE.getName(), VALID_CLIENT_NAME, 
+        BookCommand bookCommand = new BookCommand(ALICE.getName(), VALID_CLIENT_NAME,
                 LocalDateTime.of(2025, 10, 20, 14, 0), VALID_DESCRIPTION);
 
         CommandResult commandResult = bookCommand.execute(modelStub);
 
-        String expectedMessage = String.format(BookCommand.MESSAGE_SUCCESS, ALICE.getName(), 
+        String expectedMessage = String.format(BookCommand.MESSAGE_SUCCESS, ALICE.getName(),
                 VALID_CLIENT_NAME, "2025-10-20 14:00", VALID_DESCRIPTION);
         assertEquals(expectedMessage, commandResult.getFeedbackToUser());
         assertTrue(modelStub.personsUpdated.size() == 1);
@@ -138,11 +138,11 @@ public class BookCommandTest {
 
     @Test
     public void equals() {
-        BookCommand bookAliceCommand = new BookCommand(ALICE.getName(), VALID_CLIENT_NAME, 
+        BookCommand bookAliceCommand = new BookCommand(ALICE.getName(), VALID_CLIENT_NAME,
                 VALID_DATETIME, VALID_DESCRIPTION);
-        BookCommand bookAliceCommandCopy = new BookCommand(ALICE.getName(), VALID_CLIENT_NAME, 
+        BookCommand bookAliceCommandCopy = new BookCommand(ALICE.getName(), VALID_CLIENT_NAME,
                 VALID_DATETIME, VALID_DESCRIPTION);
-        BookCommand bookBobCommand = new BookCommand(new Name("Bob"), VALID_CLIENT_NAME, 
+        BookCommand bookBobCommand = new BookCommand(new Name("Bob"), VALID_CLIENT_NAME,
                 VALID_DATETIME, VALID_DESCRIPTION);
 
         // same object -> returns true
@@ -161,36 +161,36 @@ public class BookCommandTest {
         assertFalse(bookAliceCommand.equals(bookBobCommand));
 
         // different client name -> returns false
-        BookCommand differentClientCommand = new BookCommand(ALICE.getName(), "Different Client", 
+        BookCommand differentClientCommand = new BookCommand(ALICE.getName(), "Different Client",
                 VALID_DATETIME, VALID_DESCRIPTION);
         assertFalse(bookAliceCommand.equals(differentClientCommand));
 
         // different datetime -> returns false
-        BookCommand differentDateTimeCommand = new BookCommand(ALICE.getName(), VALID_CLIENT_NAME, 
+        BookCommand differentDateTimeCommand = new BookCommand(ALICE.getName(), VALID_CLIENT_NAME,
                 VALID_DATETIME_2, VALID_DESCRIPTION);
         assertFalse(bookAliceCommand.equals(differentDateTimeCommand));
 
         // different description -> returns false
-        BookCommand differentDescriptionCommand = new BookCommand(ALICE.getName(), VALID_CLIENT_NAME, 
+        BookCommand differentDescriptionCommand = new BookCommand(ALICE.getName(), VALID_CLIENT_NAME,
                 VALID_DATETIME, "Different Description");
         assertFalse(bookAliceCommand.equals(differentDescriptionCommand));
     }
 
     @Test
     public void toStringMethod() {
-        BookCommand bookCommand = new BookCommand(ALICE.getName(), VALID_CLIENT_NAME, 
+        BookCommand bookCommand = new BookCommand(ALICE.getName(), VALID_CLIENT_NAME,
                 VALID_DATETIME, VALID_DESCRIPTION);
-        String expected = BookCommand.class.getCanonicalName() + "{personName=" + ALICE.getName() 
-                + ", clientName=" + VALID_CLIENT_NAME 
-                + ", datetime=" + VALID_DATETIME 
+        String expected = BookCommand.class.getCanonicalName() + "{personName=" + ALICE.getName()
+                + ", clientName=" + VALID_CLIENT_NAME
+                + ", datetime=" + VALID_DATETIME
                 + ", description=" + VALID_DESCRIPTION + "}";
         assertEquals(expected, bookCommand.toString());
     }
 
     /**
-     * Executes the given {@code command}, confirms that 
-     * - a {@code CommandException} is thrown 
-     * - the CommandException message matches {@code expectedMessage} 
+     * Executes the given {@code command}, confirms that
+     * - a {@code CommandException} is thrown
+     * - the CommandException message matches {@code expectedMessage}
      * - the address book, filtered person list and selected person in {@code actualModel} remain unchanged
      */
     public static void assertCommandFailure(Command command, Model actualModel, String expectedMessage) {
