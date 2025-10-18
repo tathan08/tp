@@ -10,22 +10,24 @@
     "editor.formatOnSave": false,
     "editor.formatOnPaste": false,
     "editor.formatOnType": false,
+    "cursor.cpp.disabledLanguages": [],
+    "cursor.general.enableAutoImport": false,
+    "cursor.java.enableAutoImport": false,
     "editor.codeActionsOnSave": {
+        "source.organizeImports.sortImports": "never",
         "source.organizeImports": "never",
-        "source.fixAll": "never"
+        "source.organizeImports.java": "never",
+        "source.fixAll.eslint": "explicit",
     },
     "[java]": {
         "editor.formatOnSave": false,
         "editor.formatOnPaste": false,
         "editor.formatOnType": false,
         "editor.codeActionsOnSave": {
-            "source.organizeImports": "never"
-        }
+            "source.organizeImports.sortImports": "never",
+            "source.organizeImports": "never",
+            "source.organizeImports.java": "never",
+            "source.fixAll.checkstyle": "explicit",
+        },
     },
-    "java.completion.importOrder": [],
-    "java.import.gradle.wrapper.checksums": [],
-    "java.import.gradle.offline.enabled": false,
-    "java.server.launchMode": "Standard",
-    "java.autobuild.enabled": false,
-    "java.compile.nullAnalysis.mode": "disabled"
 }

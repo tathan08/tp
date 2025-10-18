@@ -28,6 +28,7 @@ import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
 import seedu.address.model.tag.Tag;
 
+
 /**
  * Edits the details of an existing person in the address book.
  */
@@ -163,10 +164,10 @@ public class EditCommand extends Command {
          * A defensive copy of {@code tags} is used internally.
          */
         public EditPersonDescriptor(EditPersonDescriptor toCopy) {
-            setName(toCopy.name);
-            setPhone(toCopy.phone);
-            setEmail(toCopy.email);
-            setTags(toCopy.tags);
+            this.name = toCopy.name;
+            this.phone = toCopy.phone;
+            this.email = toCopy.email;
+            this.tags = (toCopy.tags != null) ? new HashSet<>(toCopy.tags) : null;
         }
 
         /**
