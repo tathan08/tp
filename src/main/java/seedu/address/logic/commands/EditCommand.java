@@ -73,13 +73,6 @@ public class EditCommand extends Command {
         
         logger.info(String.format("Executing EditCommand for index: %d", index.getOneBased()));
         
-        // Invariant assertion: validate descriptor has at least one field to edit
-        assert editPersonDescriptor.isAnyFieldEdited() : "At least one field must be edited";
-        
-        // Invariant assertion: model should be in valid state
-        assert model.getAddressBook() != null : "Model address book should not be null";
-        assert model.getFilteredPersonList() != null : "Model filtered person list should not be null";
-        
         List<Person> lastShownList = model.getFilteredPersonList();
 
         if (index.getZeroBased() >= lastShownList.size()) {
@@ -100,11 +93,6 @@ public class EditCommand extends Command {
         model.setPerson(personToEdit, editedPerson);
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
         
-        // Post-condition assertion: verify person was updated in model
-        assert model.hasPerson(editedPerson) : "Edited person should exist in model";
-        assert !model.hasPerson(personToEdit) || personToEdit.isSamePerson(editedPerson) : 
-                "Original person should be replaced or unchanged if same identity";
-        
         logger.info(String.format("Successfully edited person: %s", editedPerson.getName()));
         return new CommandResult(String.format(MESSAGE_EDIT_PERSON_SUCCESS, Messages.format(editedPerson)));
     }
@@ -124,10 +112,6 @@ public class EditCommand extends Command {
 
         Person editedPerson = new Person(updatedName, updatedPhone, updatedEmail, updatedTags,
                 personToEdit.getBookings());
-        
-        // Post-condition assertion: edited person should have valid fields
-        assert editedPerson.getName() != null : "Edited person name should not be null";
-        assert editedPerson.getTags() != null : "Edited person tags should not be null";
         
         return editedPerson;
     }

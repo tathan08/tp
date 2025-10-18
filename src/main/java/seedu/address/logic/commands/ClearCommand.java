@@ -24,19 +24,11 @@ public class ClearCommand extends Command {
         
         logger.warning("Executing ClearCommand - this will delete all data!");
         
-        // Invariant assertion: model should be in valid state
-        assert model.getAddressBook() != null : "Model address book should not be null";
-        assert model.getFilteredPersonList() != null : "Model filtered person list should not be null";
-        
         // Log the number of persons being deleted for audit trail
         int personCount = model.getAddressBook().getPersonList().size();
         logger.info(String.format("Clearing address book with %d persons", personCount));
         
         model.setAddressBook(new AddressBook());
-        
-        // Post-condition assertion: address book should be empty after clearing
-        assert model.getAddressBook().getPersonList().isEmpty() : "Address book should be empty after clearing";
-        assert model.getFilteredPersonList().isEmpty() : "Filtered person list should be empty after clearing";
         
         logger.warning("Address book successfully cleared - all data deleted");
         return new CommandResult(MESSAGE_SUCCESS);

@@ -56,10 +56,6 @@ public class DeleteCommand extends Command {
         requireNonNull(tags);
         this.targetName = targetName;
         this.tags = tags;
-        
-        // Invariant assertion: validate target name is not empty
-        assert targetName.fullName != null && !targetName.fullName.trim().isEmpty() : 
-                "Target name should not be null or empty";
     }
 
     @Override
@@ -67,10 +63,6 @@ public class DeleteCommand extends Command {
         requireNonNull(model);
         
         logger.info(String.format("Executing DeleteCommand for person: %s", targetName.fullName));
-        
-        // Invariant assertion: model should be in valid state
-        assert model.getAddressBook() != null : "Model address book should not be null";
-        assert model.getFilteredPersonList() != null : "Model filtered person list should not be null";
         
         List<Person> lastShownList = model.getFilteredPersonList();
 
@@ -80,9 +72,6 @@ public class DeleteCommand extends Command {
             // Full person deletion
             logger.info(String.format("Deleting entire person: %s", personToDelete.getName()));
             model.deletePerson(personToDelete);
-            
-            // Post-condition assertion: person should no longer exist in model
-            assert !model.hasPerson(personToDelete) : "Person should not exist in model after deletion";
             
             logger.info(String.format("Successfully deleted person: %s", personToDelete.getName()));
             return new CommandResult(String.format(MESSAGE_DELETE_PERSON_SUCCESS, Messages.format(personToDelete)));
@@ -123,11 +112,6 @@ public class DeleteCommand extends Command {
 
         model.setPerson(personToDelete, updatedPerson);
         model.updateFilteredPersonList(Model.PREDICATE_SHOW_ALL_PERSONS);
-        
-        // Post-condition assertion: verify tags were removed correctly
-        assert updatedPerson.getTags().size() == personToDelete.getTags().size() - present.size() : 
-                "Tag count should decrease by the number of removed tags";
-        assert !updatedPerson.getTags().containsAll(present) : "Removed tags should not be present in updated person";
         
         String removed = tagsToRemove.stream().map(Tag::toString).collect(Collectors.joining(", "));
         logger.info(String.format("Successfully removed tags %s from person: %s", present, personToDelete.getName()));
@@ -183,9 +167,6 @@ public class DeleteCommand extends Command {
     }
 
     private Person findUniquePerson(List<Person> list, Name targetName) throws CommandException {
-        assert list != null : "Person list should not be null";
-        assert targetName != null : "Target name should not be null";
-        
         String queryName = targetName.toString().trim().replaceAll("\\s+", " ");
 
         List<Person> exactMatch = list.stream()

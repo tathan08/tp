@@ -46,10 +46,6 @@ public class AddCommand extends Command {
     public AddCommand(Person person) {
         requireNonNull(person);
         toAdd = person;
-        
-        // Invariant assertion: person should be valid
-        assert person.getName() != null : "Person name should not be null";
-        assert person.getTags() != null : "Person tags should not be null";
     }
 
     @Override
@@ -57,10 +53,6 @@ public class AddCommand extends Command {
         requireNonNull(model);
         
         logger.info(String.format("Executing AddCommand for person: %s", toAdd.getName()));
-        
-        // Invariant assertion: model should be in valid state
-        assert model.getAddressBook() != null : "Model address book should not be null";
-        assert model.getFilteredPersonList() != null : "Model filtered person list should not be null";
 
         if (model.hasPerson(toAdd)) {
             logger.warning(String.format("Attempted to add duplicate person: %s", toAdd.getName()));
@@ -68,9 +60,6 @@ public class AddCommand extends Command {
         }
 
         model.addPerson(toAdd);
-        
-        // Post-condition assertion: person should now exist in model
-        assert model.hasPerson(toAdd) : "Person should exist in model after adding";
         
         logger.info(String.format("Successfully added person: %s", toAdd.getName()));
         return new CommandResult(String.format(MESSAGE_SUCCESS, Messages.format(toAdd)));

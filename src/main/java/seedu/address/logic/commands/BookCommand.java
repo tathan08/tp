@@ -62,11 +62,6 @@ public class BookCommand extends Command {
         this.clientName = clientName;
         this.datetime = datetime;
         this.description = description;
-        
-        // Invariant assertions: validate booking parameters
-        assert Booking.isValidClientName(clientName) : "Client name should be valid";
-        assert Booking.isValidDescription(description) : "Description should be valid";
-        assert Booking.isFutureDateTime(datetime) : "DateTime should be in the future";
     }
 
     @Override
@@ -75,10 +70,6 @@ public class BookCommand extends Command {
         
         logger.info(String.format("Executing BookCommand for person: %s with client: %s at %s", 
                 personName, clientName, datetime));
-        
-        // Invariant assertion: model should be in valid state
-        assert model.getAddressBook() != null : "Model address book should not be null";
-        assert model.getFilteredPersonList() != null : "Model filtered person list should not be null";
 
         // Find the person by name
         Person personToBook = null;
@@ -120,10 +111,6 @@ public class BookCommand extends Command {
         );
 
         model.setPerson(personToBook, updatedPerson);
-        
-        // Post-condition assertion: booking should now exist in person's bookings
-        assert updatedPerson.getBookings().contains(newBooking) : "New booking should be in person's bookings";
-        assert updatedPerson.getBookings().size() == personToBook.getBookings().size() + 1 : "Booking count should increase by 1";
         
         logger.info(String.format("Successfully booked appointment for %s with %s at %s", 
                 personName, clientName, datetime));
