@@ -126,13 +126,14 @@ The `Model` component,
 * stores the currently 'selected' `Person` objects (e.g., results of a search query) as a separate _filtered_ list which is exposed to outsiders as an unmodifiable `ObservableList<Person>` that can be 'observed' e.g. the UI can be bound to this list so that the UI automatically updates when the data in the list change.
 * stores a `UserPref` object that represents the user’s preferences. This is exposed to the outside as a `ReadOnlyUserPref` objects.
 * does not depend on any of the other three components (as the `Model` represents data entities of the domain, they should make sense on their own without depending on other components)
+* A `Person` has a `Name`, `Phone`, `Email`, and may have 0 or any number of `Tag`s or `Booking`s.
+
 
 <div markdown="span" class="alert alert-info">:information_source: **Note:** An alternative (arguably, a more OOP) model is given below. It has a `Tag` list in the `AddressBook`, which `Person` references. This allows `AddressBook` to only require one `Tag` object per unique tag, instead of each `Person` needing their own `Tag` objects.<br>
 
 <img src="images/BetterModelClassDiagram.png" width="450" />
 
 </div>
-
 
 ### Storage component
 
@@ -302,7 +303,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 #### **Use Case: Add a Person**
 
-**System**: FirstImpressions 
+**System**: FirstImpressions
 **Actor**: User
 
 **Main Success Scenario (MSS):**
@@ -339,7 +340,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **Main Success Scenario (MSS):**
 1. User checks list of all persons
-2. User requests to delete specific person 
+2. User requests to delete specific person
 3. FirstImpressions deletes person in the list
 4. Use case ends
 
@@ -429,15 +430,15 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 4.  Searching for 1000 contacts should return under 1s.
 5.  Create, edit, delete actions should be completed under `150`ms.
 6.  Should be able to import 1000 contacts from CSV in 3s or less.
-7.  Should be able to export 1000 contacts to CSV or JSON in 2s or less. 
+7.  Should be able to export 1000 contacts to CSV or JSON in 2s or less.
 8.  UI remains responsive during bulk ops.
-9.  Should perform all writes atomically so that no contact data is lost on crash or power out. 
+9.  Should perform all writes atomically so that no contact data is lost on crash or power out.
 10. Should autosave any contact creation, edit or delete within 1s of the action.
-11. Should be fully usable with keyboard only. 
+11. Should be fully usable with keyboard only.
 12. Should provide clear error message and guidance on failed import/export.
-13. Should work for x86 and ARM processors without modification. 
+13. Should work for x86 and ARM processors without modification.
 14. Should support multiple file types for import and export (CSV/JSON).
-15. Should run offline for all core features. 
+15. Should run offline for all core features.
 16. Should log all system errors to a local file with timestamps.
 17. Should not exceed 100MB in log file size.
 
