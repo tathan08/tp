@@ -110,9 +110,9 @@ Format: `add n/NAME t/TAG…​`
 
 Examples:
 
-* `add n/Alice Tan t/teamLead t/vipHandler` <br> will add tags `teamLead` and `vipHandler` to the Person called `Alice Tan`.
+* `add n/Alice Tan t/sales t/manager` <br> will add tags `sales` and `manager` to the Person called `Alice Tan`.
 
-![add message](images\addMessage.jpg)
+![add tags](images\addTags.png)
 
 ### Listing all persons : `list`
 
