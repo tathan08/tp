@@ -34,6 +34,13 @@ public class ClientContainsKeywordsPredicate implements Predicate<Person> {
         switch (type) {
 
         case NAME:
+            // Filter out empty keywords
+            List<String> validKeywords = keywords.stream().filter(kw -> !kw.trim().isEmpty()).toList();
+
+            // If there are no valid keywords, return false (no match)
+            if (validKeywords.isEmpty()) {
+                return false;
+            }
             String combinedKeyword = String.join(" ", keywords).trim();
             return person.getName().fullName.toLowerCase().contains(combinedKeyword.toLowerCase());
 
