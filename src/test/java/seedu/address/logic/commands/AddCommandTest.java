@@ -55,7 +55,7 @@ public class AddCommandTest {
 
         assertEquals(String.format(AddCommand.MESSAGE_TAGS_ADDED, Messages.format(modelStub.getPerson())),
                 commandResult.getFeedbackToUser());
-        assertTrue(modelStub.personUpdated);
+        assertTrue(modelStub.isPersonUpdated());
     }
 
     @Test
@@ -79,7 +79,7 @@ public class AddCommandTest {
 
         assertEquals(String.format(AddCommand.MESSAGE_TAGS_ADDED, Messages.format(modelStub.getPerson())),
                 commandResult.getFeedbackToUser());
-        assertTrue(modelStub.personUpdated);
+        assertTrue(modelStub.isPersonUpdated());
     }
 
     @Test
@@ -93,8 +93,8 @@ public class AddCommandTest {
 
         assertEquals(String.format(AddCommand.MESSAGE_TAGS_ADDED, Messages.format(modelStub.getPerson())),
                 commandResult.getFeedbackToUser());
-        assertTrue(modelStub.personUpdated);
-        
+        assertTrue(modelStub.isPersonUpdated());
+
         // Verify that the updated person has all unique tags
         Person updatedPerson = modelStub.getPerson();
         assertEquals(3, updatedPerson.getTags().size()); // friends, colleagues, client
@@ -111,7 +111,7 @@ public class AddCommandTest {
             manyTagNames[i] = "tag" + (i + 1);
         }
         Person existingPerson = new PersonBuilder().withName("Alice").withTags(manyTagNames).build();
-        
+
         // Try to add 2 more tags (would exceed 20 limit)
         Person personWithTooManyTags = new PersonBuilder().withName("Alice").withTags("tag20", "tag21").build();
         AddCommand addCommand = new AddCommand(personWithTooManyTags);
@@ -128,7 +128,7 @@ public class AddCommandTest {
             maxTagNames[i] = "tag" + (i + 1);
         }
         Person existingPerson = new PersonBuilder().withName("Alice").withTags(maxTagNames).build();
-        
+
         // Try to add 1 more tag (would exceed limit)
         Person personWithExtraTag = new PersonBuilder().withName("Alice").withTags("tag21").build();
         AddCommand addCommand = new AddCommand(personWithExtraTag);
@@ -287,7 +287,7 @@ public class AddCommandTest {
     private class ModelStubWithPerson extends ModelStub {
         private final Person person;
         private Person updatedPerson;
-        public boolean personUpdated = false;
+        private boolean personUpdated = false;
 
         ModelStubWithPerson(Person person) {
             requireNonNull(person);
@@ -314,6 +314,10 @@ public class AddCommandTest {
 
         public Person getPerson() {
             return updatedPerson != null ? updatedPerson : person;
+        }
+
+        public boolean isPersonUpdated() {
+            return personUpdated;
         }
     }
 

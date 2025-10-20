@@ -24,7 +24,8 @@ public class AddCommand extends Command {
 
     public static final String COMMAND_WORD = "add";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Adds a person or adds tags to an existing person in the address book. \n"
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Adds a person or adds tags to an existing person "
+            + "in the address book. \n"
             + "Parameters: "
             + PREFIX_NAME + "NAME "
             + "[" + PREFIX_PHONE + "PHONE] "
@@ -65,8 +66,7 @@ public class AddCommand extends Command {
                 // Only add tags if there are tags specified
                 if (toAdd.getTags().isEmpty()) {
                     throw new CommandException(MESSAGE_DUPLICATE_PERSON);
-                }
-                else {
+                } else {
                     // Add new tags to existing person
                     Set<Tag> existingTags = new LinkedHashSet<>(existingPerson.getTags());
                     Set<Tag> newTags = toAdd.getTags();
