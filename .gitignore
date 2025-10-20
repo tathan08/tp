@@ -29,3 +29,5 @@ docs/_site/
 
 # VSCode workspace settings
 .vscode/
+
+eclipse-java-formatter.xml
