@@ -39,7 +39,7 @@ public class ClientContainsKeywordsPredicate implements Predicate<Person> {
 
             // If there are no valid keywords, return false (no match)
             if (validKeywords.isEmpty()) {
-                return false;
+                return true;
             }
             String combinedKeyword = String.join(" ", keywords).trim();
             return person.getName().fullName.toLowerCase().contains(combinedKeyword.toLowerCase());

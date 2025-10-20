@@ -3,6 +3,7 @@ package seedu.address.logic.parser;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import seedu.address.logic.commands.FindCommand;
@@ -15,21 +16,26 @@ import seedu.address.model.person.ClientContainsKeywordsPredicate;
 public class FindCommandParser implements Parser<FindCommand> {
 
     /**
-     * Parses the given {@code String} of arguments in the context of the FindCommand
-     * and returns a FindCommand object for execution.
+     * Parses the given {@code String} of arguments in the context of the
+     * FindCommand and returns a FindCommand object for execution.
      *
      * @throws ParseException if the user input does not conform the expected format
      */
     public FindCommand parse(String args) throws ParseException {
         String trimmedArgs = args.trim();
-        if (trimmedArgs.isEmpty()) {
-            throw new ParseException(
-                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
-        }
 
+        // Extract prefix
         String prefix = extractPrefix(trimmedArgs);
         String keywordArgs = extractKeywords(trimmedArgs, prefix);
-        List<String> keywords = Arrays.asList(keywordArgs.split("\\s+"));
+
+        List<String> keywords;
+
+        // If keywordArgs is empty or only whitespace, pass empty list
+        if (keywordArgs == null || keywordArgs.trim().isEmpty()) {
+            keywords = Collections.emptyList();
+        } else {
+            keywords = Arrays.asList(keywordArgs.trim().split("\\s+"));
+        }
 
         return createFindCommand(prefix, keywords);
     }
@@ -50,8 +56,7 @@ public class FindCommandParser implements Parser<FindCommand> {
         } else if (args.startsWith("d/")) {
             return "d/";
         } else {
-            throw new ParseException(
-                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
         }
     }
 
@@ -64,12 +69,9 @@ public class FindCommandParser implements Parser<FindCommand> {
      * @return The keyword string.
      * @throws ParseException if no keywords are provided.
      */
-    private String extractKeywords(String args, String prefix) throws ParseException {
+    private String extractKeywords(String args, String prefix) {
         String keywordArgs = args.substring(prefix.length()).trim();
-        if (keywordArgs.isEmpty()) {
-            throw new ParseException(
-                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
-        }
+        // Do not throw exception; allow empty string
         return keywordArgs;
     }
 
@@ -85,20 +87,16 @@ public class FindCommandParser implements Parser<FindCommand> {
     private FindCommand createFindCommand(String prefix, List<String> keywords) throws ParseException {
         switch (prefix) {
         case "n/":
-            return new FindCommand(
-                    new ClientContainsKeywordsPredicate(ClientContainsKeywordsPredicate.SearchType.NAME,
-                            keywords));
+            return new FindCommand(new ClientContainsKeywordsPredicate(ClientContainsKeywordsPredicate.SearchType.NAME,
+                                            keywords));
         case "t/":
-            return new FindCommand(
-                    new ClientContainsKeywordsPredicate(ClientContainsKeywordsPredicate.SearchType.TAG,
-                            keywords));
+            return new FindCommand(new ClientContainsKeywordsPredicate(ClientContainsKeywordsPredicate.SearchType.TAG,
+                                            keywords));
         case "d/":
-            return new FindCommand(
-                    new ClientContainsKeywordsPredicate(ClientContainsKeywordsPredicate.SearchType.DATE,
-                            keywords));
+            return new FindCommand(new ClientContainsKeywordsPredicate(ClientContainsKeywordsPredicate.SearchType.DATE,
+                                            keywords));
         default:
-            throw new ParseException(
-                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
         }
     }
 

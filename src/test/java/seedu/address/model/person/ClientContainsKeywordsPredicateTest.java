@@ -87,13 +87,25 @@ public class ClientContainsKeywordsPredicateTest {
 
     @Test
     public void test_nameDoesNotContainKeywords_returnsFalse() {
+        // Empty keyword → all persons should pass
         ClientContainsKeywordsPredicate predicate = new ClientContainsKeywordsPredicate(
                                         ClientContainsKeywordsPredicate.SearchType.NAME, Collections.emptyList());
-        assertFalse(predicate.test(new PersonBuilder().withName("Alice").build()));
+        assertTrue(predicate.test(new PersonBuilder().withName("Alice").build()));
 
+        // Non-matching keyword → false
         predicate = new ClientContainsKeywordsPredicate(ClientContainsKeywordsPredicate.SearchType.NAME,
                                         Arrays.asList("Carol"));
         assertFalse(predicate.test(new PersonBuilder().withName("Alice Bob").build()));
+
+        // Combined keywords that don't appear together → false
+        predicate = new ClientContainsKeywordsPredicate(ClientContainsKeywordsPredicate.SearchType.NAME,
+                                        Arrays.asList("Alice", "Carol"));
+        assertFalse(predicate.test(new PersonBuilder().withName("Alice Bob").build()));
+
+        // Partial match still counts → true
+        predicate = new ClientContainsKeywordsPredicate(ClientContainsKeywordsPredicate.SearchType.NAME,
+                                        Arrays.asList("carol"));
+        assertTrue(predicate.test(new PersonBuilder().withName("Carolyn").build()));
     }
 
     // ===============================
