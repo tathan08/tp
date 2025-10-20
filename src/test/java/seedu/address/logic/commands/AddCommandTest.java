@@ -45,10 +45,25 @@ public class AddCommandTest {
     }
 
     @Test
-    public void execute_duplicatePerson_throwsCommandException() {
-        Person validPerson = new PersonBuilder().build();
-        AddCommand addCommand = new AddCommand(validPerson);
-        ModelStub modelStub = new ModelStubWithPerson(validPerson);
+    public void execute_duplicatePerson_addsTagsToExistingPerson() throws Exception {
+        Person existingPerson = new PersonBuilder().withName("Alice").withTags("friends").build();
+        Person personWithNewTags = new PersonBuilder().withName("Alice").withTags("colleagues").build();
+        AddCommand addCommand = new AddCommand(personWithNewTags);
+        ModelStubWithPerson modelStub = new ModelStubWithPerson(existingPerson);
+
+        CommandResult commandResult = addCommand.execute(modelStub);
+
+        assertEquals(String.format(AddCommand.MESSAGE_TAGS_ADDED, Messages.format(modelStub.getPerson())),
+                commandResult.getFeedbackToUser());
+        assertTrue(modelStub.personUpdated);
+    }
+
+    @Test
+    public void execute_duplicatePersonNoTags_throwsCommandException() {
+        Person existingPerson = new PersonBuilder().withName("Alice").withTags("friends").build();
+        Person personWithoutTags = new PersonBuilder().withName("Alice").build(); // No tags
+        AddCommand addCommand = new AddCommand(personWithoutTags);
+        ModelStubWithPerson modelStub = new ModelStubWithPerson(existingPerson);
 
         assertThrows(CommandException.class, AddCommand.MESSAGE_DUPLICATE_PERSON, () -> addCommand.execute(modelStub));
     }
@@ -164,6 +179,8 @@ public class AddCommandTest {
      */
     private class ModelStubWithPerson extends ModelStub {
         private final Person person;
+        private Person updatedPerson;
+        public boolean personUpdated = false;
 
         ModelStubWithPerson(Person person) {
             requireNonNull(person);
@@ -174,6 +191,22 @@ public class AddCommandTest {
         public boolean hasPerson(Person person) {
             requireNonNull(person);
             return this.person.isSamePerson(person);
+        }
+
+        @Override
+        public void setPerson(Person target, Person editedPerson) {
+            requireNonNull(editedPerson);
+            this.updatedPerson = editedPerson;
+            this.personUpdated = true;
+        }
+
+        @Override
+        public ObservableList<Person> getFilteredPersonList() {
+            return javafx.collections.FXCollections.observableArrayList(person);
+        }
+
+        public Person getPerson() {
+            return updatedPerson != null ? updatedPerson : person;
         }
     }
 

@@ -77,7 +77,7 @@ Format: `help`
 
 Adds a person to the contact list.
 
-Format: `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]…​`
+Format: `add n/NAME [p/PHONE_NUMBER] [e/EMAIL] [t/TAG]…​`
 
 * Consecutive spaces in name are removed. e.g. "Alice&nbsp;&nbsp;Tan" will be saved as `Alice Tan`.
 * Phone numbers must be numeric only.
@@ -93,6 +93,24 @@ Examples:
 * `add n/Alice Tan p/98702930 e/alicetan@gmail.com t/teamLead t/vipHandler` <br> will add a Person called `Alice Tan`, with phone number `98702930`, with email `alicetan@gmail.com`, with tags `teamLead` and `vipHandler` to the contact list.
 * `add n/Bob Lee t/mandarinSpeaking` <br> will add a Person called `Bob Lee` with tag `mandarinSpeaking` to the contact list.
 * `add n/Germaine` <br> will add a Person called `Germaine` to the contact list.
+
+![add message](images\addMessage.jpg)
+
+### Adding a tag to an existing person: `add`
+
+Adds a tag to an existing person.
+
+Format: `add n/NAME t/TAG…​`
+
+* Consecutive spaces in name are removed. e.g. "Alice&nbsp;&nbsp;Tan" will be saved as `Alice Tan`.
+* Multiple  tags can be added at once by prefixing each tag with `t/`.
+* Tags must be alphanumeric and have no spaces.
+* If person does not already exist in AdddressBook, the person is created.
+* Other tags e.g. `e/email@example.com` here will be ignored.
+
+Examples:
+
+* `add n/Alice Tan t/teamLead t/vipHandler` <br> will add tags `teamLead` and `vipHandler` to the Person called `Alice Tan`.
 
 ![add message](images\addMessage.jpg)
 
