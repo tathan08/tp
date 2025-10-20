@@ -39,7 +39,7 @@ public class AddCommand extends Command {
     public static final String MESSAGE_SUCCESS = "New person added: %1$s";
     public static final String MESSAGE_TAGS_ADDED = "Tags added to existing person: %1$s";
     public static final String MESSAGE_DUPLICATE_PERSON = "This person already exists in the address book. "
-            + "If you want to add tags to this person, please also include a"
+            + "If you want to add tags to this person, please also include a "
             + PREFIX_TAG + "TAG field.";
 
     private final Person toAdd;
