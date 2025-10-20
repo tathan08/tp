@@ -23,3 +23,11 @@ src/test/data/sandbox/
 # MacOS custom attributes files created by Finder
 .DS_Store
 docs/_site/
+
+# Compiled class files
+*.class
+
+# VSCode workspace settings
+.vscode/
+
+eclipse-java-formatter.xml
