@@ -10,6 +10,9 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import java.util.logging.Logger;
+
+import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
@@ -42,6 +45,8 @@ public class AddCommand extends Command {
     public static final String MESSAGE_DUPLICATE_PERSON = "This person already exists in the address book. "
             + "If you want to add tags to this person, please also include a "
             + PREFIX_TAG + "TAG field.";
+
+    private static final Logger logger = LogsCenter.getLogger(AddCommand.class);
 
     private final Person toAdd;
 
@@ -94,10 +99,17 @@ public class AddCommand extends Command {
                     return new CommandResult(String.format(MESSAGE_TAGS_ADDED, Messages.format(updatedPerson)));
                 }
             }
+        logger.info(String.format("Executing AddCommand for person: %s", toAdd.getName()));
+
+        if (model.hasPerson(toAdd)) {
+            logger.warning(String.format("Attempted to add duplicate person: %s", toAdd.getName()));
+            throw new CommandException(MESSAGE_DUPLICATE_PERSON);
         }
 
         // If person doesn't exist, add as new person
         model.addPerson(toAdd);
+
+        logger.info(String.format("Successfully added person: %s", toAdd.getName()));
         return new CommandResult(String.format(MESSAGE_SUCCESS, Messages.format(toAdd)));
     }
 
@@ -119,6 +131,7 @@ public class AddCommand extends Command {
     @Override
     public int hashCode() {
         return toAdd.hashCode();
+        return java.util.Objects.hash(toAdd);
     }
 
     @Override
