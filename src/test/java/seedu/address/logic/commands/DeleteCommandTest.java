@@ -95,10 +95,43 @@ public class DeleteCommandTest {
         DeleteCommand deleteCommand = new DeleteCommand(newPerson.getName(),
                 Optional.of(new LinkedHashSet<>(targetTag)));
 
-        CommandResult res = deleteCommand.execute(model);
+        deleteCommand.execute(model);
 
         Person after = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
         assertTrue(after.getTags().isEmpty());
+    }
+
+    @Test
+    public void execute_deleteSomeTags_success() throws CommandException {
+        showPersonAtIndex(model, INDEX_FIRST_PERSON);
+
+        Person target = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+
+        Set<Tag> targetTag = new LinkedHashSet<>();
+        targetTag.add(new Tag("tagOne"));
+        targetTag.add(new Tag("tagTwo"));
+        targetTag.add(new Tag("tagThree"));
+
+        Set<Tag> testTag = Set.of(new Tag("tagOne"), new Tag("tagTwo"));
+
+        Person newPerson = new Person(
+                target.getName(),
+                target.getPhone(),
+                target.getEmail(),
+                targetTag,
+                target.getBookings()
+        );
+        model.setPerson(target, newPerson);
+
+        DeleteCommand deleteCommand = new DeleteCommand(newPerson.getName(),
+                Optional.of(new LinkedHashSet<>(testTag)));
+
+        deleteCommand.execute(model);
+
+        Person after = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        assertTrue(after.getTags().contains(new Tag("tagThree")));
+        assertFalse(after.getTags().contains(new Tag("tagOne")));
+        assertFalse(after.getTags().contains(new Tag("tagTwo")));
     }
 
     @Test
