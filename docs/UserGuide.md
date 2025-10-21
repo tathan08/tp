@@ -105,7 +105,7 @@ Format: `add n/NAME t/TAG…​`
 * Consecutive spaces in name are removed. e.g. "Alice&nbsp;&nbsp;Tan" will be saved as `Alice Tan`.
 * Multiple  tags can be added at once by prefixing each tag with `t/`.
 * Tags must be alphanumeric and have no spaces.
-* If person does not already exist in AdddressBook, the person is created.
+* If person does not already exist in FirstImpressions, the person is created.
 * Other tags e.g. `e/email@example.com` here will be ignored.
 
 Examples:
