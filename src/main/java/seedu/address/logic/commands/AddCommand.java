@@ -9,7 +9,6 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
-
 import java.util.logging.Logger;
 
 import seedu.address.commons.core.LogsCenter;
@@ -62,8 +61,12 @@ public class AddCommand extends Command {
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
 
+        logger.info(String.format("Executing AddCommand for person: %s", toAdd.getName()));
+
         // Check if person already exists
         if (model.hasPerson(toAdd)) {
+
+            logger.info(String.format("Person already exists: %s, adding tags to existing person", toAdd.getName()));
             // Find the existing person by name
             Person existingPerson = findPersonByName(model, toAdd.getName());
 
@@ -99,11 +102,6 @@ public class AddCommand extends Command {
                     return new CommandResult(String.format(MESSAGE_TAGS_ADDED, Messages.format(updatedPerson)));
                 }
             }
-        logger.info(String.format("Executing AddCommand for person: %s", toAdd.getName()));
-
-        if (model.hasPerson(toAdd)) {
-            logger.warning(String.format("Attempted to add duplicate person: %s", toAdd.getName()));
-            throw new CommandException(MESSAGE_DUPLICATE_PERSON);
         }
 
         // If person doesn't exist, add as new person
@@ -131,7 +129,6 @@ public class AddCommand extends Command {
     @Override
     public int hashCode() {
         return toAdd.hashCode();
-        return java.util.Objects.hash(toAdd);
     }
 
     @Override
