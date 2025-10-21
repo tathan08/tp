@@ -63,16 +63,16 @@ public class EditCommandParserTest {
     public void parse_invalidValue_failure() {
         // invalid old name
         assertParseFailure(parser, INVALID_NAME_DESC + PHONE_DESC_AMY, Name.MESSAGE_CONSTRAINTS);
-        
+
         // invalid new name
         assertParseFailure(parser, NAME_DESC_AMY + INVALID_NAME_DESC, Name.MESSAGE_CONSTRAINTS);
-        
+
         // invalid phone
         assertParseFailure(parser, NAME_DESC_AMY + INVALID_PHONE_DESC, Phone.MESSAGE_CONSTRAINTS);
-        
+
         // invalid email
         assertParseFailure(parser, NAME_DESC_AMY + INVALID_EMAIL_DESC, Email.MESSAGE_CONSTRAINTS);
-        
+
         // invalid tag
         assertParseFailure(parser, NAME_DESC_AMY + INVALID_TAG_DESC, Tag.MESSAGE_CONSTRAINTS);
 
@@ -81,11 +81,11 @@ public class EditCommandParserTest {
 
         // while parsing {@code PREFIX_TAG} alone will reset the tags of the {@code Person} being edited,
         // parsing it together with a valid tag results in error
-        assertParseFailure(parser, NAME_DESC_AMY + TAG_DESC_FRIEND + TAG_DESC_HUSBAND + TAG_EMPTY, 
+        assertParseFailure(parser, NAME_DESC_AMY + TAG_DESC_FRIEND + TAG_DESC_HUSBAND + TAG_EMPTY,
                 Tag.MESSAGE_CONSTRAINTS);
-        assertParseFailure(parser, NAME_DESC_AMY + TAG_DESC_FRIEND + TAG_EMPTY + TAG_DESC_HUSBAND, 
+        assertParseFailure(parser, NAME_DESC_AMY + TAG_DESC_FRIEND + TAG_EMPTY + TAG_DESC_HUSBAND,
                 Tag.MESSAGE_CONSTRAINTS);
-        assertParseFailure(parser, NAME_DESC_AMY + TAG_EMPTY + TAG_DESC_FRIEND + TAG_DESC_HUSBAND, 
+        assertParseFailure(parser, NAME_DESC_AMY + TAG_EMPTY + TAG_DESC_FRIEND + TAG_DESC_HUSBAND,
                 Tag.MESSAGE_CONSTRAINTS);
 
         // multiple invalid values, but only the first invalid value is captured

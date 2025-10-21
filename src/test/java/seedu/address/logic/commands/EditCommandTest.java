@@ -42,7 +42,7 @@ public class EditCommandTest {
         // Use ALICE's name as the old name
         EditCommand editCommand = new EditCommand(ALICE.getName(), descriptor);
 
-        String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_PERSON_SUCCESS, 
+        String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_PERSON_SUCCESS,
                 seedu.address.logic.Messages.format(editedPerson));
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
@@ -64,7 +64,7 @@ public class EditCommandTest {
                 .withPhone(VALID_PHONE_BOB).withTags(VALID_TAG_HUSBAND).build();
         EditCommand editCommand = new EditCommand(lastPerson.getName(), descriptor);
 
-        String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_PERSON_SUCCESS, 
+        String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_PERSON_SUCCESS,
                 seedu.address.logic.Messages.format(editedPerson));
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
@@ -78,7 +78,7 @@ public class EditCommandTest {
         EditCommand editCommand = new EditCommand(ALICE.getName(), new EditPersonDescriptor());
         Person editedPerson = ALICE;
 
-        String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_PERSON_SUCCESS, 
+        String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_PERSON_SUCCESS,
                 seedu.address.logic.Messages.format(editedPerson));
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
@@ -93,7 +93,7 @@ public class EditCommandTest {
         EditCommand editCommand = new EditCommand(ALICE.getName(),
                 new EditPersonDescriptorBuilder().withName(VALID_NAME_BOB).build());
 
-        String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_PERSON_SUCCESS, 
+        String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_PERSON_SUCCESS,
                 seedu.address.logic.Messages.format(editedPerson));
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
@@ -127,7 +127,7 @@ public class EditCommandTest {
         EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder().withName(VALID_NAME_BOB).build();
         EditCommand editCommand = new EditCommand(nonExistentName, descriptor);
 
-        assertCommandFailure(editCommand, model, 
+        assertCommandFailure(editCommand, model,
                 String.format(EditCommand.MESSAGE_PERSON_NOT_FOUND, nonExistentName.fullName));
     }
 
@@ -161,7 +161,7 @@ public class EditCommandTest {
 
         // Verify that bookings are preserved
         Person updatedPerson = model.getFilteredPersonList().stream()
-                .filter(person -> person.getEmail() != null 
+                .filter(person -> person.getEmail() != null
                         && person.getEmail().value.equals("newemail@example.com"))
                 .findFirst()
                 .orElseThrow();
