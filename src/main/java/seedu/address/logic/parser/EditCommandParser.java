@@ -36,7 +36,7 @@ public class EditCommandParser implements Parser<EditCommand> {
 
         // Get all name values
         List<String> nameValues = argMultimap.getAllValues(PREFIX_NAME);
-        
+
         if (nameValues.isEmpty()) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, EditCommand.MESSAGE_USAGE));
         }
