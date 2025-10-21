@@ -13,13 +13,16 @@ public class ClientContainsKeywordsPredicate implements Predicate<Person> {
     /**
      * The type of search to be performed.
      */
-    public enum SearchType { NAME, TAG, DATE }
+    public enum SearchType {
+        NAME, TAG, DATE
+    }
 
     private final List<String> keywords;
     private final SearchType type;
 
     /**
-     * Constructs a ClientContainsKeywordsPredicate with the given search type and keywords.
+     * Constructs a ClientContainsKeywordsPredicate with the given search type
+     * and keywords.
      */
     public ClientContainsKeywordsPredicate(SearchType type, List<String> keywords) {
         this.keywords = keywords;
@@ -31,26 +34,26 @@ public class ClientContainsKeywordsPredicate implements Predicate<Person> {
         switch (type) {
 
         case NAME:
-            return keywords.stream()
-                    .filter(keyword -> !keyword.trim().isEmpty())
-                    .anyMatch(keyword ->
-                            person.getName().fullName.toLowerCase().contains(keyword.toLowerCase()));
+            // Filter out empty keywords
+            List<String> validKeywords = keywords.stream().filter(kw -> !kw.trim().isEmpty()).toList();
+
+            // If there are no valid keywords, return false (no match)
+            if (validKeywords.isEmpty()) {
+                return true;
+            }
+            String combinedKeyword = String.join(" ", keywords).trim();
+            return person.getName().fullName.toLowerCase().contains(combinedKeyword.toLowerCase());
 
         case TAG:
-            return person.getTags().stream()
-                    .map(tag -> tag.tagName.toLowerCase())
-                        .anyMatch(tagName ->
-                                keywords.stream()
-                                        .filter(keyword -> !keyword.trim().isEmpty())
-                                        .anyMatch(keyword -> tagName.equals(keyword.toLowerCase())));
+            return person.getTags().stream().map(tag -> tag.tagName.toLowerCase()).anyMatch(tagName -> keywords.stream()
+                                            .filter(keyword -> !keyword.trim().isEmpty())
+                                            .anyMatch(keyword -> tagName.equals(keyword.toLowerCase())));
 
         case DATE:
-            return keywords.stream()
-                    .filter(keyword -> !keyword.trim().isEmpty())
-                    .anyMatch(keyword ->
-                            person.getBookings().stream()
-                                    .map(booking -> booking.getDateTime().toLocalDate().toString())
-                                    .anyMatch(date -> date.equals(keyword)));
+            return keywords.stream().filter(keyword -> !keyword.trim().isEmpty()).anyMatch(keyword -> person
+                                            .getBookings().stream()
+                                            .map(booking -> booking.getDateTime().toLocalDate().toString())
+                                            .anyMatch(date -> date.equals(keyword)));
 
         default:
             throw new IllegalStateException("Unexpected Value:" + type);
@@ -69,8 +72,8 @@ public class ClientContainsKeywordsPredicate implements Predicate<Person> {
         }
 
         ClientContainsKeywordsPredicate otherNameContainsKeywordsPredicate = (ClientContainsKeywordsPredicate) other;
-        return (this.type == otherNameContainsKeywordsPredicate.type) && (
-                keywords.equals(otherNameContainsKeywordsPredicate.keywords));
+        return (this.type == otherNameContainsKeywordsPredicate.type)
+                                        && (keywords.equals(otherNameContainsKeywordsPredicate.keywords));
     }
 
     @Override

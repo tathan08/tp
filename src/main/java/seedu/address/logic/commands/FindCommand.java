@@ -10,23 +10,23 @@ import seedu.address.model.Model;
 import seedu.address.model.person.Person;
 
 /**
- * Finds and lists all persons in address book whose name contains any of the argument keywords.
- * Keyword matching is case insensitive.
+ * Finds and lists all persons in address book whose name contains any of the
+ * argument keywords. Keyword matching is case insensitive.
  */
 public class FindCommand extends Command {
 
     public static final String COMMAND_WORD = "find";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD
-            + ": Finds all persons whose names contain any of "
-            + "the specified keywords (case-insensitive) and displays them as a list with index numbers.\n"
-            + "Parameters: KEYWORD [MORE_KEYWORDS]...\n"
-            + "Example: " + COMMAND_WORD + " n/Alex";
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Finds all persons whose names contain any of "
+                                    + "the specified keywords (case-insensitive) and displays them as"
+                                    + "a list with index numbers.\n" + "Parameters: find [n/NAME] [t/TAG] [d/DATE]\n"
+                                    + "Example: " + COMMAND_WORD + " n/Alex";
 
     private final Predicate<Person> predicate;
 
     /**
-     * Creates a FindCommand to be executed with the specified {@code Predicate}.
+     * Creates a FindCommand to be executed with the specified
+     * {@code Predicate}.
      */
     public FindCommand(Predicate<Person> predicate) {
         this.predicate = predicate;
@@ -37,8 +37,7 @@ public class FindCommand extends Command {
         requireNonNull(model);
         model.updateFilteredPersonList(predicate);
         int resultCount = model.getFilteredPersonList().size();
-        return new CommandResult(
-                String.format(Messages.MESSAGE_PERSONS_LISTED_OVERVIEW, resultCount));
+        return new CommandResult(String.format(Messages.MESSAGE_PERSONS_LISTED_OVERVIEW, resultCount));
     }
 
     @Override
@@ -58,8 +57,6 @@ public class FindCommand extends Command {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this)
-                .add("predicate", predicate)
-                .toString();
+        return new ToStringBuilder(this).add("predicate", predicate).toString();
     }
 }
