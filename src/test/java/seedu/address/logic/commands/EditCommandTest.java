@@ -132,6 +132,45 @@ public class EditCommandTest {
     }
 
     @Test
+    public void execute_editPersonWithBookings_bookingsPreserved() {
+        // CARL has bookings in the typical address book
+        Person personWithBookings = model.getFilteredPersonList().stream()
+                .filter(person -> person.getName().fullName.equals("Carl Kurz"))
+                .findFirst()
+                .orElseThrow();
+
+        // Edit Carl's phone and email
+        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder()
+                .withPhone("98765432")
+                .withEmail("newemail@example.com")
+                .build();
+        EditCommand editCommand = new EditCommand(personWithBookings.getName(), descriptor);
+
+        Person editedPerson = new PersonBuilder(personWithBookings)
+                .withPhone("98765432")
+                .withEmail("newemail@example.com")
+                .build();
+
+        String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_PERSON_SUCCESS,
+                seedu.address.logic.Messages.format(editedPerson));
+
+        Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
+        expectedModel.setPerson(personWithBookings, editedPerson);
+
+        assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
+
+        // Verify that bookings are preserved
+        Person updatedPerson = model.getFilteredPersonList().stream()
+                .filter(person -> person.getEmail() != null 
+                        && person.getEmail().value.equals("newemail@example.com"))
+                .findFirst()
+                .orElseThrow();
+
+        assertEquals(personWithBookings.getBookings().size(), updatedPerson.getBookings().size());
+        assertEquals(personWithBookings.getBookings(), updatedPerson.getBookings());
+    }
+
+    @Test
     public void equals() {
         final EditCommand standardCommand = new EditCommand(new Name(VALID_NAME_AMY), DESC_AMY);
 
