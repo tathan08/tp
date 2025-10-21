@@ -45,6 +45,7 @@ public class PersonBuilder {
         phone = personToCopy.getPhone();
         email = personToCopy.getEmail();
         tags = new HashSet<>(personToCopy.getTags());
+        bookings = new java.util.ArrayList<>(personToCopy.getBookings());
     }
 
     /**
