@@ -1,8 +1,7 @@
 package seedu.address.logic.parser;
 
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
+import static seedu.address.logic.parser.CliSyntax.*;
 
 import java.util.Arrays;
 import java.util.List;
@@ -27,7 +26,7 @@ public class DeleteCommandParser implements Parser<DeleteCommand> {
      */
     public DeleteCommand parse(String args) throws ParseException {
         try {
-            ArgumentMultimap multimap = ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_TAG);
+            ArgumentMultimap multimap = ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_TAG, PREFIX_BOOKING);
             String name = multimap.getValue(PREFIX_NAME).orElse("").trim();
             List<String> allTags = multimap.getAllValues(PREFIX_TAG);
             List<String> rawTags = allTags.stream()
@@ -44,8 +43,21 @@ public class DeleteCommandParser implements Parser<DeleteCommand> {
             }
 
             Name targetName = new Name(name);
-
             boolean prefixTagExists = !allTags.isEmpty();
+
+            if (multimap.getValue(PREFIX_BOOKING).isPresent()) {
+                String id = multimap.getValue(PREFIX_BOOKING).orElse("").trim();
+                if (id.isEmpty()) {
+                    throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                            DeleteCommand.MESSAGE_DELETE_BOOKING_USAGE));
+                }
+                Integer bookingID = Integer.valueOf(id);
+                if (prefixTagExists) {
+                    throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                            DeleteCommand.MESSAGE_DELETE_BOOKING_OR_TAG));
+                }
+                return new DeleteCommand(targetName, bookingID);
+            }
 
             if (rawTags.isEmpty()) {
                 if (prefixTagExists) {

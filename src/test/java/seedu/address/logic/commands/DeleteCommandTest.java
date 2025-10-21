@@ -10,7 +10,9 @@ import static seedu.address.logic.commands.CommandTestUtil.showPersonAtIndex;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
+import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -18,6 +20,7 @@ import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
+import seedu.address.model.booking.Booking;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
@@ -95,7 +98,7 @@ public class DeleteCommandTest {
         DeleteCommand deleteCommand = new DeleteCommand(newPerson.getName(),
                 Optional.of(new LinkedHashSet<>(targetTag)));
 
-        CommandResult res = deleteCommand.execute(model);
+        deleteCommand.execute(model);
 
         Person after = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
         assertTrue(after.getTags().isEmpty());
@@ -158,6 +161,59 @@ public class DeleteCommandTest {
                 Optional.of(new LinkedHashSet<>(testTag)));
 
         assertThrows(CommandException.class, () -> deleteCommand.execute(model));
+    }
+
+    @Test
+    public void execute_deleteBooking_success() throws CommandException{
+        showPersonAtIndex(model, INDEX_FIRST_PERSON);
+
+        Person target = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+
+        LocalDateTime targetTiming = LocalDateTime.of(3000, 10, 10, 10, 10);
+        Booking booking = new Booking("1", "mr tan", targetTiming, "meeting");
+
+        List<Booking> targetBooking = List.of(booking);
+
+        Person newPerson = new Person(
+                target.getName(),
+                target.getPhone(),
+                target.getEmail(),
+                target.getTags(),
+                targetBooking
+        );
+        model.setPerson(target, newPerson);
+
+        DeleteCommand deleteCommand = new DeleteCommand(newPerson.getName(), 1);
+
+        deleteCommand.execute(model);
+
+        Person after = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        assertFalse(after.getBookings().contains(booking));
+    }
+
+    @Test
+    public void execute_deleteBooking_noSuchID() throws CommandException{
+        showPersonAtIndex(model, INDEX_FIRST_PERSON);
+
+        Person target = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+
+        LocalDateTime targetTiming = LocalDateTime.of(3000, 10, 10, 10, 10);
+        Booking booking = new Booking("1", "mr tan", targetTiming, "meeting");
+
+        List<Booking> targetBooking = List.of(booking);
+
+        Person newPerson = new Person(
+                target.getName(),
+                target.getPhone(),
+                target.getEmail(),
+                target.getTags(),
+                targetBooking
+        );
+        model.setPerson(target, newPerson);
+
+        DeleteCommand deleteCommand = new DeleteCommand(newPerson.getName(), 2);
+
+       assertThrows(CommandException.class, () -> deleteCommand.execute(model));
     }
 
 

@@ -69,4 +69,25 @@ public class DeleteCommandParserTest {
                 DeleteCommand.MESSAGE_DELETE_TAG_USAGE));
     }
 
+    @Test
+    public void parse_deleteBooking_success() {
+        String input = "delete n/Alex Yeoh b/1";
+        DeleteCommand expected = new DeleteCommand(new Name("Alex Yeoh"), 1);
+        assertParseSuccess(parser, input, expected);
+    }
+
+    @Test
+    public void parse_deleteEmptyBooking_throwsParseException() {
+        String input = "delete n/Alex Yeoh b/ ";
+        assertParseFailure(parser, input, String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                DeleteCommand.MESSAGE_DELETE_BOOKING_USAGE));
+    }
+
+    @Test
+    public void parse_deleteBookingAndTag_throwsParseException() {
+        String input = "delete n/Alex Yeoh b/1 t/1 ";
+        assertParseFailure(parser, input, String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                DeleteCommand.MESSAGE_DELETE_BOOKING_OR_TAG));
+    }
+
 }
