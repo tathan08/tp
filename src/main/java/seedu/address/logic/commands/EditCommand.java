@@ -51,18 +51,18 @@ public class EditCommand extends Command {
     public static final String MESSAGE_DUPLICATE_PERSON = "This person already exists in the address book.";
     public static final String MESSAGE_PERSON_NOT_FOUND = "Person with name '%1$s' not found in the address book.";
 
-    private final Index index;
+    private final Name oldName;
     private final EditPersonDescriptor editPersonDescriptor;
 
     /**
-     * @param index of the person in the filtered person list to edit
+     * @param oldName the name of the person to edit
      * @param editPersonDescriptor details to edit the person with
      */
-    public EditCommand(Index index, EditPersonDescriptor editPersonDescriptor) {
-        requireNonNull(index);
+    public EditCommand(Name oldName, EditPersonDescriptor editPersonDescriptor) {
+        requireNonNull(oldName);
         requireNonNull(editPersonDescriptor);
 
-        this.index = index;
+        this.oldName = oldName;
         this.editPersonDescriptor = new EditPersonDescriptor(editPersonDescriptor);
     }
 
@@ -71,11 +71,12 @@ public class EditCommand extends Command {
         requireNonNull(model);
         List<Person> lastShownList = model.getFilteredPersonList();
 
-        if (index.getZeroBased() >= lastShownList.size()) {
-            throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
-        }
+        Person personToEdit = lastShownList.stream()
+                .filter(person -> person.getName().equals(oldName))
+                .findFirst()
+                .orElseThrow(() -> new CommandException(
+                        String.format(MESSAGE_PERSON_NOT_FOUND, oldName.fullName)));
 
-        Person personToEdit = lastShownList.get(index.getZeroBased());
         Person editedPerson = createEditedPerson(personToEdit, editPersonDescriptor);
 
         if (!personToEdit.isSamePerson(editedPerson) && model.hasPerson(editedPerson)) {
@@ -115,14 +116,14 @@ public class EditCommand extends Command {
         }
 
         EditCommand otherEditCommand = (EditCommand) other;
-        return index.equals(otherEditCommand.index)
+        return oldName.equals(otherEditCommand.oldName)
                 && editPersonDescriptor.equals(otherEditCommand.editPersonDescriptor);
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this)
-                .add("index", index)
+                .add("oldName", oldName)
                 .add("editPersonDescriptor", editPersonDescriptor)
                 .toString();
     }
