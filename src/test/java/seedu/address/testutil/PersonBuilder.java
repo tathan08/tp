@@ -45,7 +45,15 @@ public class PersonBuilder {
         phone = personToCopy.getPhone();
         email = personToCopy.getEmail();
         tags = new HashSet<>(personToCopy.getTags());
-        bookings = personToCopy.getBookings() != null ? new java.util.ArrayList<>(personToCopy.getBookings()) : null;
+        // Create new bookings with auto-generated IDs instead of copying existing ones
+        if (personToCopy.getBookings() != null) {
+            bookings = new java.util.ArrayList<>();
+            for (Booking booking : personToCopy.getBookings()) {
+                bookings.add(new Booking(booking.getClientName(), booking.getDateTime(), booking.getDescription()));
+            }
+        } else {
+            bookings = null;
+        }
     }
 
     /**

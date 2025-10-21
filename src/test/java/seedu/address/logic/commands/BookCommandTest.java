@@ -243,11 +243,6 @@ public class BookCommandTest {
      */
     private static class ModelStubWithPersons extends ModelStubAcceptingBooking {
         @Override
-        public ObservableList<Person> getFilteredPersonList() {
-            return FXCollections.observableArrayList(personsAdded);
-        }
-
-        @Override
         public ReadOnlyAddressBook getAddressBook() {
             AddressBook addressBook = new AddressBook();
             for (Person person : personsAdded) {
