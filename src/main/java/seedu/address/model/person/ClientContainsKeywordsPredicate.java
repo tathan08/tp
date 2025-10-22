@@ -78,6 +78,7 @@ public class ClientContainsKeywordsPredicate implements Predicate<Person> {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this).add("searchType", type).add("keywords", keywords).toString();
+        return new ToStringBuilder(this).add("searchType", type)
+                .add("keywords", keywords).toString();
     }
 }
