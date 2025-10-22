@@ -15,8 +15,8 @@ import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
-import seedu.address.model.booking.Booking;
 import seedu.address.model.Model;
+import seedu.address.model.booking.Booking;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.tag.Tag;
@@ -94,7 +94,8 @@ public class DeleteCommand extends Command {
         if (targetBooking > 0) {
             List<Booking> bookingList = personToDelete.getBookings();
             if (bookingList.size() < targetBooking) {
-                throw new CommandException(String.format(MESSAGE_DELETE_BOOKING_NOT_FOUND, personToDelete.getName().fullName, targetBooking));
+                throw new CommandException(String.format(MESSAGE_DELETE_BOOKING_NOT_FOUND,
+                        personToDelete.getName().fullName, targetBooking));
             }
             List<Booking> newBookings = new ArrayList<>(bookingList);
             newBookings.remove(targetBooking - 1);
@@ -109,7 +110,8 @@ public class DeleteCommand extends Command {
             model.setPerson(personToDelete, updatedPerson);
             model.updateFilteredPersonList(Model.PREDICATE_SHOW_ALL_PERSONS);
 
-            return new CommandResult(String.format(MESSAGE_DELETE_BOOKING_SUCCESS, targetBooking ,personToDelete.getName().fullName));
+            return new CommandResult(String.format(MESSAGE_DELETE_BOOKING_SUCCESS, targetBooking,
+                    personToDelete.getName().fullName));
         }
 
         if (tags.isEmpty()) {

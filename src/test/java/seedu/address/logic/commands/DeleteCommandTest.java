@@ -20,10 +20,10 @@ import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
-import seedu.address.model.booking.Booking;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
+import seedu.address.model.booking.Booking;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.tag.Tag;
@@ -197,7 +197,7 @@ public class DeleteCommandTest {
     }
 
     @Test
-    public void execute_deleteBooking_success() throws CommandException{
+    public void execute_deleteBooking_success() throws CommandException {
         showPersonAtIndex(model, INDEX_FIRST_PERSON);
 
         Person target = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
@@ -225,7 +225,7 @@ public class DeleteCommandTest {
     }
 
     @Test
-    public void execute_deleteBooking_noSuchID() throws CommandException{
+    public void execute_deleteBooking_noSuchID() throws CommandException {
         showPersonAtIndex(model, INDEX_FIRST_PERSON);
 
         Person target = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
@@ -246,7 +246,7 @@ public class DeleteCommandTest {
 
         DeleteCommand deleteCommand = new DeleteCommand(newPerson.getName(), 2);
 
-       assertThrows(CommandException.class, () -> deleteCommand.execute(model));
+        assertThrows(CommandException.class, () -> deleteCommand.execute(model));
     }
 
 
