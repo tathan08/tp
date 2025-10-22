@@ -403,12 +403,6 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 <img src="images/findMockup.JPG" width="200px" alt="find person mockup">
 
-#### **Command Format**
-
- - find n/<name_keywords>
- - find t/<tag_keywords>
- - find d/<YYYY-MM-DD>
-
 #### **Delimeters & Usage**
 
 - `n/` searches by **name** (case-insensitive, partial matches allowed, only 1 parameter allowed).
@@ -419,6 +413,10 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 #### **Extensions**
 
+- **1a. Unknown or invalid parameter provided** \
+  FirstImpressions shows error: `"Invalid command format!"`  \
+  Use case ends.
+
 - **3a. Person not found** \
   FirstImpressions throws error "0 persons listed!" \
   Use case ends
@@ -427,6 +425,14 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
   The user enters a valid prefix (`find n/`) but no keyword. \
   Displays all persons in the list. \
   Use case continues as in the main scenario.
+
+- **3c. Part of name provided**  \
+  The user enters part of name stored in FirstImpressions\
+  Displays all persons that contain given parameter in the list. \
+  Use case continues as in the main scenario.
+
+
+
 
 
 #### **Use Case: Help Menu**
