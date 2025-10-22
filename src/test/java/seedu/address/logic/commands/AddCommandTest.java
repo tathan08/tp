@@ -45,12 +45,134 @@ public class AddCommandTest {
     }
 
     @Test
-    public void execute_duplicatePerson_throwsCommandException() {
-        Person validPerson = new PersonBuilder().build();
-        AddCommand addCommand = new AddCommand(validPerson);
-        ModelStub modelStub = new ModelStubWithPerson(validPerson);
+    public void execute_duplicatePerson_addsTagsToExistingPerson() throws Exception {
+        Person existingPerson = new PersonBuilder().withName("Alice").withTags("friends").build();
+        Person personWithNewTags = new PersonBuilder().withName("Alice").withTags("colleagues").build();
+        AddCommand addCommand = new AddCommand(personWithNewTags);
+        ModelStubWithPerson modelStub = new ModelStubWithPerson(existingPerson);
+
+        CommandResult commandResult = addCommand.execute(modelStub);
+
+        assertEquals(String.format(AddCommand.MESSAGE_TAGS_ADDED, Messages.format(modelStub.getPerson())),
+                commandResult.getFeedbackToUser());
+        assertTrue(modelStub.isPersonUpdated());
+    }
+
+    @Test
+    public void execute_duplicatePersonNoTags_throwsCommandException() {
+        Person existingPerson = new PersonBuilder().withName("Alice").withTags("friends").build();
+        Person personWithoutTags = new PersonBuilder().withName("Alice").build(); // No tags
+        AddCommand addCommand = new AddCommand(personWithoutTags);
+        ModelStubWithPerson modelStub = new ModelStubWithPerson(existingPerson);
 
         assertThrows(CommandException.class, AddCommand.MESSAGE_DUPLICATE_PERSON, () -> addCommand.execute(modelStub));
+    }
+
+    @Test
+    public void execute_duplicatePersonWithTags_addsTagsSuccessfully() throws Exception {
+        Person existingPerson = new PersonBuilder().withName("Alice").withTags("friends").build();
+        Person personWithNewTags = new PersonBuilder().withName("Alice").withTags("colleagues").build();
+        AddCommand addCommand = new AddCommand(personWithNewTags);
+        ModelStubWithPerson modelStub = new ModelStubWithPerson(existingPerson);
+
+        CommandResult commandResult = addCommand.execute(modelStub);
+
+        assertEquals(String.format(AddCommand.MESSAGE_TAGS_ADDED, Messages.format(modelStub.getPerson())),
+                commandResult.getFeedbackToUser());
+        assertTrue(modelStub.isPersonUpdated());
+    }
+
+    @Test
+    public void execute_duplicatePersonWithDuplicateTags_addsOnlyNewTags() throws Exception {
+        Person existingPerson = new PersonBuilder().withName("Alice").withTags("friends", "colleagues").build();
+        Person personWithMixedTags = new PersonBuilder().withName("Alice").withTags("friends", "client").build();
+        AddCommand addCommand = new AddCommand(personWithMixedTags);
+        ModelStubWithPerson modelStub = new ModelStubWithPerson(existingPerson);
+
+        CommandResult commandResult = addCommand.execute(modelStub);
+
+        assertEquals(String.format(AddCommand.MESSAGE_TAGS_ADDED, Messages.format(modelStub.getPerson())),
+                commandResult.getFeedbackToUser());
+        assertTrue(modelStub.isPersonUpdated());
+
+        // Verify that the updated person has all unique tags
+        Person updatedPerson = modelStub.getPerson();
+        assertEquals(3, updatedPerson.getTags().size()); // friends, colleagues, client
+        assertTrue(updatedPerson.getTags().contains(new seedu.address.model.tag.Tag("friends")));
+        assertTrue(updatedPerson.getTags().contains(new seedu.address.model.tag.Tag("colleagues")));
+        assertTrue(updatedPerson.getTags().contains(new seedu.address.model.tag.Tag("client")));
+    }
+
+    @Test
+    public void execute_duplicatePersonExceedsTagLimit_throwsCommandException() {
+        // Create a person with 19 tags (1 below limit)
+        String[] manyTagNames = new String[19];
+        for (int i = 0; i < 19; i++) {
+            manyTagNames[i] = "tag" + (i + 1);
+        }
+        Person existingPerson = new PersonBuilder().withName("Alice").withTags(manyTagNames).build();
+
+        // Try to add 2 more tags (would exceed 20 limit)
+        Person personWithTooManyTags = new PersonBuilder().withName("Alice").withTags("tag20", "tag21").build();
+        AddCommand addCommand = new AddCommand(personWithTooManyTags);
+        ModelStubWithPerson modelStub = new ModelStubWithPerson(existingPerson);
+
+        assertThrows(CommandException.class, () -> addCommand.execute(modelStub));
+    }
+
+    @Test
+    public void execute_duplicatePersonAtTagLimit_throwsCommandException() {
+        // Create a person with exactly 20 tags (at limit)
+        String[] maxTagNames = new String[20];
+        for (int i = 0; i < 20; i++) {
+            maxTagNames[i] = "tag" + (i + 1);
+        }
+        Person existingPerson = new PersonBuilder().withName("Alice").withTags(maxTagNames).build();
+
+        // Try to add 1 more tag (would exceed limit)
+        Person personWithExtraTag = new PersonBuilder().withName("Alice").withTags("tag21").build();
+        AddCommand addCommand = new AddCommand(personWithExtraTag);
+        ModelStubWithPerson modelStub = new ModelStubWithPerson(existingPerson);
+
+        assertThrows(CommandException.class, () -> addCommand.execute(modelStub));
+    }
+
+    @Test
+    public void execute_duplicatePersonWithEmptyTagSet_throwsCommandException() {
+        Person existingPerson = new PersonBuilder().withName("Alice").withTags("friends").build();
+        Person personWithEmptyTags = new PersonBuilder().withName("Alice").withTags().build(); // Empty tag set
+        AddCommand addCommand = new AddCommand(personWithEmptyTags);
+        ModelStubWithPerson modelStub = new ModelStubWithPerson(existingPerson);
+
+        assertThrows(CommandException.class, AddCommand.MESSAGE_DUPLICATE_PERSON, () -> addCommand.execute(modelStub));
+    }
+
+    @Test
+    public void execute_newPersonWithTags_addsPersonSuccessfully() throws Exception {
+        Person newPerson = new PersonBuilder().withName("Bob").withTags("friends", "colleagues").build();
+        AddCommand addCommand = new AddCommand(newPerson);
+        ModelStubAcceptingPersonAdded modelStub = new ModelStubAcceptingPersonAdded();
+
+        CommandResult commandResult = addCommand.execute(modelStub);
+
+        assertEquals(String.format(AddCommand.MESSAGE_SUCCESS, Messages.format(newPerson)),
+                commandResult.getFeedbackToUser());
+        assertEquals(1, modelStub.personsAdded.size());
+        assertEquals(newPerson, modelStub.personsAdded.get(0));
+    }
+
+    @Test
+    public void execute_newPersonWithoutTags_addsPersonSuccessfully() throws Exception {
+        Person newPerson = new PersonBuilder().withName("Bob").build(); // No tags
+        AddCommand addCommand = new AddCommand(newPerson);
+        ModelStubAcceptingPersonAdded modelStub = new ModelStubAcceptingPersonAdded();
+
+        CommandResult commandResult = addCommand.execute(modelStub);
+
+        assertEquals(String.format(AddCommand.MESSAGE_SUCCESS, Messages.format(newPerson)),
+                commandResult.getFeedbackToUser());
+        assertEquals(1, modelStub.personsAdded.size());
+        assertEquals(newPerson, modelStub.personsAdded.get(0));
     }
 
     @Test
@@ -164,6 +286,8 @@ public class AddCommandTest {
      */
     private class ModelStubWithPerson extends ModelStub {
         private final Person person;
+        private Person updatedPerson;
+        private boolean personUpdated = false;
 
         ModelStubWithPerson(Person person) {
             requireNonNull(person);
@@ -174,6 +298,26 @@ public class AddCommandTest {
         public boolean hasPerson(Person person) {
             requireNonNull(person);
             return this.person.isSamePerson(person);
+        }
+
+        @Override
+        public void setPerson(Person target, Person editedPerson) {
+            requireNonNull(editedPerson);
+            this.updatedPerson = editedPerson;
+            this.personUpdated = true;
+        }
+
+        @Override
+        public ObservableList<Person> getFilteredPersonList() {
+            return javafx.collections.FXCollections.observableArrayList(person);
+        }
+
+        public Person getPerson() {
+            return updatedPerson != null ? updatedPerson : person;
+        }
+
+        public boolean isPersonUpdated() {
+            return personUpdated;
         }
     }
 

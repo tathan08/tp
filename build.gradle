@@ -78,4 +78,8 @@ shadowJar {
     archiveFileName = 'firstimpressions.jar'
 }
 
+run {
+    jvmArgs = ['-ea']
+}
+
 defaultTasks 'clean', 'test'
