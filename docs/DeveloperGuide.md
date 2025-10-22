@@ -395,17 +395,38 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 **Actor**: User
 
 **Main Success Scenario (MSS):**
-1. User requests to find specific name, tag or scheduled date
-2. FirstImpressions prompts "[no. of matches] found"
-3. Use case ends
+1. User requests to find persons by **name**, **tag**, or **scheduled date** using the `find` command.
+2. *FirstImpressions* filters the contact list based on the provided search criteria.
+3. *FirstImpressions* displays a message indicating the number of persons found, e.g.
+   > “3 persons listed!”
+4. Use case ends.
 
 <img src="images/findMockup.JPG" width="200px" alt="find person mockup">
 
-**Extensions**
+#### **Command Format**
 
-- 3a. Person not found \
-  FirstImpressions tthrows error "No matches for [prompt]." \
+ - find n/<name_keywords>
+ - find t/<tag_keywords>
+ - find d/<YYYY-MM-DD>
+
+#### **Delimeters & Usage**
+
+- `n/` searches by **name** (case-insensitive, partial matches allowed, only 1 parameter allowed).
+- `t/` searches by **tag** (must match the full tag name, multiple parameters allowed).
+- `d/` searches by **scheduled date** (exact date match, in `YYYY-MM-DD` format, multiple parameters allowed).
+- Names can be separated by spaces (e.g., `find n/Alice Bob`).
+- If **no name** is provided (e.g., `find n/`), all persons are listed.
+
+#### **Extensions**
+
+- **3a. Person not found** \
+  FirstImpressions throws error "0 persons listed!" \
   Use case ends
+
+- **3b. Empty name provided**  \
+  The user enters a valid prefix (`find n/`) but no keyword. \
+  Displays all persons in the list. \
+  Use case continues as in the main scenario.
 
 
 #### **Use Case: Help Menu**
