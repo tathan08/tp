@@ -83,10 +83,12 @@ public class DeleteCommandTest {
 
         Person target = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
 
+        //Create new tags
         Set<Tag> targetTag = new LinkedHashSet<>();
         targetTag.add(new Tag("tagOne"));
         targetTag.add(new Tag("tagTwo"));
 
+        //Add tags to target
         Person newPerson = new Person(
                 target.getName(),
                 target.getPhone(),
@@ -111,6 +113,7 @@ public class DeleteCommandTest {
 
         Person target = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
 
+        //Create new tags
         Set<Tag> targetTag = new LinkedHashSet<>();
         targetTag.add(new Tag("tagOne"));
         targetTag.add(new Tag("tagTwo"));
@@ -118,6 +121,7 @@ public class DeleteCommandTest {
 
         Set<Tag> testTag = Set.of(new Tag("tagOne"), new Tag("tagTwo"));
 
+        //Add tags to target
         Person newPerson = new Person(
                 target.getName(),
                 target.getPhone(),
@@ -144,11 +148,13 @@ public class DeleteCommandTest {
 
         Person target = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
 
+        //Create new tag
         Set<Tag> targetTag = new LinkedHashSet<>();
         targetTag.add(new Tag("tag"));
 
         Set<Tag> testTag = Set.of(new Tag("tag"), new Tag("vip"), new Tag("friends"));
 
+        //Add tag to target
         Person newPerson = new Person(
                 target.getName(),
                 target.getPhone(),
@@ -177,11 +183,13 @@ public class DeleteCommandTest {
 
         Person target = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
 
+        //Create new tag
         Set<Tag> targetTag = new LinkedHashSet<>();
         targetTag.add(new Tag("tag"));
 
         Set<Tag> testTag = Set.of(new Tag("vip"), new Tag("friends"));
 
+        //Add tag to target
         Person newPerson = new Person(
                 target.getName(),
                 target.getPhone(),
@@ -204,11 +212,13 @@ public class DeleteCommandTest {
 
         Person target = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
 
+        //Create new booking
         LocalDateTime targetTiming = LocalDateTime.of(3000, 10, 10, 10, 10);
         Booking booking = new Booking("1", "mr tan", targetTiming, "meeting");
 
         List<Booking> targetBooking = List.of(booking);
 
+        //Add booking to target
         Person newPerson = new Person(
                 target.getName(),
                 target.getPhone(),
@@ -218,6 +228,7 @@ public class DeleteCommandTest {
         );
         model.setPerson(target, newPerson);
 
+        //Attempt to delete booking
         DeleteCommand deleteCommand = new DeleteCommand(newPerson.getName(), 1);
 
         deleteCommand.execute(model);
@@ -232,11 +243,13 @@ public class DeleteCommandTest {
 
         Person target = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
 
+        //Create new booking
         LocalDateTime targetTiming = LocalDateTime.of(3000, 10, 10, 10, 10);
         Booking booking = new Booking("1", "mr tan", targetTiming, "meeting");
 
         List<Booking> targetBooking = List.of(booking);
 
+        //Add booking to target
         Person newPerson = new Person(
                 target.getName(),
                 target.getPhone(),
@@ -246,6 +259,7 @@ public class DeleteCommandTest {
         );
         model.setPerson(target, newPerson);
 
+        //Attempt to delete a booking
         DeleteCommand deleteCommand = new DeleteCommand(newPerson.getName(), 2);
 
         assertThrows(CommandException.class, () -> deleteCommand.execute(model));
