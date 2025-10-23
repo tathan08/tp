@@ -154,6 +154,40 @@ public class FindCommandTest {
     }
 
     @Test
+    public void execute_predicateWithSingleMatch_success() {
+        // Use an existing person in model, e.g., "Alice Pauline"
+        ClientContainsKeywordsPredicate predicate = new ClientContainsKeywordsPredicate(
+                                        ClientContainsKeywordsPredicate.SearchType.NAME, List.of("Alice"));
+        FindCommand command = new FindCommand(predicate);
+
+        // Execute and capture the result
+        CommandResult result = command.execute(model);
+
+        // Assert feedback string contains the correct number of matches
+        assertTrue(result.getFeedbackToUser().contains("1 persons listed!"));
+
+        // Assert filtered list contains the correct person
+        assertTrue(model.getFilteredPersonList().stream().anyMatch(p -> p.getName().fullName.equals("Alice Pauline")));
+    }
+
+    @Test
+    public void execute_predicateWithNoMatches_success() {
+        // Use a keyword that does not match anyone
+        ClientContainsKeywordsPredicate predicate = new ClientContainsKeywordsPredicate(
+                                        ClientContainsKeywordsPredicate.SearchType.NAME, List.of("Nonexistent"));
+        FindCommand command = new FindCommand(predicate);
+
+        // Execute
+        CommandResult result = command.execute(model);
+
+        // Assert feedback string indicates 0 matches
+        assertTrue(result.getFeedbackToUser().contains("0 persons listed!"));
+
+        // Assert filtered list is empty
+        assertTrue(model.getFilteredPersonList().isEmpty());
+    }
+
+    @Test
     public void toString_includesPredicateDetails() {
         ClientContainsKeywordsPredicate predicate =
                 new ClientContainsKeywordsPredicate(ClientContainsKeywordsPredicate.SearchType.TAG, List.of("friends"));
@@ -163,6 +197,15 @@ public class FindCommandTest {
         assertTrue(result.contains("TAG"));
     }
 
+    @Test
+    public void toString_returnsExpectedString() {
+        ClientContainsKeywordsPredicate predicate =
+                new ClientContainsKeywordsPredicate(ClientContainsKeywordsPredicate.SearchType.NAME, List.of("Bob"));
+        FindCommand command = new FindCommand(predicate);
+        String s = command.toString();
+        assertTrue(s.contains("FindCommand"));
+        assertTrue(s.contains("Bob"));
+    }
 
     /**
      * Parses {@code userInput} into a {@code ClientContainsKeywordsPredicate}.

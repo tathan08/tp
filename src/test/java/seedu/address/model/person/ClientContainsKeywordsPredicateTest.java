@@ -115,6 +115,11 @@ public class ClientContainsKeywordsPredicateTest {
         predicate = new ClientContainsKeywordsPredicate(ClientContainsKeywordsPredicate.SearchType.NAME,
                                         Arrays.asList("carol"));
         assertTrue(predicate.test(new PersonBuilder().withName("Carolyn").build()));
+
+        predicate = new ClientContainsKeywordsPredicate(
+                                        ClientContainsKeywordsPredicate.SearchType.NAME, List.of("Alice"));
+        Person person = new PersonBuilder().withName("Bob").build();
+        assertFalse(predicate.test(person)); // covers false branch
     }
 
     @Test
@@ -177,6 +182,22 @@ public class ClientContainsKeywordsPredicateTest {
         predicate = new ClientContainsKeywordsPredicate(ClientContainsKeywordsPredicate.SearchType.TAG,
                                         Collections.emptyList());
         assertFalse(predicate.test(new PersonBuilder().withTags("vip").build()));
+    }
+
+    @Test
+    public void test_tagSearch_matchesCorrectly() {
+        ClientContainsKeywordsPredicate predicate = new ClientContainsKeywordsPredicate(
+                                        ClientContainsKeywordsPredicate.SearchType.TAG, List.of("friends"));
+        Person person = new PersonBuilder().withTags("friends", "colleague").build();
+        assertTrue(predicate.test(person)); // covers TAG branch
+    }
+
+    @Test
+    public void test_tagSearch_doesNotMatch() {
+        ClientContainsKeywordsPredicate predicate = new ClientContainsKeywordsPredicate(
+                                        ClientContainsKeywordsPredicate.SearchType.TAG, List.of("family"));
+        Person person = new PersonBuilder().withTags("friends", "colleague").build();
+        assertFalse(predicate.test(person)); // false branch for TAG path
     }
 
     // ===============================
