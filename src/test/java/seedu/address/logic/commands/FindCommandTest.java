@@ -2,6 +2,8 @@ package seedu.address.logic.commands;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.Messages.MESSAGE_PERSONS_LISTED_OVERVIEW;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
@@ -14,6 +16,7 @@ import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
@@ -118,6 +121,48 @@ public class FindCommandTest {
         String expected = FindCommand.class.getCanonicalName() + "{predicate=" + predicate + "}";
         assertEquals(expected, findCommand.toString());
     }
+
+    @Test
+    public void constructor_nullPredicate_throwsAssertionError() {
+        assertThrows(AssertionError.class, () -> new FindCommand(null));
+    }
+
+    @Test
+    public void execute_nullModel_throwsNullPointerException() {
+        ClientContainsKeywordsPredicate predicate =
+                new ClientContainsKeywordsPredicate(ClientContainsKeywordsPredicate.SearchType.NAME, List.of("Alice"));
+        FindCommand command = new FindCommand(predicate);
+        assertThrows(NullPointerException.class, () -> command.execute(null));
+    }
+
+    @Test
+    public void equals_samePredicate_returnsTrue() {
+        ClientContainsKeywordsPredicate predicate =
+                new ClientContainsKeywordsPredicate(ClientContainsKeywordsPredicate.SearchType.NAME, List.of("Alice"));
+        FindCommand command1 = new FindCommand(predicate);
+        FindCommand command2 = new FindCommand(predicate);
+        assertEquals(command1, command2);
+    }
+
+    @Test
+    public void equals_differentPredicate_returnsFalse() {
+        FindCommand command1 = new FindCommand(new ClientContainsKeywordsPredicate(
+                ClientContainsKeywordsPredicate.SearchType.NAME, List.of("Alice")));
+        FindCommand command2 = new FindCommand(new ClientContainsKeywordsPredicate(
+                ClientContainsKeywordsPredicate.SearchType.NAME, List.of("Bob")));
+        assertNotEquals(command1, command2);
+    }
+
+    @Test
+    public void toString_includesPredicateDetails() {
+        ClientContainsKeywordsPredicate predicate =
+                new ClientContainsKeywordsPredicate(ClientContainsKeywordsPredicate.SearchType.TAG, List.of("friends"));
+        FindCommand command = new FindCommand(predicate);
+        String result = command.toString();
+        assertTrue(result.contains("friends"));
+        assertTrue(result.contains("TAG"));
+    }
+
 
     /**
      * Parses {@code userInput} into a {@code ClientContainsKeywordsPredicate}.
