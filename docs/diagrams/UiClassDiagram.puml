@@ -15,6 +15,7 @@ Class PersonListPanel
 Class PersonCard
 Class StatusBarFooter
 Class CommandBox
+Class BookingRow
 }
 
 package Model <<Rectangle>> {
@@ -37,6 +38,12 @@ MainWindow *-down-> "1" StatusBarFooter
 MainWindow --> "0..1" HelpWindow
 
 PersonListPanel -down-> "*" PersonCard
+PersonCard *-down-> "*" BookingRow
+
+note bottom of BookingRow
+  Nested class of PersonCard
+  Displayed as table of Bookings
+end note
 
 MainWindow -left-|> UiPart
 
@@ -48,6 +55,7 @@ StatusBarFooter --|> UiPart
 HelpWindow --|> UiPart
 
 PersonCard ..> Model
+BookingRow -right.> Model
 UiManager -right-> Logic
 MainWindow -left-> Logic
 
