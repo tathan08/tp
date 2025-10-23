@@ -7,74 +7,20 @@ skinparam classBackgroundColor STORAGE_COLOR
 package Storage as StoragePackage {
 
 package "UserPrefs Storage" #F4F6F6{
-    Class "<<interface>>\nUserPrefsStorage" as UserPrefsStorage {
-        + readUserPrefs()
-        + saveUserPrefs()
-        + getUserPrefsFilePath()
-    }
-    Class JsonUserPrefsStorage {
-        - filePath
-        + JsonUserPrefStorage()
-        + readUserPrefs()
-        + saveUserPrefs()
-    }
+    Class "<<interface>>\nUserPrefsStorage" as UserPrefsStorage
+    Class JsonUserPrefsStorage
 }
 
-Class "<<interface>>\nStorage" as Storage {
-    + readAddressBook()
-    + saveAddressBook()
-    + readUserPrefs()
-    + saveUserPrefs()
-    + getAddressBookFilePath()
-    + getUserPrefsFilePath()
-}
-
-Class StorageManager {
-    - userPrefStorage
-    - addressBookStorage
-    + StorageManager()
-    + readAddressBook()
-    + saveAddressBook()
-    + readUserPrefs()
-    + saveUserPrefs()
-}
+Class "<<interface>>\nStorage" as Storage
+Class StorageManager
 
 package "AddressBook Storage" #F4F6F6{
-    Class "<<interface>>\nAddressBookStorage" as AddressBookStorage {
-        + readAddressBook()
-        + saveAddressBook()
-        + getAddressBookFilePath()
-    }
-
-    Class JsonAddressBookStorage {
-        - filePath
-        + JsonAddressBookStorage()
-        + readAddressBook()
-        + saveAddressBook()
-    }
-
-    Class JsonSerializableAddressBook {
-        - persons
-        + JsonSerializableAddressBook()
-    }
-
-    Class JsonAdaptedPerson {
-        - name
-        - phone
-        - email
-    }
-
-    Class JsonAdaptedTag {
-        - tagName
-    }
-
-    Class JsonAdaptedBooking {
-        - id
-        - clientName
-        - datetime
-        - description
-    }
-
+    Class "<<interface>>\nAddressBookStorage" as AddressBookStorage
+    Class JsonAddressBookStorage
+    Class JsonSerializableAddressBook
+    Class JsonAdaptedPerson
+    Class JsonAdaptedTag
+    Class JsonAdaptedBooking
 }
 
 }
@@ -86,8 +32,8 @@ StorageManager .up.|> Storage
 StorageManager -up-> "1" UserPrefsStorage
 StorageManager -up-> "1" AddressBookStorage
 
-Storage -left-|> UserPrefsStorage
-Storage -right-|> AddressBookStorage
+Storage -right-|> UserPrefsStorage
+Storage -left-|> AddressBookStorage
 
 JsonUserPrefsStorage .up.|> UserPrefsStorage
 JsonAddressBookStorage .up.|> AddressBookStorage
