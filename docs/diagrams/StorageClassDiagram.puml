@@ -7,19 +7,20 @@ skinparam classBackgroundColor STORAGE_COLOR
 package Storage as StoragePackage {
 
 package "UserPrefs Storage" #F4F6F6{
-Class "<<interface>>\nUserPrefsStorage" as UserPrefsStorage
-Class JsonUserPrefsStorage
+    Class "<<interface>>\nUserPrefsStorage" as UserPrefsStorage
+    Class JsonUserPrefsStorage
 }
 
 Class "<<interface>>\nStorage" as Storage
 Class StorageManager
 
 package "AddressBook Storage" #F4F6F6{
-Class "<<interface>>\nAddressBookStorage" as AddressBookStorage
-Class JsonAddressBookStorage
-Class JsonSerializableAddressBook
-Class JsonAdaptedPerson
-Class JsonAdaptedTag
+    Class "<<interface>>\nAddressBookStorage" as AddressBookStorage
+    Class JsonAddressBookStorage
+    Class JsonSerializableAddressBook
+    Class JsonAdaptedPerson
+    Class JsonAdaptedTag
+    Class JsonAdaptedBooking
 }
 
 }
@@ -31,13 +32,14 @@ StorageManager .up.|> Storage
 StorageManager -up-> "1" UserPrefsStorage
 StorageManager -up-> "1" AddressBookStorage
 
-Storage -left-|> UserPrefsStorage
-Storage -right-|> AddressBookStorage
+Storage -right-|> UserPrefsStorage
+Storage -left-|> AddressBookStorage
 
 JsonUserPrefsStorage .up.|> UserPrefsStorage
 JsonAddressBookStorage .up.|> AddressBookStorage
 JsonAddressBookStorage ..> JsonSerializableAddressBook
 JsonSerializableAddressBook --> "*" JsonAdaptedPerson
 JsonAdaptedPerson --> "*" JsonAdaptedTag
+JsonAdaptedPerson --> "*" JsonAdaptedBooking
 
 @enduml
