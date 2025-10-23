@@ -238,11 +238,113 @@ The following activity diagram summarizes what happens when a user executes a ne
   * Pros: Will use less memory (e.g. for `delete`, just save the person being deleted).
   * Cons: We must ensure that the implementation of each individual command are correct.
 
-_{more aspects and alternatives to be added}_
 
-### \[Proposed\] Data archiving
+### \[Proposed\] Reschedule
 
-_{Explain here how the data archiving feature will be implemented}_
+#### Proposed Implementation
+
+The reschedule mechanism allows users to update the datetime of an existing booking. It interacts with the **Model** and **Booking** classes to ensure no conflicts occur.
+
+**Operations:**
+
+  - `Model#rescheduleBooking(Booking booking, LocalDateTime newDateTime)` — Updates the booking with a new datetime after validation.
+  - `Booking#setDateTime(LocalDateTime newDateTime)` — Updates the datetime field of a booking.
+  - Optional undo support: Track changes in `VersionedAddressBook` to allow undo/redo of reschedules.
+
+-----
+
+## Usage Scenario
+
+1.  The user views all bookings and identifies one to reschedule (e.g., a booking for Carl Kurz).
+
+2.  Executes the command:
+
+    ```
+     reschedule 2 n/Carl d/2025-10-25 1100
+    ```
+
+    Where:
+
+    `b/2` = booking ID
+
+    `n/Carl` = team member name (added for clarity and verification)
+
+    `d/2025-10-25 14:00` = new datetime
+
+    The Logic component parses the command and calls:
+
+    ```
+     model.rescheduleBooking(selectedBooking, newDateTime);
+    ```
+
+    The **Model** validates:
+
+      - The booking exists (using `b/2`).
+      - The team member name (`n/`) matches the team member in booking `b/2`.
+      - The new datetime does not conflict with other bookings for the same team member.
+      - All parameters are valid (non-null, proper format).
+
+    If validation passes, the booking datetime is updated. Otherwise, an error is thrown (e.g., team member mismatch, conflict, or invalid date).
+
+    The **Logic** component returns a `CommandResult` to the UI:
+
+      - **Success Example:**
+
+        ```
+        Booking rescheduled successfully: Carl Kurz, new datetime: 2025-10-25 14:00
+        ```
+
+      - **Failure Example:** Appropriate error message.
+
+
+<img src="images/RescheduleDiagram.png"/>
+
+-----
+
+## Design Considerations
+
+### Conflict Detection:
+
+  - Ensure the updated datetime does not conflict with other bookings for the same team member.
+  - Conflicts prevent the reschedule.
+
+### Undo/Redo Support:
+
+  - Optional integration with **VersionedAddressBook**.
+  - Call `Model#commitAddressBook()` after a successful reschedule.
+
+### Parameter Validation:
+
+  - Booking ID exists.
+  - **Team member name (`n/`) matches the name in the booking.** (New consideration)
+  - New datetime is properly formatted and in the future.
+  - Team member availability at the new datetime.
+
+### Atomicity:
+
+  - Reschedule is **all-or-nothing**: either fully applied or not applied at all.
+
+-----
+
+## Extensions / Error Cases
+
+  - **Booking does not exist:**
+    Error: "Booking ID not found"
+
+  - **Double booking:**
+    Error: "Team member is already booked at the requested time"
+
+  - **Invalid datetime format:**
+    Error: "Invalid datetime format. Use YYYY-MM-DD HH:MM"
+
+  - **Past datetime:**
+    Error: "Cannot reschedule booking to a past datetime"
+
+  - **Missing parameters:**
+    Error: "Booking ID and new datetime are required for rescheduling"
+
+  - **Unknown parameter:**
+    Error: "Unknown parameter. Valid parameters are b/ (booking ID), n/ (team member name), d/ (new datetime)" (Updated list)
 
 
 --------------------------------------------------------------------------------------------------------------------
