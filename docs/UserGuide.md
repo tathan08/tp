@@ -143,7 +143,7 @@ Examples:
 
 ![edit message](images\editMessage.jpg)
 
-### Locating persons by name: `find`
+### Locating team members by name: `find`
 
 Search and lists all people whose name contains the given parameter. <br>
 If given a tag or date, will search all tags and bookings to list all people with an exact match.
