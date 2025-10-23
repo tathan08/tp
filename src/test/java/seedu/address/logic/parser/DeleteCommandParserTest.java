@@ -24,6 +24,7 @@ public class DeleteCommandParserTest {
 
     private DeleteCommandParser parser = new DeleteCommandParser();
 
+    //Tests for parsing name
     @Test
     public void parse_validArgs_returnsDeleteCommand() {
         assertParseSuccess(parser, "delete n/ Alex Yeoh",
@@ -47,6 +48,7 @@ public class DeleteCommandParserTest {
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, Name.MESSAGE_CONSTRAINTS));
     }
 
+    //Tests for parsing tags
     @Test
     public void parse_deleteTag_success() {
         String input = "delete n/Alex Yeoh t/tag";
@@ -67,6 +69,28 @@ public class DeleteCommandParserTest {
         String input = "delete n/Alex Yeoh t/ ";
         assertParseFailure(parser, input, String.format(MESSAGE_INVALID_COMMAND_FORMAT,
                 DeleteCommand.MESSAGE_DELETE_TAG_USAGE));
+    }
+
+    //Tests for parsing bookings
+    @Test
+    public void parse_deleteBooking_success() {
+        String input = "delete n/Alex Yeoh b/1";
+        DeleteCommand expected = new DeleteCommand(new Name("Alex Yeoh"), 1);
+        assertParseSuccess(parser, input, expected);
+    }
+
+    @Test
+    public void parse_deleteEmptyBooking_throwsParseException() {
+        String input = "delete n/Alex Yeoh b/ ";
+        assertParseFailure(parser, input, String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                DeleteCommand.MESSAGE_DELETE_BOOKING_USAGE));
+    }
+
+    @Test
+    public void parse_deleteBookingAndTag_throwsParseException() {
+        String input = "delete n/Alex Yeoh b/1 t/1 ";
+        assertParseFailure(parser, input, String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                DeleteCommand.MESSAGE_DELETE_BOOKING_OR_TAG));
     }
 
 }

@@ -53,13 +53,16 @@ public class AddressBookParserTest {
 
     @Test
     public void parseCommand_delete() throws Exception {
-        DeleteCommand command = (DeleteCommand) parser.parseCommand(
+        DeleteCommand deleteName = (DeleteCommand) parser.parseCommand(
                 DeleteCommand.COMMAND_WORD + " n/" + PERSON_NAME);
-        assertEquals(new DeleteCommand(new Name(PERSON_NAME), Optional.empty()), command);
+        assertEquals(new DeleteCommand(new Name(PERSON_NAME), Optional.empty()), deleteName);
         DeleteCommand deleteTag = (DeleteCommand) parser.parseCommand(
                         DeleteCommand.COMMAND_WORD + " n/" + PERSON_NAME + " t/" + PERSON_TAG);
         Optional<Set<Tag>> personTag = Optional.of(Set.of(new Tag(PERSON_TAG)));
         assertEquals(new DeleteCommand(new Name(PERSON_NAME), personTag), deleteTag);
+        DeleteCommand deleteBooking = (DeleteCommand) parser.parseCommand(
+                DeleteCommand.COMMAND_WORD + " n/" + PERSON_NAME + " b/1");
+        assertEquals(new DeleteCommand(new Name((PERSON_NAME)), 1), deleteBooking);
     }
 
     @Test
