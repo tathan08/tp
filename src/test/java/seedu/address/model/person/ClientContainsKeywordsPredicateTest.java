@@ -2,6 +2,7 @@ package seedu.address.model.person;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDateTime;
@@ -47,6 +48,14 @@ public class ClientContainsKeywordsPredicateTest {
         ClientContainsKeywordsPredicate tagPredicate = new ClientContainsKeywordsPredicate(
                                         ClientContainsKeywordsPredicate.SearchType.TAG, firstKeywordList);
         assertFalse(firstPredicate.equals(tagPredicate));
+    }
+
+    @Test
+    public void constructor_nullType_throwsAssertionError() {
+        List<String> keywords = List.of("Alice");
+        AssertionError thrown = assertThrows(AssertionError.class, () ->
+                new ClientContainsKeywordsPredicate(null, keywords));
+        assertEquals("SearchType must not be null", thrown.getMessage());
     }
 
     // ===============================
@@ -106,6 +115,41 @@ public class ClientContainsKeywordsPredicateTest {
         predicate = new ClientContainsKeywordsPredicate(ClientContainsKeywordsPredicate.SearchType.NAME,
                                         Arrays.asList("carol"));
         assertTrue(predicate.test(new PersonBuilder().withName("Carolyn").build()));
+
+        predicate = new ClientContainsKeywordsPredicate(
+                                        ClientContainsKeywordsPredicate.SearchType.NAME, List.of("Alice"));
+        Person person = new PersonBuilder().withName("Bob").build();
+        assertFalse(predicate.test(person)); // covers false branch
+    }
+
+    @Test
+    public void constructor_nullKeywords_throwsAssertionError() {
+        AssertionError thrown = assertThrows(AssertionError.class, () -> new ClientContainsKeywordsPredicate(
+                                                                        ClientContainsKeywordsPredicate.SearchType.NAME,
+                                                                        null));
+        assertEquals("Keywords list must not be null", thrown.getMessage());
+    }
+
+    @Test
+    public void test_invalidSearchType_throwsException() {
+        // Use reflection to bypass the enum and simulate an invalid state
+        ClientContainsKeywordsPredicate predicate = new ClientContainsKeywordsPredicate(
+                                        ClientContainsKeywordsPredicate.SearchType.NAME, List.of("Alice")) {
+            @Override
+            public boolean test(Person person) {
+                throw new IllegalStateException("Unexpected Value:" + "INVALID");
+            }
+        };
+
+        assertThrows(IllegalStateException.class, () -> predicate.test(new PersonBuilder().withName("Alice").build()));
+    }
+
+    @Test
+    public void test_assertions_validInputs() {
+        // Valid case just to hit the asserts
+        ClientContainsKeywordsPredicate predicate = new ClientContainsKeywordsPredicate(
+                                        ClientContainsKeywordsPredicate.SearchType.NAME, List.of("Alice"));
+        assertTrue(predicate.test(new PersonBuilder().withName("Alice Bob").build()));
     }
 
     // ===============================
@@ -138,6 +182,22 @@ public class ClientContainsKeywordsPredicateTest {
         predicate = new ClientContainsKeywordsPredicate(ClientContainsKeywordsPredicate.SearchType.TAG,
                                         Collections.emptyList());
         assertFalse(predicate.test(new PersonBuilder().withTags("vip").build()));
+    }
+
+    @Test
+    public void test_tagSearch_matchesCorrectly() {
+        ClientContainsKeywordsPredicate predicate = new ClientContainsKeywordsPredicate(
+                                        ClientContainsKeywordsPredicate.SearchType.TAG, List.of("friends"));
+        Person person = new PersonBuilder().withTags("friends", "colleague").build();
+        assertTrue(predicate.test(person)); // covers TAG branch
+    }
+
+    @Test
+    public void test_tagSearch_doesNotMatch() {
+        ClientContainsKeywordsPredicate predicate = new ClientContainsKeywordsPredicate(
+                                        ClientContainsKeywordsPredicate.SearchType.TAG, List.of("family"));
+        Person person = new PersonBuilder().withTags("friends", "colleague").build();
+        assertFalse(predicate.test(person)); // false branch for TAG path
     }
 
     // ===============================

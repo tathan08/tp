@@ -16,7 +16,6 @@ import java.util.Set;
 import java.util.logging.Logger;
 
 import seedu.address.commons.core.LogsCenter;
-import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.CollectionUtil;
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
@@ -37,35 +36,38 @@ public class EditCommand extends Command {
     public static final String COMMAND_WORD = "edit";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Edits the details of the person identified "
-            + "by the index number used in the displayed person list. "
+            + "by their name. "
             + "Existing values will be overwritten by the input values.\n"
-            + "Parameters: INDEX (must be a positive integer) "
-            + "[" + PREFIX_NAME + "NAME] "
+            + "Parameters: " + PREFIX_NAME + "OLD_NAME "
+            + "[" + PREFIX_NAME + "NEW_NAME] "
             + "[" + PREFIX_PHONE + "PHONE] "
             + "[" + PREFIX_EMAIL + "EMAIL] "
             + "[" + PREFIX_TAG + "TAG]...\n"
-            + "Example: " + COMMAND_WORD + " 1 "
+            + "Example: " + COMMAND_WORD + " "
+            + PREFIX_NAME + "John Doe "
+            + PREFIX_NAME + "Jane Doe "
             + PREFIX_PHONE + "91234567 "
-            + PREFIX_EMAIL + "johndoe@example.com";
+            + PREFIX_EMAIL + "janedoe@example.com";
 
     public static final String MESSAGE_EDIT_PERSON_SUCCESS = "Edited Person: %1$s";
     public static final String MESSAGE_NOT_EDITED = "At least one field to edit must be provided.";
     public static final String MESSAGE_DUPLICATE_PERSON = "This person already exists in the address book.";
+    public static final String MESSAGE_PERSON_NOT_FOUND = "Person with name '%1$s' not found in the address book.";
 
     private static final Logger logger = LogsCenter.getLogger(EditCommand.class);
 
-    private final Index index;
+    private final Name oldName;
     private final EditPersonDescriptor editPersonDescriptor;
 
     /**
-     * @param index of the person in the filtered person list to edit
+     * @param oldName the name of the person to edit
      * @param editPersonDescriptor details to edit the person with
      */
-    public EditCommand(Index index, EditPersonDescriptor editPersonDescriptor) {
-        requireNonNull(index);
+    public EditCommand(Name oldName, EditPersonDescriptor editPersonDescriptor) {
+        requireNonNull(oldName);
         requireNonNull(editPersonDescriptor);
 
-        this.index = index;
+        this.oldName = oldName;
         this.editPersonDescriptor = new EditPersonDescriptor(editPersonDescriptor);
     }
 
@@ -73,17 +75,19 @@ public class EditCommand extends Command {
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
 
-        logger.info(String.format("Executing EditCommand for index: %d", index.getOneBased()));
-
         List<Person> lastShownList = model.getFilteredPersonList();
 
-        if (index.getZeroBased() >= lastShownList.size()) {
-            logger.warning(String.format("Invalid index provided: %d (list size: %d)",
-                    index.getOneBased(), lastShownList.size()));
-            throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
-        }
+        logger.info(String.format("Executing EditCommand for Person: %s", oldName.fullName));
 
-        Person personToEdit = lastShownList.get(index.getZeroBased());
+        Person personToEdit = lastShownList.stream()
+                .filter(person -> person.getName().equals(oldName))
+                .findFirst()
+                .orElseThrow(() -> {
+                    logger.warning(String.format(
+                        "Invalid name provided, Person not found: %s", oldName.fullName));
+                    return new CommandException(String.format(MESSAGE_PERSON_NOT_FOUND, oldName.fullName));
+                });
+
         Person editedPerson = createEditedPerson(personToEdit, editPersonDescriptor);
 
         if (!personToEdit.isSamePerson(editedPerson) && model.hasPerson(editedPerson)) {
@@ -130,19 +134,19 @@ public class EditCommand extends Command {
         }
 
         EditCommand otherEditCommand = (EditCommand) other;
-        return index.equals(otherEditCommand.index)
+        return oldName.equals(otherEditCommand.oldName)
                 && editPersonDescriptor.equals(otherEditCommand.editPersonDescriptor);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(index, editPersonDescriptor);
+        return Objects.hash(editPersonDescriptor);
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this)
-                .add("index", index)
+                .add("oldName", oldName)
                 .add("editPersonDescriptor", editPersonDescriptor)
                 .toString();
     }

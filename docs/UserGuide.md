@@ -143,17 +143,21 @@ Examples:
 
 ![edit message](images\editMessage.jpg)
 
-### Locating persons by name: `find`
+### Locating team members by name: `find`
 
-Search and lists all people that match the given name or tags. <br>
-If given a date, will search all bookings and list all people with those bookings.
+Search and lists all people whose name contains the given parameter. <br>
+If given a tag or date, will search all tags and bookings to list all people with an exact match.
 
-Format: `find [n/NAME] [t/TAG] [d/DATE]`
+Format: <br>
+`find [n/NAME]` <br>
+`find [t/TAG1] [t/TAG2]...` <br>
+`find [d/DATE1] [d/DATE2]...` <br>
 
 * Only one field is allowed, subsequent fields will be ignored. e.g. `find n/Hans t/teamLead` is equivalent to `find n/Hans`
-* Only one parameter is allowed, subsequent parameters will be ignored. e.g. `find n/Ali Bob` is equivalent to `find n/Ali`
+* For "/n", only one parameter is allowed, subsequent parameters will be considered as part of the name. e.g. `find n/Ali n/Bob` will search for `Ali n/Bob`
+* For "t/" and "d/", multiple parameters are allowed, all tags requested and all bookings with the requested dates will be listed. e.g. `find t/teamLead vipHandler` or `find d/2026-11-15 2026-12-25` will list all team member's that contain the requested parameters
 * The search for names and tags are case-insensitive. e.g `hans` will match `Hans`
-* Partial matches will be shown e.g. `find n/Han` will find a person named `Hans`
+* Partial matches will be shown e.g. `find n/Ali` will find a person named `Alice`
 * Date must be in `YYYY-MM-DD` format.
 
 Examples:
