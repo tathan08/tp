@@ -9,15 +9,15 @@ Participant ":Model" as model MODEL_COLOR
 Participant ":Storage" as storage STORAGE_COLOR
 
 ' User initiates reschedule command
-user -[USER_COLOR]> ui : "reschedule b/2 n/Carl d/2025-10-25 1100"
+user -[USER_COLOR]> ui : "reschedule 2 n/Carl d/2025-10-25 1100"
 activate ui UI_COLOR
 
 ' UI passes command to logic
-ui -[UI_COLOR]> logic : execute("reschedule b/2 n/Carl d/2025-10-25 1100")
+ui -[UI_COLOR]> logic : execute("reschedule 2 n/Carl d/2025-10-25 1100")
 activate logic LOGIC_COLOR
 
 ' Logic calls model to perform reschedule
-logic -[LOGIC_COLOR]> model : rescheduleBooking(bookingId=2, newDateTime=2025-10-25 1100)
+logic -[LOGIC_COLOR]> model : rescheduleBooking(id, newDateTime)
 activate model MODEL_COLOR
 
 ' Model validates and updates booking

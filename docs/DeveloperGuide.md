@@ -261,14 +261,14 @@ The reschedule mechanism allows users to update the datetime of an existing book
 2.  Executes the command:
 
     ```
-     reschedule b/2 n/Carl Kurz d/2025-10-25 14:00
+     reschedule 2 n/Carl d/2025-10-25 1100
     ```
 
     Where:
 
     `b/2` = booking ID
 
-    `n/Carl Kurz` = team member name (added for clarity and verification)
+    `n/Carl` = team member name (added for clarity and verification)
 
     `d/2025-10-25 14:00` = new datetime
 
@@ -331,9 +331,6 @@ The reschedule mechanism allows users to update the datetime of an existing book
 
   - **Booking does not exist:**
     Error: "Booking ID not found"
-
-  - **Team member mismatch:**
-    Error: "Booking ID 2 is not for Carl Kurz. It is for Alice Tan." (New error case)
 
   - **Double booking:**
     Error: "Team member is already booked at the requested time"
