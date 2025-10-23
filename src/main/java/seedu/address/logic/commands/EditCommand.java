@@ -74,8 +74,11 @@ public class EditCommand extends Command {
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
+        assert oldName != null : "Old name should not be null";
+        assert editPersonDescriptor != null : "Edit person descriptor should not be null";
 
         List<Person> lastShownList = model.getFilteredPersonList();
+        assert lastShownList != null : "Filtered person list should not be null";
 
         logger.info(String.format("Executing EditCommand for Person: %s", oldName.fullName));
 
@@ -89,6 +92,7 @@ public class EditCommand extends Command {
                 });
 
         Person editedPerson = createEditedPerson(personToEdit, editPersonDescriptor);
+        assert editedPerson != null : "Edited person should not be null";
 
         if (!personToEdit.isSamePerson(editedPerson) && model.hasPerson(editedPerson)) {
             logger.warning(String.format("Attempted to edit person %s to duplicate: %s",
@@ -182,6 +186,7 @@ public class EditCommand extends Command {
         }
 
         public void setName(Name name) {
+            assert name != null : "Name should not be null";
             this.name = name;
         }
 
@@ -190,6 +195,7 @@ public class EditCommand extends Command {
         }
 
         public void setPhone(Phone phone) {
+            assert phone != null : "Phone should not be null";
             this.phone = phone;
         }
 
@@ -198,6 +204,7 @@ public class EditCommand extends Command {
         }
 
         public void setEmail(Email email) {
+            assert email != null : "Email should not be null";
             this.email = email;
         }
 
