@@ -1,0 +1,46 @@
+@startuml
+!include style.puml
+skinparam ArrowFontStyle plain
+
+Actor User as user USER_COLOR
+Participant ":UI" as ui UI_COLOR
+Participant ":Logic" as logic LOGIC_COLOR
+Participant ":Model" as model MODEL_COLOR
+Participant ":Storage" as storage STORAGE_COLOR
+
+' User initiates reschedule command
+user -[USER_COLOR]> ui : "reschedule b/2 n/Carl d/2025-10-25 1100"
+activate ui UI_COLOR
+
+' UI passes command to logic
+ui -[UI_COLOR]> logic : execute("reschedule b/2 n/Carl d/2025-10-25 1100")
+activate logic LOGIC_COLOR
+
+' Logic calls model to perform reschedule
+logic -[LOGIC_COLOR]> model : rescheduleBooking(bookingId=2, newDateTime=2025-10-25 1100)
+activate model MODEL_COLOR
+
+' Model validates and updates booking
+model -[MODEL_COLOR]-> logic
+deactivate model
+
+' If needed, logic commits the change to storage
+logic -[LOGIC_COLOR]> storage : saveAddressBook(addressBook)
+activate storage STORAGE_COLOR
+
+storage -[STORAGE_COLOR]> storage : Save to file
+activate storage STORAGE_COLOR_T1
+storage --[STORAGE_COLOR]> storage
+deactivate storage
+
+storage --[STORAGE_COLOR]> logic
+deactivate storage
+
+' Logic returns result to UI
+logic --[LOGIC_COLOR]> ui
+deactivate logic
+
+' UI displays result to user
+ui--[UI_COLOR]> user
+deactivate ui
+@enduml
