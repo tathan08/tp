@@ -29,14 +29,23 @@ public class FindCommand extends Command {
      * {@code Predicate}.
      */
     public FindCommand(Predicate<Person> predicate) {
+        // Defensive check — the predicate should never be null
+        assert predicate != null : "Predicate passed to FindCommand must not be null";
+
         this.predicate = predicate;
     }
 
     @Override
     public CommandResult execute(Model model) {
         requireNonNull(model);
+        assert model.getFilteredPersonList() != null
+                    : "Model's filtered person list should not be null before updating";
+
         model.updateFilteredPersonList(predicate);
         int resultCount = model.getFilteredPersonList().size();
+        // Ensure the count is non-negative
+        assert resultCount >= 0 : "Result count of filtered list should never be negative";
+
         return new CommandResult(String.format(Messages.MESSAGE_PERSONS_LISTED_OVERVIEW, resultCount));
     }
 
@@ -52,6 +61,9 @@ public class FindCommand extends Command {
         }
 
         FindCommand otherFindCommand = (FindCommand) other;
+        // Sanity check
+        assert this.predicate != null : "Predicate should not be null when comparing commands";
+
         return predicate.equals(otherFindCommand.predicate);
     }
 
