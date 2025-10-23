@@ -76,6 +76,7 @@ public class DeleteCommandTest {
         assertCommandSuccess(deleteCommand, model, expectedMessage, expectedModel);
     }
 
+    // Tests for deleting tags
     @Test
     public void execute_deleteMultipleTags_success() throws CommandException {
         showPersonAtIndex(model, INDEX_FIRST_PERSON);
@@ -196,6 +197,7 @@ public class DeleteCommandTest {
         assertThrows(CommandException.class, () -> deleteCommand.execute(model));
     }
 
+    // Tests for deleting bookings
     @Test
     public void execute_deleteBooking_success() throws CommandException {
         showPersonAtIndex(model, INDEX_FIRST_PERSON);
