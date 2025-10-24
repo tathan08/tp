@@ -220,11 +220,9 @@ Format: `list`
 
 Edits an existing person in the contact list.
 
-Format: `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [t/TAG]…​`
+Format: `edit n/OLD_NAME [n/NEW_NAME] [p/PHONE] [e/EMAIL] [t/TAG]…​`
 
-* Edits the person at the specified `INDEX`. The index refers to the index number shown in the currently displayed person list. <br>
-The index **must be a positive integer** 1, 2, 3, …​ and <br>
-**must be between 1 and the total number of items in the currently displayed person list**
+* Edits the person identified by `OLD_NAME`. The name must exactly match (case-sensitive) a person in the contact list.
 * At least one of the optional fields must be provided.
 * Existing values will be updated to the input values.
 * When editing tags, the existing tags of the person will be removed i.e adding of tags is not cumulative.
@@ -232,12 +230,12 @@ The index **must be a positive integer** 1, 2, 3, …​ and <br>
     specifying any tags after it.
 
 <div markdown="span" class="alert alert-warning">:exclamation: **Warning:**
-The index number changes based on the currently displayed list. If you use `find` to filter the list, the indices will be different from the full list. Always check the current list before editing.
+Person names are case-sensitive. `edit n/john doe` will not edit `John Doe`. Use the exact name as shown in the contact list.
 </div>
 
 Examples:
-*  `edit 1 p/91234567 e/johntan@gmail.com` Edits the phone number and email address of the 1st person to be `91234567` and `johntan@gmail.com` respectively.
-*  `edit 2 n/Betsy Crower t/` Edits the name of the 2nd person to be `Betsy Crower` and clears all existing tags.
+*  `edit n/John Doe p/91234567 e/johntan@gmail.com` Edits the phone number and email address of the person named `John Doe` to be `91234567` and `johntan@gmail.com` respectively.
+*  `edit n/John Doe n/Jane Doe t/` Edits the name of `John Doe` to be `Jane Doe` and clears all existing tags.
 
 ![edit message](images\editMessage.jpg)
 *Figure 5: Success message after editing a person's details*
@@ -395,7 +393,7 @@ Action | Format, Examples
 **Help** | `help`
 **Add** | `add n/NAME p/PHONE_NUMBER e/EMAIL [t/TAG]…​` <br> e.g., `add n/Alice Tan p/98702930 e/alicetan@gmail.com t/team-lead t/vip-handler`
 **List** | `list`
-**Edit** | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [t/TAG]…​`<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com`
+**Edit** | `edit n/OLD_NAME [n/NEW_NAME] [p/PHONE_NUMBER] [e/EMAIL] [t/TAG]…​`<br> e.g.,`edit n/John Doe n/Jane Doe p/91234567 e/janedoe@example.com`
 **Find** | `find n/NAME` or `find t/TAG1 t/TAG2...` or `find d/DATE1 d/DATE2...`<br> e.g., `find n/John` or `find d/2025-08-18`
 **Delete** | `delete n/PERSON_NAME [t/TAG]…​`<br> e.g., `delete n/Alex Yeoh` or `delete n/Alex t/vipHandler`
 **Clear** | `clear`
