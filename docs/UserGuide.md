@@ -249,11 +249,11 @@ If given a tag or date, will search all tags and bookings to list all people wit
 
 Format: <br>
 `find n/NAME` <br>
-`find t/TAG1 t/TAG2...` <br>
-`find d/DATE1 d/DATE2...` <br>
+`find t/TAG1 TAG2...` <br>
+`find d/DATE1 DATE2...` <br>
 
 * Only one field is allowed, subsequent fields will be ignored. e.g. `find n/Hans t/teamLead` is equivalent to `find n/Hans`
-* For "t/" and "d/", multiple parameters are allowed, all tags requested and all bookings with the requested dates will be listed. e.g. `find t/teamLead t/vipHandler` or `find d/2026-11-15 d/2026-12-25` will list all team member's that contain the requested parameters
+* For "t/" and "d/", multiple parameters are allowed, all tags requested and all bookings with the requested dates will be listed. e.g. `find t/teamLead vipHandler` or `find d/2026-11-15 2026-12-25` will list all team member's that contain the requested parameters
 * The search for names and tags are case-insensitive. e.g `hans` will match `Hans`
 * Partial matches will be shown e.g. `find n/Ali` will find a person named `Alice`
 * Date must be in `YYYY-MM-DD` format.
