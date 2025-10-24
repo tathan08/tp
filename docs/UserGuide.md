@@ -252,7 +252,7 @@ Format: <br>
 `find t/TAG1 TAG2...` <br>
 `find d/DATE1 DATE2...` <br>
 
-* Only one field is allowed, subsequent fields will be ignored. e.g. `find n/Hans t/teamLead` is equivalent to `find n/Hans`
+* Only one field is allowed, subsequent fields will be ignored. e.g. `find n/Hans t/teamLead` will find a person named `Hans t/teamLead`
 * For "t/" and "d/", multiple parameters are allowed, all tags requested and all bookings with the requested dates will be listed. e.g. `find t/teamLead vipHandler` or `find d/2026-11-15 2026-12-25` will list all team member's that contain the requested parameters
 * The search for names and tags are case-insensitive. e.g `hans` will match `Hans`
 * Partial matches will be shown e.g. `find n/Ali` will find a person named `Alice`
