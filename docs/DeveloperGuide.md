@@ -239,7 +239,7 @@ The following activity diagram summarizes what happens when a user executes a ne
   * Cons: We must ensure that the implementation of each individual command are correct.
 
 
-### \[Proposed\] Reschedule
+### \[Proposed\] Reschedule Booking
 
 #### Proposed Implementation
 
@@ -345,6 +345,185 @@ The reschedule mechanism allows users to update the datetime of an existing book
 
   - **Unknown parameter:**
     Error: "Unknown parameter. Valid parameters are b/ (booking ID), n/ (team member name), d/ (new datetime)" (Updated list)
+
+### \[Proposed\] Edit Booking Clients/Description
+
+#### Proposed Implementation
+
+The edit booking mechanism allows users to update the client name or description of an existing booking without changing the datetime. This provides flexibility for booking management.
+
+**Operations:**
+
+  - `Model#editBooking(Booking booking, String newClientName, String newDescription)` — Updates the booking with new client name and/or description.
+  - `Booking#setClientName(String newClientName)` — Updates the client name field of a booking.
+  - `Booking#setDescription(String newDescription)` — Updates the description field of a booking.
+
+-----
+
+## Usage Scenario
+
+1.  The user views all bookings and identifies one to edit (e.g., a booking for Carl Kurz).
+
+2.  Executes the command:
+
+    ```
+     editbooking 2 n/Carl c/Madam Wong desc/Updated consultation details
+    ```
+
+    Where:
+
+    `2` = booking ID
+
+    `n/Carl` = team member name (for verification)
+
+    `c/Madam Wong` = new client name
+
+    `desc/Updated consultation details` = new description
+
+    The Logic component parses the command and calls:
+
+    ```
+     model.editBooking(selectedBooking, newClientName, newDescription);
+    ```
+
+    The **Model** validates:
+
+      - The booking exists (using booking ID).
+      - The team member name (`n/`) matches the team member in the booking.
+      - At least one field (client name or description) is provided for update.
+      - All parameters are valid (non-null, proper format).
+
+    If validation passes, the booking details are updated. Otherwise, an error is thrown.
+
+    The **Logic** component returns a `CommandResult` to the UI:
+
+      - **Success Example:**
+
+        ```
+        Booking updated successfully: Carl Kurz, Client: Madam Wong, Description: Updated consultation details
+        ```
+
+      - **Failure Example:** Appropriate error message.
+
+-----
+
+## Design Considerations
+
+### Field Validation:
+
+  - Client name must follow the same validation rules as new bookings.
+  - Description must follow the same validation rules as new bookings.
+  - At least one field must be provided for update.
+
+### Undo/Redo Support:
+
+  - Integration with **VersionedAddressBook**.
+  - Call `Model#commitAddressBook()` after a successful edit.
+
+### Atomicity:
+
+  - Edit booking is **all-or-nothing**: either fully applied or not applied at all.
+
+-----
+
+## Extensions / Error Cases
+
+  - **Booking does not exist:**
+    Error: "Booking ID not found"
+
+  - **No fields to update:**
+    Error: "At least one field (client name or description) must be provided for update"
+
+  - **Invalid client name:**
+    Error: "Invalid client name format"
+
+  - **Invalid description:**
+    Error: "Invalid description format"
+
+  - **Team member mismatch:**
+    Error: "Team member name does not match the booking"
+
+### \[Proposed\] Timezone Support
+
+#### Proposed Implementation
+
+The timezone mechanism allows users to work with bookings across different timezones, making the application suitable for global teams and clients.
+
+**Operations:**
+
+  - `Model#setUserTimezone(ZoneId timezone)` — Sets the user's preferred timezone.
+  - `Booking#getDateTimeInTimezone(ZoneId timezone)` — Returns booking datetime converted to specified timezone.
+  - `Booking#createBookingWithTimezone(String clientName, LocalDateTime datetime, String description, ZoneId timezone)` — Creates booking with timezone awareness.
+
+-----
+
+## Usage Scenario
+
+1.  The user sets their preferred timezone:
+
+    ```
+     settimezone Asia/Singapore
+    ```
+
+2.  The user creates a booking:
+
+    ```
+     book d/2025-09-20 10:30 c/Madam Chen n/Bob Lee desc/consultation
+    ```
+
+    The system stores the booking in the user's timezone and can display it in other timezones when needed.
+
+3.  The user views bookings in a different timezone:
+
+    ```
+     viewbookings timezone America/New_York
+    ```
+
+    All booking times are automatically converted and displayed in the specified timezone.
+
+-----
+
+## Design Considerations
+
+### Timezone Storage:
+
+  - Store all booking datetimes in UTC internally.
+  - Convert to user's preferred timezone for display.
+  - Allow temporary timezone switching for viewing.
+
+### User Preferences:
+
+  - Store user's default timezone in `UserPrefs`.
+  - Allow timezone changes without affecting existing bookings.
+  - Provide timezone validation and error handling.
+
+### Display Format:
+
+  - Show timezone information in booking displays.
+  - Provide clear indication when times are converted.
+  - Support multiple timezone formats (e.g., UTC+8, Asia/Singapore).
+
+### Data Migration:
+
+  - Existing bookings without timezone information default to UTC.
+  - Provide migration tools for existing data.
+  - Maintain backward compatibility.
+
+-----
+
+## Extensions / Error Cases
+
+  - **Invalid timezone:**
+    Error: "Invalid timezone format. Use format like 'Asia/Singapore' or 'UTC+8'"
+
+  - **Timezone not found:**
+    Error: "Timezone not recognized. Please use a valid timezone identifier"
+
+  - **Conversion errors:**
+    Error: "Unable to convert datetime to specified timezone"
+
+  - **Missing timezone:**
+    Error: "Please set your preferred timezone using 'settimezone' command"
 
 
 --------------------------------------------------------------------------------------------------------------------
