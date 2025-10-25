@@ -80,6 +80,7 @@ shadowJar {
 
 run {
     jvmArgs = ['-ea']
+    enableAssertions = true
 }
 
 defaultTasks 'clean', 'test'
