@@ -72,7 +72,7 @@ With FirstImpressions, no client request is too hard to handle as our system is 
    - Arch Linux: `sudo pacman -S jdk17-openjdk`
    </div>
 
-2. **Verify Java Installation:** {#verify-java}
+2. **Verify Java Installation:** <span id="verify-java"></span>
    Open a command terminal as follows: 
    - On Windows, press the Windows key on your keyboard, and type in cmd
    - On Mac, press the Command + Space keys at the same time, and type in terminal
