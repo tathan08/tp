@@ -286,22 +286,29 @@ Examples:
 
 ### Deleting a person : `delete`
 
-Remove a person from the contact list, or remove specific tag(s) from a person.
+Remove a person from the contact list, or remove specific tag(s) from a person, or remove specific booking(s) from a person.
 
-Format: `delete n/PERSON_NAME [t/TAG]…​`
+Format: `delete n/PERSON_NAME [t/TAG]…​ [b/BOOKING_INDEX]…​`
 
 * If only `n/PERSON_NAME` is provided, then the person is removed from the contact list.
 * If both `n/PERSON_NAME` and `t/TAG` is provided, then the specific tag(s) will be removed.
+* If both `n/PERSON_NAME` and `b/BOOKING_INDEX` is provided, then the specific booking(s) will be removed.
 * Only tags that currently belong to the person will be deleted.
+* Booking indices refer to the booking number shown in the person's booking list (starting from 1).
 * The name provided must exactly match (case-sensitive) a person in the contact list. e.g. `delete n/Alex` will not delete `Alex Yeoh`
 
 <div markdown="span" class="alert alert-warning">:exclamation: **Warning:**
 Person names are case-sensitive. `delete n/alice` will not delete `Alice Tan`. Use the exact name as shown in the contact list.
 </div>
 
+<div markdown="span" class="alert alert-warning">:exclamation: **Warning:**
+You cannot use both `t/` (tags) and `b/` (bookings) in the same delete command. The command will fail with: "Invalid command format! Only use either 'b/' or 't/', and not both!"
+</div>
+
 Examples:
 * `delete n/Alex t/vipHandler` will remove the tag `vipHandler` from `Alex` in the contact list.
-* `delete n/Alex Yeoh` will remove `Alex Yeoh` from the contact list. <br> 
+* `delete n/Alex Yeoh b/1` will remove the first booking from `Alex Yeoh` in the contact list.
+* `delete n/Alex Yeoh` will remove `Alex Yeoh` from the contact list entirely. <br> 
   ![delete message](images\deleteMessage.jpg)
   *Figure 7: Success message after deleting a person from the contact list*
 
@@ -421,7 +428,7 @@ Action | Format, Examples
 **List** | `list`
 **Edit** | `edit n/OLD_NAME [n/NEW_NAME] [p/PHONE_NUMBER] [e/EMAIL] [t/TAG]…​`<br> e.g.,`edit n/John Doe n/Jane Doe p/91234567 e/janedoe@example.com`
 **Find** | `find n/NAME` or `find t/TAG1 t/TAG2...` or `find d/DATE1 d/DATE2...`<br> e.g., `find n/John` or `find d/2025-08-18`
-**Delete** | `delete n/PERSON_NAME [t/TAG]…​`<br> e.g., `delete n/Alex Yeoh` or `delete n/Alex t/vipHandler`
+**Delete** | `delete n/PERSON_NAME [t/TAG]…​ [b/BOOKING_INDEX]…​`<br> e.g., `delete n/Alex Yeoh` or `delete n/Alex t/vipHandler` or `delete n/Alex Yeoh b/1`
 **Clear** | `clear`
 **Book** | `book d/DATETIME c/CLIENT_NAME n/PERSON_NAME [desc/DESCRIPTION]` <br> e.g., `book d/2025-09-18 14:00 c/Mr Lim n/Alice Tan desc/first consultation`
 **Exit** | `exit`
