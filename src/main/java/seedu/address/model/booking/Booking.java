@@ -6,6 +6,7 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.time.format.ResolverStyle;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -22,7 +23,8 @@ public class Booking {
     public static final String MESSAGE_CONSTRAINTS_DESCRIPTION =
             "Description must be 1-500 characters.";
 
-    public static final DateTimeFormatter DATETIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    public static final DateTimeFormatter DATETIME_FORMATTER = DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm")
+            .withResolverStyle(ResolverStyle.STRICT);
 
     // Validation regex for client name
     private static final String CLIENT_NAME_VALIDATION_REGEX = "^[a-zA-Z0-9 .'-]+$";

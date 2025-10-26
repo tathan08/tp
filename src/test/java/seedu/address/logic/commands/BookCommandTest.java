@@ -23,6 +23,7 @@ import seedu.address.model.AddressBook;
 import seedu.address.model.Model;
 import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.ReadOnlyUserPrefs;
+import seedu.address.model.booking.Booking;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.testutil.PersonBuilder;
@@ -66,6 +67,15 @@ public class BookCommandTest {
 
         assertCommandFailure(bookCommand, modelStub, String.format(BookCommand.MESSAGE_PERSON_NOT_FOUND,
                 "Nonexistent Person"));
+    }
+
+    @Test
+    public void parseDateTime_pastDate_rejected() {
+        // Test that parsing rejects past dates
+        // Note: This tests the Booking.parseDateTime and isFutureDateTime methods
+        // The actual command parser (BookCommandParser) should reject past dates
+        LocalDateTime pastDate = LocalDateTime.of(2020, 1, 1, 10, 0);
+        assertFalse(Booking.isFutureDateTime(pastDate), "Past date should not be accepted as future date");
     }
 
     @Test
@@ -260,6 +270,15 @@ public class BookCommandTest {
         @Override
         public ObservableList<Person> getFilteredPersonList() {
             return FXCollections.observableArrayList(personsAdded);
+        }
+
+        @Override
+        public ReadOnlyAddressBook getAddressBook() {
+            AddressBook addressBook = new AddressBook();
+            for (Person person : personsAdded) {
+                addressBook.addPerson(person);
+            }
+            return addressBook;
         }
     }
 
