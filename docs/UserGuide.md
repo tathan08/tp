@@ -52,9 +52,6 @@ With FirstImpressions, no client request is too hard to handle as our system is 
 5. [Known Issues](#known-issues)
 6. [Command Summary](#command-summary)
 
-* Table of Contents
-{:toc}
-
 --------------------------------------------------------------------------------------------------------------------
 
 ## Quick start
@@ -76,7 +73,12 @@ With FirstImpressions, no client request is too hard to handle as our system is 
    </div>
 
 2. **Verify Java Installation:**
-   Open a command terminal and run:
+   Open a command terminal as follows:
+   - On Windows, press the Windows key on your keyboard, and type in cmd
+   - On Mac, press the Command + Space keys at the same time, and type in terminal
+   - On Linux, press the Control + Alt + T keys at the same time.
+
+   Then in your terminal, run:
    ```
    java -version
    ```
@@ -95,13 +97,7 @@ With FirstImpressions, no client request is too hard to handle as our system is 
 
 3. **Run the application:**
    
-   **Windows:**
-   - Open Command Prompt or PowerShell
-   - Navigate to the folder: `cd C:\path\to\your\folder`
-   - Run: `java -jar firstimpressions.jar`
-   
-   **Mac/Linux:**
-   - Open Terminal
+   - Open your command terminal, [as follows](#2-verify-java-installation)
    - Navigate to the folder: `cd /path/to/your/folder`
    - Run: `java -jar firstimpressions.jar`
 
@@ -118,7 +114,7 @@ Always backup your `addressbook.json` file before making major changes. Data los
 
    * `list` : Lists all contacts.
 
-   * `add n/Alice Tan p/98765432 e/alicetan@gmail.com t/vip-handler` : Adds a contact named `Alice Tan` to the list of contacts.
+   * `add n/Alice Tan p/98765432 e/alicetan@gmail.com t/vipHandler` : Adds a contact named `Alice Tan` to the list of contacts.
 
    * `delete n/Alice Tan` : Deletes the contact named Alice Tan from the whole list of contacts.
 
@@ -140,10 +136,10 @@ Always backup your `addressbook.json` file before making major changes. Data los
   e.g. in `add n/PERSON_NAME`, `PERSON_NAME` is a parameter which can be used as `add n/Alice Tan`.
 
 * Items in square brackets are optional.<br>
-  e.g `n/PERSON_NAME [t/TAG]` can be used as `n/Alice Tan t/vip-handler` or as `n/Alice Tan`.
+  e.g `n/PERSON_NAME [t/TAG]` can be used as `n/Alice Tan t/vipHandler` or as `n/Alice Tan`.
 
 * Items with `…`​ after them can be used multiple times including zero times.<br>
-  e.g. `[t/TAG​]…` can be used as ` ` (i.e. 0 times), `t/vip-handler`, `t/vip-handler t/team-lead` etc.
+  e.g. `[t/TAG​]…` can be used as ` ` (i.e. 0 times), `t/vipHandler`, `t/vipHandler t/teamLead` etc.
 
 * Parameters can be in any order.<br>
   e.g. if the command specifies `n/NAME p/PHONE_NUMBER`, `p/PHONE_NUMBER n/NAME` is also acceptable.
@@ -391,7 +387,7 @@ Furthermore, certain edits can cause the FirstImpressions to behave in unexpecte
 Action | Format, Examples
 --------|------------------
 **Help** | `help`
-**Add** | `add n/NAME p/PHONE_NUMBER e/EMAIL [t/TAG]…​` <br> e.g., `add n/Alice Tan p/98702930 e/alicetan@gmail.com t/team-lead t/vip-handler`
+**Add** | `add n/NAME p/PHONE_NUMBER e/EMAIL [t/TAG]…​` <br> e.g., `add n/Alice Tan p/98702930 e/alicetan@gmail.com t/teamLead t/vipHandler`
 **List** | `list`
 **Edit** | `edit n/OLD_NAME [n/NEW_NAME] [p/PHONE_NUMBER] [e/EMAIL] [t/TAG]…​`<br> e.g.,`edit n/John Doe n/Jane Doe p/91234567 e/janedoe@example.com`
 **Find** | `find n/NAME` or `find t/TAG1 t/TAG2...` or `find d/DATE1 d/DATE2...`<br> e.g., `find n/John` or `find d/2025-08-18`
