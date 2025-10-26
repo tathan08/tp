@@ -192,15 +192,15 @@ Format: `clear`
 
 Assigns a client meeting to a person at a given date and time, with an optional description.
 
-Format: `book d/DATETIME c/CLIENT_NAME n/PERSON_NAME [desc/DESCRIPTION]`
+Format: `book dt/DATETIME c/CLIENT_NAME n/PERSON_NAME [desc/DESCRIPTION]`
 
 * Name of person provided must be in the current contact list.
 * Datetime must be in `YYYY-MM-DD HH:MM` format in 24-hour notation.
 
 Examples:
 
-* `book d/2025-09-20 10:30 c/Madam Chen n/Bob Lee` will assign a booking on 20th September 2025 10.30am to Bob Lee. The client will be Madam Chen.
-* `book d/2025-10-18 14:00 c/Mr Lim n/Alice Tan desc/first consultation` will assign a booking on 18th October 2025 2pm to Alice Tan. The client will be Mr Lim and the description is "first consultation". <br>
+* `book dt/2025-09-20 10:30 c/Madam Chen n/Bob Lee` will assign a booking on 20th September 2025 10.30am to Bob Lee. The client will be Madam Chen.
+* `book dt/2025-10-18 14:00 c/Mr Lim n/Alice Tan desc/first consultation` will assign a booking on 18th October 2025 2pm to Alice Tan. The client will be Mr Lim and the description is "first consultation". <br>
   ![book messsage](images\bookMessage.jpg)
 
 ### Exiting the program : `exit`
@@ -247,5 +247,5 @@ Action | Format, Examples
 **Find** | `find [n/NAME] [t/TAG] [d/DATE]`<br> e.g., `find d/2025-08-18`
 **Delete** | `delete INDEX`<br> e.g., `delete 3`
 **Clear** | `clear`
-**Book** | `book d/DATETIME c/CLIENT_NAME n/PERSON_NAME [desc/DESCRIPTION]` <br> e.g., `book d/2025-09-18 14:00 c/Mr Lim n/Alice Tan desc/first consultation`
+**Book** | `book dt/DATETIME c/CLIENT_NAME n/PERSON_NAME [desc/DESCRIPTION]` <br> e.g., `book dt/2025-09-18 14:00 c/Mr Lim n/Alice Tan desc/first consultation`
 **Exit** | `exit`

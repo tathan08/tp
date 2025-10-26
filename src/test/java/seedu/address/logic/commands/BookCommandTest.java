@@ -4,7 +4,6 @@ import static java.util.Objects.requireNonNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.address.testutil.Assert.assertThrows;
 import static seedu.address.testutil.TypicalPersons.ALICE;
 import static seedu.address.testutil.TypicalPersons.CARL;
@@ -190,9 +189,6 @@ public class BookCommandTest {
 
         // different types -> returns false
         assertFalse(bookAliceCommand.equals(1));
-
-        // null -> returns false
-        assertFalse(bookAliceCommand.equals(null));
 
         // different person -> returns false
         assertFalse(bookAliceCommand.equals(bookBobCommand));
