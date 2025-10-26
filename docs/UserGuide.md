@@ -72,7 +72,7 @@ With FirstImpressions, no client request is too hard to handle as our system is 
    - Arch Linux: `sudo pacman -S jdk17-openjdk`
    </div>
 
-2. **Verify Java Installation:** (#open-terminal)
+2. **Verify Java Installation:** {#verify-java}
    Open a command terminal as follows: 
    - On Windows, press the Windows key on your keyboard, and type in cmd
    - On Mac, press the Command + Space keys at the same time, and type in terminal
@@ -101,7 +101,7 @@ Do not move the .jar file after data has been created. The application stores da
 
 3. **Run the application:**
    
-   - Open your command terminal, [as follows](#open-terminal)
+   - Open your command terminal, [as follows](#verify-java)
    - Navigate to the folder: `cd /path/to/your/folder`
    - Run: `java -jar firstimpressions.jar`
 
