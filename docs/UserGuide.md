@@ -73,7 +73,7 @@ With FirstImpressions, no client request is too hard to handle as our system is 
    </div>
 
 2. **Verify Java Installation:**
-   Open a command terminal as follows:
+   Open a command terminal as follows: {#open-terminal}
    - On Windows, press the Windows key on your keyboard, and type in cmd
    - On Mac, press the Command + Space keys at the same time, and type in terminal
    - On Linux, press the Control + Alt + T keys at the same time.
@@ -101,7 +101,7 @@ Do not move the .jar file after data has been created. The application stores da
 
 3. **Run the application:**
    
-   - Open your command terminal, [as follows](#2-verify-java-installation)
+   - Open your command terminal, [as follows](#open-terminal)
    - Navigate to the folder: `cd /path/to/your/folder`
    - Run: `java -jar firstimpressions.jar`
 
