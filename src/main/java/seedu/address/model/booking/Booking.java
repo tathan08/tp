@@ -17,6 +17,8 @@ import java.util.concurrent.atomic.AtomicLong;
 public class Booking {
     public static final String MESSAGE_CONSTRAINTS_DATETIME =
             "Invalid date: must be in format YYYY-MM-DD HH:MM and in the future.";
+    public static final String MESSAGE_CONSTRAINTS_PAST_DATETIME =
+            "Invalid date: booking date must be in the future.";
     public static final String MESSAGE_CONSTRAINTS_CLIENT =
             "Invalid client name. Must be 1-100 characters with at least one letter. "
             + "Only letters, numbers, spaces, hyphens, apostrophes, and periods are allowed.";
@@ -116,6 +118,73 @@ public class Booking {
             return LocalDateTime.parse(datetimeStr, DATETIME_FORMATTER);
         } catch (DateTimeParseException e) {
             return null;
+        }
+    }
+
+    /**
+     * Validates a datetime string and returns a specific error message if invalid.
+     * Returns null if the datetime string is valid.
+     *
+     * @param datetimeStr The datetime string to validate
+     * @return Error message if invalid, null if valid
+     */
+    public static String validateDateTime(String datetimeStr) {
+        LocalDateTime parsed = parseDateTime(datetimeStr);
+        if (parsed == null) {
+            // Try to extract the date part for a better error message
+            if (datetimeStr.matches("\\d{4}-\\d{2}-\\d{2}\\s+\\d{2}:\\d{2}")) {
+                String datePart = datetimeStr.split("\\s+")[0];
+                String[] parts = datePart.split("-");
+                if (parts.length == 3) {
+                    try {
+                        int year = Integer.parseInt(parts[0]);
+                        int month = Integer.parseInt(parts[1]);
+                        int day = Integer.parseInt(parts[2]);
+                        String monthName = getMonthName(month);
+                        String dayOrdinal = getDayOrdinal(day);
+                        return String.format("Invalid date \"%s %s %d\", that date does not exist "
+                                + "in the (Gregorian) calendar.", monthName, dayOrdinal, year);
+                    } catch (NumberFormatException e) {
+                        return MESSAGE_CONSTRAINTS_DATETIME;
+                    }
+                }
+            }
+            return MESSAGE_CONSTRAINTS_DATETIME;
+        }
+        if (!isFutureDateTime(parsed)) {
+            return MESSAGE_CONSTRAINTS_PAST_DATETIME;
+        }
+        return null; // Valid
+    }
+
+    /**
+     * Returns the month name for a given month number (1-12).
+     */
+    private static String getMonthName(int month) {
+        String[] months = {"", "January", "February", "March", "April", "May", "June",
+                           "July", "August", "September", "October", "November", "December"};
+        if (month < 1 || month > 12) {
+            return "Month " + month;
+        }
+        return months[month];
+    }
+
+    /**
+     * Returns the ordinal form of a day (e.g., "1st", "2nd", "31st").
+     */
+    private static String getDayOrdinal(int day) {
+        if (day >= 11 && day <= 13) {
+            return day + "th";
+        }
+        switch (day % 10) {
+        case 1:
+            return day + "st";
+        case 2:
+            return day + "nd";
+        case 3:
+            return day + "rd";
+        default:
+            return day + "th";
         }
     }
 
