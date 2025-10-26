@@ -139,6 +139,31 @@ public class BookCommandTest {
     }
 
     @Test
+    public void execute_bookPersonNotInFilteredList_success() throws Exception {
+        // Create model with Alice and Carl, but filtered list only shows Alice
+        ModelStubWithFilteredList modelStub = new ModelStubWithFilteredList();
+        Person alice = new PersonBuilder(ALICE).build();
+        Person carl = new PersonBuilder(CARL).withBookings(new ArrayList<>()).build(); // Carl with no bookings
+        modelStub.addPerson(alice);
+        modelStub.addPerson(carl);
+        
+        // Set filtered list to only show Alice (simulating a find command)
+        modelStub.setFilteredPersons(List.of(alice));
+
+        // Book Carl who is NOT in the filtered list - should succeed because BookCommand
+        // searches the full address book, not just the filtered list
+        BookCommand bookCommand = new BookCommand(carl.getName(), VALID_CLIENT_NAME,
+                VALID_DATETIME, VALID_DESCRIPTION);
+
+        CommandResult commandResult = bookCommand.execute(modelStub);
+
+        String expectedMessage = String.format(BookCommand.MESSAGE_SUCCESS, carl.getName(),
+                VALID_CLIENT_NAME, "2025-12-25 10:00", VALID_DESCRIPTION);
+        assertEquals(expectedMessage, commandResult.getFeedbackToUser());
+        assertTrue(modelStub.personsUpdated.size() == 1);
+    }
+
+    @Test
     public void equals() {
         BookCommand bookAliceCommand = new BookCommand(ALICE.getName(), VALID_CLIENT_NAME,
                 VALID_DATETIME, VALID_DESCRIPTION);
@@ -244,6 +269,37 @@ public class BookCommandTest {
     private static class ModelStubWithPersons extends ModelStubAcceptingBooking {
         @Override
         public ReadOnlyAddressBook getAddressBook() {
+            AddressBook addressBook = new AddressBook();
+            for (Person person : personsAdded) {
+                addressBook.addPerson(person);
+            }
+            return addressBook;
+        }
+    }
+
+    /**
+     * A Model stub that supports a filtered person list separate from the full address book.
+     * This simulates the behavior after a find command is executed.
+     */
+    private static class ModelStubWithFilteredList extends ModelStubAcceptingBooking {
+        private List<Person> filteredPersons = new ArrayList<>();
+
+        /**
+         * Sets the filtered person list (simulating a find command).
+         */
+        public void setFilteredPersons(List<Person> persons) {
+            this.filteredPersons = new ArrayList<>(persons);
+        }
+
+        @Override
+        public ObservableList<Person> getFilteredPersonList() {
+            // Return only the filtered persons (what the user sees after find)
+            return FXCollections.observableArrayList(filteredPersons);
+        }
+
+        @Override
+        public ReadOnlyAddressBook getAddressBook() {
+            // Return the full address book with all persons
             AddressBook addressBook = new AddressBook();
             for (Person person : personsAdded) {
                 addressBook.addPerson(person);
