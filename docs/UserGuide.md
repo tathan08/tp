@@ -95,6 +95,10 @@ With FirstImpressions, no client request is too hard to handle as our system is 
 
 2. **Copy the file** to the folder you want to use as the _home folder_ for the app.
 
+<div markdown="span" class="alert alert-warning">:exclamation: **Warning:**
+Do not move the .jar file after data has been created. The application stores data relative to the .jar file location. Moving it may cause loss of access to your data.
+</div>
+
 3. **Run the application:**
    
    - Open your command terminal, [as follows](#2-verify-java-installation)
@@ -170,6 +174,21 @@ Format: `add n/NAME [p/PHONE_NUMBER] [e/EMAIL] [t/TAG]…​`
 * Phone numbers must be numeric only.
 * Tags must be alphanumeric and have no spaces.
 
+<div markdown="span" class="alert alert-warning">:exclamation: **Warning:**
+Duplicate names are not allowed. Each person in the contact list must have a unique name. If you try to add a person with an existing name, the command will fail.
+</div>
+
+<div markdown="span" class="alert alert-warning">:exclamation: **Warning:**
+Tags must be alphanumeric only (no spaces, hyphens, or special characters). Use camelCase for multi-word tags (e.g., `vipHandler`, not `vip-handler` or `vip handler`).
+</div>
+
+<div markdown="span" class="alert alert-info">:information_source: **Character Limits:**
+* Names: Maximum 100 characters
+* Phone: Numeric only, no specific length limit
+* Email: Must be a valid email format
+* Tags: Alphanumeric only, use camelCase for multi-word tags
+</div>
+
 <div markdown="span" class="alert alert-primary">:bulb: **Tip:**
 A person can have any number of tags (including 0). <br>
 Use camelCase for multiword tags. e.g. teamLead
@@ -221,12 +240,15 @@ Format: `edit n/OLD_NAME [n/NEW_NAME] [p/PHONE] [e/EMAIL] [t/TAG]…​`
 * Edits the person identified by `OLD_NAME`. The name must exactly match (case-sensitive) a person in the contact list.
 * At least one of the optional fields must be provided.
 * Existing values will be updated to the input values.
-* When editing tags, the existing tags of the person will be removed i.e adding of tags is not cumulative.
 * You can remove all the person's tags by typing `t/` without
     specifying any tags after it.
 
 <div markdown="span" class="alert alert-warning">:exclamation: **Warning:**
 Person names are case-sensitive. `edit n/john doe` will not edit `John Doe`. Use the exact name as shown in the contact list.
+</div>
+
+<div markdown="span" class="alert alert-warning">:exclamation: **Warning:**
+When editing tags, the existing tags of the person will be **completely replaced** (not added to). If you want to keep existing tags, you must include them in the edit command. For example, if a person has tags `teamLead` and `sales`, using `edit n/John t/manager` will replace both tags with only `manager`.
 </div>
 
 Examples:
@@ -305,8 +327,16 @@ Format: `book d/DATETIME c/CLIENT_NAME n/PERSON_NAME [desc/DESCRIPTION]`
 * Name of person provided must be in the current contact list.
 * Datetime must be in `YYYY-MM-DD HH:MM` format in 24-hour notation.
 
+<div markdown="span" class="alert alert-info">:information_source: **Time Format:**
+Time must be in 24-hour format (HH:MM). Use `14:00` for 2:00 PM, `09:00` for 9:00 AM. Minutes are required even for on-the-hour times (e.g., `10:00`, not `10`).
+</div>
+
 <div markdown="span" class="alert alert-warning">:exclamation: **Warning:**
 Bookings must be scheduled for future dates and times. Past dates will be rejected with an error message.
+</div>
+
+<div markdown="span" class="alert alert-warning">:exclamation: **Warning:**
+Dates must be valid calendar dates. Invalid dates like 2026-02-31 will be rejected. Always verify your date is correct before booking.
 </div>
 
 Examples:
