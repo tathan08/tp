@@ -73,7 +73,7 @@ With FirstImpressions, no client request is too hard to handle as our system is 
    </div>
 
 2. **Verify Java Installation:**
-   Open a command terminal as follows: {#open-terminal}
+   Open a command terminal as follows: (#open-terminal)
    - On Windows, press the Windows key on your keyboard, and type in cmd
    - On Mac, press the Command + Space keys at the same time, and type in terminal
    - On Linux, press the Control + Alt + T keys at the same time.
