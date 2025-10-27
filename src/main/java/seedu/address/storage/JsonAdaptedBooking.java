@@ -15,20 +15,19 @@ class JsonAdaptedBooking {
 
     public static final String MISSING_FIELD_MESSAGE_FORMAT = "Booking's %s field is missing!";
 
-    private final String id;
     private final String clientName;
     private final String datetime;
     private final String description;
 
     /**
      * Constructs a {@code JsonAdaptedBooking} with the given booking details.
+     * Note: The 'id' field is no longer used but kept in JSON for backward compatibility.
      */
     @JsonCreator
-    public JsonAdaptedBooking(@JsonProperty("id") String id,
+    public JsonAdaptedBooking(@JsonProperty("id") String id, // Kept for backward compatibility, not used
                               @JsonProperty("clientName") String clientName,
                               @JsonProperty("datetime") String datetime,
                               @JsonProperty("description") String description) {
-        this.id = id;
         this.clientName = clientName;
         this.datetime = datetime;
         this.description = description;
@@ -38,7 +37,6 @@ class JsonAdaptedBooking {
      * Converts a given {@code Booking} into this class for Jackson use.
      */
     public JsonAdaptedBooking(Booking source) {
-        id = source.getId();
         clientName = source.getClientName();
         datetime = source.getDateTimeString();
         description = source.getDescription();
@@ -50,10 +48,6 @@ class JsonAdaptedBooking {
      * @throws IllegalValueException if there were any data constraints violated in the adapted booking.
      */
     public Booking toModelType() throws IllegalValueException {
-        if (id == null) {
-            throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, "id"));
-        }
-
         if (clientName == null) {
             throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, "clientName"));
         }
@@ -78,7 +72,7 @@ class JsonAdaptedBooking {
         }
         final String modelDescription = description;
 
-        return new Booking(id, modelClientName, modelDatetime, modelDescription);
+        return new Booking(modelClientName, modelDatetime, modelDescription);
     }
 }
 

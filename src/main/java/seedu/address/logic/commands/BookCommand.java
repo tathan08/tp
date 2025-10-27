@@ -120,11 +120,19 @@ public class BookCommand extends Command {
         logger.info(String.format("Successfully booked appointment for %s with %s at %s",
                 personName, clientName, datetime));
 
-        return new CommandResult(String.format(MESSAGE_SUCCESS,
+        // Check if booking is in the past
+        boolean isPastDate = !Booking.isFutureDateTime(datetime);
+        String resultMessage = String.format(MESSAGE_SUCCESS,
                 personName,
                 clientName,
                 newBooking.getDateTimeString(),
-                description));
+                description);
+
+        if (isPastDate) {
+            resultMessage += "\nNote that this is a Booking that is in the past!";
+        }
+
+        return new CommandResult(resultMessage);
     }
 
     @Override

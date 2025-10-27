@@ -111,11 +111,10 @@ public class BookingTest {
     }
 
     @Test
-    public void validateDateTime_pastDate_returnsPastDateError() {
-        // Test that past dates return past date error
+    public void validateDateTime_pastDate_nowAccepted() {
+        // Test that past dates are now accepted (returns null)
         String error = Booking.validateDateTime("2020-01-01 10:00");
-        assertNotNull(error, "Past date should return error message");
-        assertEquals(Booking.MESSAGE_CONSTRAINTS_PAST_DATETIME, error);
+        assertNull(error, "Past date should now be accepted");
     }
 
     @Test
@@ -201,9 +200,8 @@ public class BookingTest {
         LocalDateTime datetime = LocalDateTime.of(2026, 12, 25, 10, 0);
         String description = "Consultation";
 
-        Booking booking = new Booking("999", clientName, datetime, description);
+        Booking booking = new Booking(clientName, datetime, description);
 
-        assertEquals("999", booking.getId());
         assertEquals(clientName, booking.getClientName());
         assertEquals(datetime, booking.getDateTime());
         assertEquals(description, booking.getDescription());
@@ -230,37 +228,36 @@ public class BookingTest {
         LocalDateTime datetime1 = LocalDateTime.of(2026, 12, 25, 10, 0);
         LocalDateTime datetime2 = LocalDateTime.of(2026, 12, 25, 14, 0);
 
-        Booking booking1 = new Booking("1", "Client1", datetime1, "Description1");
-        Booking booking2 = new Booking("1", "Client1", datetime1, "Description1");
-        Booking booking3 = new Booking("2", "Client1", datetime1, "Description1");
-        Booking booking4 = new Booking("1", "Client2", datetime1, "Description1");
+        Booking booking1 = new Booking("Client1", datetime1, "Description1");
+        Booking booking2 = new Booking("Client1", datetime1, "Description1");
+        Booking booking3 = new Booking("Client2", datetime1, "Description1");
+        Booking booking4 = new Booking("Client1", datetime2, "Description1");
 
         assertEquals(booking1, booking2); // same values
         assertTrue(booking1.equals(booking1)); // same object
         assertFalse(booking1.equals(null)); // null
         assertFalse(booking1.equals("not a booking")); // different type
-        assertFalse(booking1.equals(booking3)); // different ID
-        assertFalse(booking1.equals(booking4)); // different client name
+        assertFalse(booking1.equals(booking3)); // different client name
+        assertFalse(booking1.equals(booking4)); // different datetime
     }
 
     @Test
     public void hashCodeTest() {
         LocalDateTime datetime = LocalDateTime.of(2026, 12, 25, 10, 0);
-        Booking booking1 = new Booking("1", "Client1", datetime, "Description1");
-        Booking booking2 = new Booking("1", "Client1", datetime, "Description1");
-        Booking booking3 = new Booking("2", "Client1", datetime, "Description1");
+        Booking booking1 = new Booking("Client1", datetime, "Description1");
+        Booking booking2 = new Booking("Client1", datetime, "Description1");
+        Booking booking3 = new Booking("Client2", datetime, "Description1");
 
         assertEquals(booking1.hashCode(), booking2.hashCode()); // same values should have same hash
-        assertNotEquals(booking1.hashCode(), booking3.hashCode()); // different ID should have different hash
+        assertNotEquals(booking1.hashCode(), booking3.hashCode()); // different client name should have different hash
     }
 
     @Test
     public void toStringTest() {
-        Booking booking = new Booking("5", "Raj s/o Kumar",
+        Booking booking = new Booking("Raj s/o Kumar",
             LocalDateTime.of(2026, 12, 25, 10, 0), "Follow-up consultation");
 
         String result = booking.toString();
-        assertTrue(result.contains("5"));
         assertTrue(result.contains("Raj s/o Kumar"));
         assertTrue(result.contains("2026-12-25 10:00"));
         assertTrue(result.contains("Follow-up consultation"));

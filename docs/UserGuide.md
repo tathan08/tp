@@ -374,8 +374,10 @@ Format: `book dt/DATETIME c/CLIENT_NAME n/PERSON_NAME [desc/DESCRIPTION]`
 Time must be in 24-hour format (HH:MM). Use `14:00` for 2:00 PM, `09:00` for 9:00 AM. Minutes are required even for on-the-hour times (e.g., `10:00`, not `10`).
 </div>
 
-<div markdown="span" class="alert alert-warning">:exclamation: **Warning:**
-Bookings must be scheduled for future dates and times. Past dates will be rejected with: "Booking date and time must be in the future. You cannot create bookings for past dates."
+<div markdown="span" class="alert alert-info">:information_source: **Past Dates:**
+Bookings can be created for past dates, for record-keeping purposes. When booking a past date, a warning message will be displayed: "Note that this is a Booking that is in the past!" to remind you that this appointment has already occurred.
+
+Additionally, past bookings will appear greyed out (with reduced opacity) in the contact list to visually distinguish them from future appointments. The bookings are sorted with future bookings at the top (in chronological order) and past bookings at the bottom (also in chronological order).
 </div>
 
 <div markdown="span" class="alert alert-warning">:exclamation: **Warning:**
@@ -386,6 +388,8 @@ Examples:
 
 * `book dt/2025-09-20 10:30 c/Madam Chen n/Bob Lee` will assign a booking on 20th September 2025 10.30am to Bob Lee. The client will be Madam Chen.
 * `book dt/2025-10-18 14:00 c/Mr Lim n/Alice Tan desc/first consultation` will assign a booking on 18th October 2025 2pm to Alice Tan. The client will be Mr Lim and the description is "first consultation".
+* `book dt/2020-10-26 17:00 c/Mr Lim n/Alice Yeoh desc/backdated` will create a booking for a past date (26th October 2020). <br>
+  The result message will be: "Booked: Alice Yeoh with client 'Mr Lim' at 2020-10-26 17:00 [backdated]. Note that this is a Booking that is in the past!"
 * `book dt/2025-11-15 15:00 c/Raj s/o Kumar n/Abhijay s/o Abhi desc/follow-up` will assign a booking on 15th November 2025 3pm to Abhijay s/o Abhi. The client Raj s/o Kumar (with slash for "son of") and the description is "follow-up". <br>
   ![book messsage](images\bookMessage.jpg) <br>
   *Figure 9: Success message after creating a new booking*
