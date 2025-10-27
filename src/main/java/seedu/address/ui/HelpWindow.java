@@ -22,8 +22,12 @@ public class HelpWindow extends UiPart<Stage> {
     public static final String ADD_COMMAND = "Add: add n/NAME [p/PHONE_NUMBER] [e/EMAIL] [t/TAG]...";
     public static final String LIST_COMMAND = "List: list";
     public static final String EDIT_COMMAND = "Edit: edit n/OLD_NAME [n/NEW_NAME] [p/PHONE] [e/EMAIL] [t/TAG]...";
-    public static final String FIND_COMMAND = "Find: find n/NAME or find t/TAG... or find d/DATE...";
-    public static final String DELETE_COMMAND = "Delete: delete n/PERSON_NAME [t/TAG]... [b/BOOKING_INDEX]...";
+    public static final String FIND_COMMAND = "Find: find n/NAME\n"
+            + "   OR find t/TAG...\n"
+            + "   OR find d/DATE...";
+    public static final String DELETE_COMMAND = "Delete: delete n/PERSON_NAME\n"
+            + "     OR delete n/PERSON_NAME t/TAG...\n"
+            + "     OR delete n/PERSON_NAME b/BOOKING_INDEX...";
     public static final String BOOK_COMMAND = "Book: book dt/DATETIME c/CLIENT_NAME "
             + "n/PERSON_NAME [desc/DESCRIPTION]";
     public static final String CLEAR_COMMAND = "Clear: clear f/";
