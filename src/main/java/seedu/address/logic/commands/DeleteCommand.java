@@ -1,6 +1,8 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.logic.parser.CliSyntax.*;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -29,12 +31,14 @@ public class DeleteCommand extends Command {
     public static final String COMMAND_WORD = "delete";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
-            + ": Deletes the person, tag or booking specified from the displayed person list.\n"
-            + "Parameters:\n NAME (must be a saved contact)\n"
-            + "TAG (optional, an available tag saved with the contact) \n"
-            + "BOOKING (Optional, an available booking saved under the contact) \n"
-            + "Example:\n" + COMMAND_WORD + " n/" + "Alex" + " (to delete a whole contact)\n"
-            + COMMAND_WORD + " n/" + "Alex" + " t/tag_1 t/tag_2... (to delete 1 or more specific tags from 'Alex')\n"
+            + ": Deletes the person, tag or booking specified in the address book.\n"
+            + "Parameters: "
+            + PREFIX_NAME + "NAME "
+            + "[" + PREFIX_TAG + "TAG]..."
+            + " OR "
+            + "[" + PREFIX_BOOKING + "BOOKING ID] \n"
+            + "Examples: \n" + COMMAND_WORD + " n/" + "Alex" + " (to delete a whole contact)\n"
+            + COMMAND_WORD + " n/" + "Alex" + " t/tag1 t/tag2... (to delete 1 or more specific tags from 'Alex')\n"
             + COMMAND_WORD + " n/" + "Alex" + " b/booking_ID (to delete a specified booking with 'Alex')";
 
     public static final String MESSAGE_DELETE_PERSON_SUCCESS = "Deleted Person: %1$s";
