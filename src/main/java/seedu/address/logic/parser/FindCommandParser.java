@@ -33,23 +33,16 @@ public class FindCommandParser implements Parser<FindCommand> {
         Map<String, List<String>> searchCriteria = new HashMap<>();
 
         // === NAME ===
-        // FIX: Replaced argMultimap.getAllValues(...) with
-        // getValue().map(List::of).orElse(List.of())
-        // to retrieve the single value correctly when Prefix.equals() is
-        // broken.
         List<String> allNames = argMultimap.getValue(PREFIX_NAME).map(String::trim).map(List::of).orElse(List.of());
 
-        // If the user typed n/ with no actual value, treat as wildcard -> match
-        // all persons
         boolean nameWildcard = allNames.stream().anyMatch(String::isEmpty);
         if (nameWildcard) {
-            searchCriteria.put("name", List.of()); // empty list means wildcard
+            searchCriteria.put("name", List.of());
         } else if (!allNames.isEmpty()) {
             searchCriteria.put("name", allNames.stream().distinct().toList());
         }
 
         // === TAG ===
-        // FIX: Same change applied here.
         List<String> allTags = argMultimap.getValue(PREFIX_TAG).map(String::trim).map(List::of).orElse(List.of());
 
         boolean tagWildcard = allTags.stream().anyMatch(String::isEmpty);
@@ -60,8 +53,14 @@ public class FindCommandParser implements Parser<FindCommand> {
         }
 
         // === DATE ===
-        // FIX: Same change applied here.
         List<String> allDates = argMultimap.getValue(PREFIX_DATE).map(String::trim).map(List::of).orElse(List.of());
+
+        // Defensive validation: ensure all date strings are valid
+        for (String dateStr : allDates) {
+            if (!dateStr.isEmpty() && !isValidDate(dateStr)) {
+                throw new ParseException("Invalid date!");
+            }
+        }
 
         boolean dateWildcard = allDates.stream().anyMatch(String::isEmpty);
         if (dateWildcard) {
@@ -70,7 +69,7 @@ public class FindCommandParser implements Parser<FindCommand> {
             searchCriteria.put("date", allDates.stream().distinct().toList());
         }
 
-        // If user didn't provide any prefixes at all (like plain "find")
+        // If user didn't provide any prefixes at all
         if (searchCriteria.isEmpty()) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
         }
@@ -79,52 +78,15 @@ public class FindCommandParser implements Parser<FindCommand> {
     }
 
     /**
-     * Extracts the prefix from the arguments.
-     *
-     * @param args The trimmed arguments string.
-     *
-     * @return The prefix string (e.g., "n/", "t/", "d/").
-     * @throws ParseException if no valid prefix is found.
+     * Helper method to validate ISO date format yyyy-MM-dd
      */
-    private String extractPrefix(String args) throws ParseException {
-        if (args.startsWith("n/")) {
-            return "n/";
-        } else if (args.startsWith("t/")) {
-            return "t/";
-        } else if (args.startsWith("d/")) {
-            return "d/";
-        } else {
-            throw new ParseException(
-                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE.toString()));
+    private boolean isValidDate(String dateStr) {
+        try {
+            java.time.LocalDate.parse(dateStr);
+            return true;
+        } catch (java.time.format.DateTimeParseException e) {
+            return false;
         }
-    }
-
-    /**
-     * Extracts the keywords from the arguments after removing the prefix.
-     *
-     * @param args The trimmed arguments string.
-     * @param prefix The prefix to remove.
-     *
-     * @return The keyword string.
-     * @throws ParseException if no keywords are provided.
-     */
-    private String extractKeywords(String args, String prefix) {
-        String keywordArgs = args.substring(prefix.length()).trim();
-        // Do not throw exception; allow empty string
-        return keywordArgs;
-    }
-
-    /**
-     * Creates a FindCommand based on the prefix and keywords.
-     *
-     * @param prefix The search prefix.
-     * @param keywords The list of keywords.
-     *
-     * @return A FindCommand with the appropriate predicate.
-     * @throws ParseException if the prefix is invalid.
-     */
-    private FindCommand createFindCommand(Map<String, List<String>> searchCriteria) {
-        return new FindCommand(new ClientContainsKeywordsPredicate(searchCriteria));
     }
 
 }
