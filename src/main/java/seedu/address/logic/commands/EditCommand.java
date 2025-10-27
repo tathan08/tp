@@ -15,6 +15,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.logging.Logger;
 
+import seedu.address.commons.ErrorMessage;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.util.CollectionUtil;
 import seedu.address.commons.util.ToStringBuilder;
@@ -35,24 +36,31 @@ public class EditCommand extends Command {
 
     public static final String COMMAND_WORD = "edit";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Edits the details of the person identified "
-            + "by their name. "
-            + "Existing values will be overwritten by the input values.\n"
-            + "Parameters: " + PREFIX_NAME + "OLD_NAME "
-            + "[" + PREFIX_NAME + "NEW_NAME] "
-            + "[" + PREFIX_PHONE + "PHONE] "
-            + "[" + PREFIX_EMAIL + "EMAIL] "
-            + "[" + PREFIX_TAG + "TAG]...\n"
-            + "Example: " + COMMAND_WORD + " "
-            + PREFIX_NAME + "John Doe "
-            + PREFIX_NAME + "Jane Doe "
-            + PREFIX_PHONE + "91234567 "
-            + PREFIX_EMAIL + "janedoe@example.com";
+    public static final ErrorMessage MESSAGE_USAGE = new ErrorMessage(
+            "Edits the details of the person identified by their name. "
+                    + "Existing values will be overwritten by the input values.",
+            PREFIX_NAME + "OLD_NAME "
+                    + "[" + PREFIX_NAME + "NEW_NAME] "
+                    + "[" + PREFIX_PHONE + "PHONE] "
+                    + "[" + PREFIX_EMAIL + "EMAIL] "
+                    + "[" + PREFIX_TAG + "TAG]...",
+            COMMAND_WORD + " "
+                    + PREFIX_NAME + "John Doe "
+                    + PREFIX_NAME + "Jane Doe "
+                    + PREFIX_PHONE + "91234567 "
+                    + PREFIX_EMAIL + "janedoe@example.com"
+    );
 
     public static final String MESSAGE_EDIT_PERSON_SUCCESS = "Edited Person: %1$s";
-    public static final String MESSAGE_NOT_EDITED = "At least one field to edit must be provided.";
-    public static final String MESSAGE_DUPLICATE_PERSON = "This person already exists in the address book.";
-    public static final String MESSAGE_PERSON_NOT_FOUND = "Person with name '%1$s' not found in the address book.";
+    public static final String MESSAGE_NOT_EDITED =
+            "No changes specified! Please provide at least one field to edit "
+            + "(name, phone, email, or tags).";
+    public static final String MESSAGE_DUPLICATE_PERSON =
+            "A person with this name already exists in your address book.\n"
+            + "Please use a different name or edit the existing contact.";
+    public static final String MESSAGE_PERSON_NOT_FOUND =
+            "Could not find a person named '%1$s' in your address book.\n"
+            + "Please check the spelling and try again.";
 
     private static final Logger logger = LogsCenter.getLogger(EditCommand.class);
 

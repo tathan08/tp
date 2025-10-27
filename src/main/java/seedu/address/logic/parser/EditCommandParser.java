@@ -41,7 +41,8 @@ public class EditCommandParser implements Parser<EditCommand> {
         assert nameValues != null : "Name values list should not be null";
 
         if (nameValues.isEmpty()) {
-            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, EditCommand.MESSAGE_USAGE));
+            throw new ParseException(
+                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, EditCommand.MESSAGE_USAGE.toString()));
         }
 
         // The first name is the old name (person to edit)

@@ -27,15 +27,27 @@ public class PhoneTest {
         // invalid phone numbers
         assertFalse(Phone.isValidPhone("")); // empty string
         assertFalse(Phone.isValidPhone(" ")); // spaces only
-        assertFalse(Phone.isValidPhone("91")); // less than 3 numbers
-        assertFalse(Phone.isValidPhone("phone")); // non-numeric
-        assertFalse(Phone.isValidPhone("9011p041")); // alphabets within digits
-        assertFalse(Phone.isValidPhone("9312 1534")); // spaces within digits
 
-        // valid phone numbers
+        // valid phone numbers - numeric only
         assertTrue(Phone.isValidPhone("911")); // exactly 3 numbers
-        assertTrue(Phone.isValidPhone("93121534"));
+        assertTrue(Phone.isValidPhone("91")); // 2 numbers
+        assertTrue(Phone.isValidPhone("93121534")); // 8 numbers
         assertTrue(Phone.isValidPhone("124293842033123")); // long phone numbers
+
+        // valid phone numbers - with special characters
+        assertTrue(Phone.isValidPhone("+65 1234 5678")); // plus sign with spaces
+        assertTrue(Phone.isValidPhone("+6512345678")); // plus sign without spaces
+        assertTrue(Phone.isValidPhone("(123) 456-7890")); // parentheses and hyphens
+        assertTrue(Phone.isValidPhone("123-456-7890")); // hyphens
+        assertTrue(Phone.isValidPhone("123 456 7890")); // spaces
+        assertTrue(Phone.isValidPhone("+1 (123) 456-7890")); // combination of special characters
+
+        // valid phone numbers - with text
+        assertTrue(Phone.isValidPhone("phone")); // text only
+        assertTrue(Phone.isValidPhone("9011p041")); // alphabets within digits
+        assertTrue(Phone.isValidPhone("ext. 123")); // extension format
+        assertTrue(Phone.isValidPhone("#1234")); // hash symbol
+        assertTrue(Phone.isValidPhone("123 ext 456")); // extension with text
     }
 
     @Test

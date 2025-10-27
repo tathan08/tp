@@ -128,8 +128,10 @@ public class AddCommandIntegrationTest {
                 .build();
 
         assertCommandFailure(new AddCommand(personWithExtraTags), model,
-                "Tag limit reached for TestPerson. Maximum 20 tags allowed. "
-                + "Current tags: 20, trying to add: 1. Remove existing tags before adding new ones.");
+                "Cannot add tags - tag limit reached!\n"
+                + "Contact 'TestPerson' already has 20 tag(s), and you're trying to add 1 more.\n"
+                + "Maximum allowed: 20 tags per contact.\n"
+                + "Please remove some existing tags before adding new ones.");
     }
 
     @Test

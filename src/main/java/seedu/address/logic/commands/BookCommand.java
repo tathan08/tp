@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import seedu.address.commons.ErrorMessage;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.commands.exceptions.CommandException;
@@ -26,22 +27,25 @@ public class BookCommand extends Command {
 
     public static final String COMMAND_WORD = "book";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Books an appointment for a team member. "
-            + "Parameters: "
-            + PREFIX_DATETIME + "DATETIME (YYYY-MM-DD HH:MM) "
-            + PREFIX_CLIENT + "CLIENT_NAME "
-            + PREFIX_NAME + "PERSON_NAME "
-            + "[" + PREFIX_DESCRIPTION + "DESCRIPTION]\n"
-            + "Example: " + COMMAND_WORD + " "
-            + PREFIX_DATETIME + "2025-09-18 14:00 "
-            + PREFIX_CLIENT + "Mr Lim "
-            + PREFIX_NAME + "Alice Tan "
-            + PREFIX_DESCRIPTION + "first consultation";
+    public static final ErrorMessage MESSAGE_USAGE = new ErrorMessage(
+            "Books an appointment for a team member.",
+            PREFIX_DATETIME + "DATETIME (YYYY-MM-DD HH:MM) "
+                    + PREFIX_CLIENT + "CLIENT_NAME "
+                    + PREFIX_NAME + "PERSON_NAME "
+                    + "[" + PREFIX_DESCRIPTION + "DESCRIPTION]",
+            COMMAND_WORD + " "
+                    + PREFIX_DATETIME + "2025-09-18 14:00 "
+                    + PREFIX_CLIENT + "Mr Lim "
+                    + PREFIX_NAME + "Alice Tan "
+                    + PREFIX_DESCRIPTION + "first consultation"
+    );
 
     public static final String MESSAGE_SUCCESS = "Booked: %1$s with client '%2$s' at %3$s [%4$s]";
-    public static final String MESSAGE_PERSON_NOT_FOUND = "No team member '%1$s'. Please use an existing team member "
-            + "or add them first.";
-    public static final String MESSAGE_DOUBLE_BOOKING = "%1$s is already booked at %2$s with client '%3$s' for [%4$s].";
+    public static final String MESSAGE_PERSON_NOT_FOUND = "Cannot find team member '%1$s' in your address book.\n"
+            + "Please add this person first, or check the spelling of their name.";
+    public static final String MESSAGE_DOUBLE_BOOKING = "Booking conflict! %1$s is already booked at %2$s.\n"
+            + "Existing booking: Client '%3$s' for [%4$s]\n"
+            + "Please choose a different time slot.";
 
     private static final Logger logger = LogsCenter.getLogger(BookCommand.class);
 
@@ -116,11 +120,19 @@ public class BookCommand extends Command {
         logger.info(String.format("Successfully booked appointment for %s with %s at %s",
                 personName, clientName, datetime));
 
-        return new CommandResult(String.format(MESSAGE_SUCCESS,
+        // Check if booking is in the past
+        boolean isPastDate = !Booking.isFutureDateTime(datetime);
+        String resultMessage = String.format(MESSAGE_SUCCESS,
                 personName,
                 clientName,
                 newBooking.getDateTimeString(),
-                description));
+                description);
+
+        if (isPastDate) {
+            resultMessage += "\nNote that this is a Booking that is in the past!";
+        }
+
+        return new CommandResult(resultMessage);
     }
 
     @Override

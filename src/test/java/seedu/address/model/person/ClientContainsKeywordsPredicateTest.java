@@ -84,12 +84,12 @@ public class ClientContainsKeywordsPredicateTest {
         ClientContainsKeywordsPredicate predicate = buildPredicate(map);
 
         // Person with matching booking
-        PersonBuilder personWithBooking = new PersonBuilder().withBookings(Arrays.asList(new Booking("100",
+        PersonBuilder personWithBooking = new PersonBuilder().withBookings(Arrays.asList(new Booking(
                                         "Test Client", LocalDateTime.of(2025, 10, 15, 10, 0), "desc")));
         assertTrue(predicate.test(personWithBooking.build()));
 
         // Person with different booking date
-        PersonBuilder personOtherDate = new PersonBuilder().withBookings(Arrays.asList(new Booking("101", "Test Client",
+        PersonBuilder personOtherDate = new PersonBuilder().withBookings(Arrays.asList(new Booking("Test Client",
                                         LocalDateTime.of(2025, 11, 20, 10, 0), "desc")));
         assertFalse(predicate.test(personOtherDate.build()));
 

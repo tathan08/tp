@@ -9,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.FlowPane;
@@ -129,6 +130,11 @@ public class PersonCard extends UiPart<Region> {
         return TAG_COLORS[colorIndex];
     }
 
+    /**
+     * Sets up the booking table with proper sorting.
+     * Bookings are reordered at each render: future bookings first (ascending),
+     * then past bookings (ascending). Past bookings are greyed out.
+     */
     private void setupBookingTable(Person person) {
         // Define column mappings
         colBookingId.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -161,20 +167,62 @@ public class PersonCard extends UiPart<Region> {
         DateTimeFormatter dateFmt = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         DateTimeFormatter timeFmt = DateTimeFormatter.ofPattern("HH:mm");
 
+        // Reorder bookings based on CURRENT datetime (fetched at each app start/render)
+        // Future bookings appear first (in chronological order)
+        // Past bookings appear after (also in chronological order)
+        // Past bookings are greyed out in the UI
+        Comparator<Booking> bookingComparator = (b1, b2) -> {
+            boolean b1IsFuture = Booking.isFutureDateTime(b1.getDateTime());
+            boolean b2IsFuture = Booking.isFutureDateTime(b2.getDateTime());
+
+            if (b1IsFuture && b2IsFuture) {
+                // Both future: sort ascending
+                return b1.getDateTime().compareTo(b2.getDateTime());
+            } else if (!b1IsFuture && !b2IsFuture) {
+                // Both past: sort ascending
+                return b1.getDateTime().compareTo(b2.getDateTime());
+            } else {
+                // One future, one past: future comes first
+                return b1IsFuture ? -1 : 1;
+            }
+        };
+
+        // Display ID: Sequential numbering (1, 2, 3...) for user convenience
+        // Note: This is different from the internal booking ID stored in JSON
+        // The delete command uses this display ID to reference bookings
         final int[] counter = {1};
         person.getBookings().stream()
-                .sorted(Comparator.comparing(Booking::getDateTime))
+                .sorted(bookingComparator)
                 .forEach(b -> rows.add(new BookingRow(
                         String.valueOf(counter[0]++),
                         b.getDateTime().format(dateFmt),
                         b.getDateTime().format(timeFmt),
                         b.getClientName(),
-                        b.getDescription())));
+                        b.getDescription(),
+                        !Booking.isFutureDateTime(b.getDateTime()))));
 
         bookingTable.setItems(rows);
         bookingTable.setFixedCellSize(-1);
         bookingTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         bookingTable.setTableMenuButtonVisible(false);
+
+        // Style rows based on whether they are past bookings
+        // Style rows: past bookings are greyed out with reduced opacity
+        bookingTable.setRowFactory(tv -> new TableRow<BookingRow>() {
+            @Override
+            protected void updateItem(BookingRow bookingRow, boolean empty) {
+                super.updateItem(bookingRow, empty);
+                if (bookingRow == null || empty) {
+                    setStyle("");
+                } else {
+                    if (bookingRow.getIsPastBooking()) {
+                        setStyle("-fx-opacity: 0.5; -fx-text-fill: #888888;");
+                    } else {
+                        setStyle("");
+                    }
+                }
+            }
+        });
     }
 
     /**
@@ -186,16 +234,22 @@ public class PersonCard extends UiPart<Region> {
         private final String time;
         private final String client;
         private final String desc;
+        private final boolean isPastBooking;
 
         /**
          * Creates a row representation of a booking.
          */
-        public BookingRow(String id, String date, String time, String client, String desc) {
+        public BookingRow(String id, String date, String time, String client, String desc, boolean isPastBooking) {
             this.id = id;
             this.date = date;
             this.time = time;
             this.client = client;
             this.desc = desc;
+            this.isPastBooking = isPastBooking;
+        }
+
+        public boolean getIsPastBooking() {
+            return isPastBooking;
         }
 
 
