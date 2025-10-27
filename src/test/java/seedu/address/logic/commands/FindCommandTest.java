@@ -68,7 +68,7 @@ public class FindCommandTest {
     @Test
     public void execute_singleDate_returnsMatchingPersons() {
         Map<String, List<String>> criteria = new HashMap<>();
-        criteria.put("date", List.of("2025-10-20"));
+        criteria.put("date", List.of("2026-10-20"));
         ClientContainsKeywordsPredicate predicate = preparePredicate(criteria);
 
         FindCommand command = new FindCommand(predicate);

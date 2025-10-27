@@ -214,7 +214,7 @@ public class DeleteCommandTest {
 
         //Create new booking
         LocalDateTime targetTiming = LocalDateTime.of(3000, 10, 10, 10, 10);
-        Booking booking = new Booking("1", "mr tan", targetTiming, "meeting");
+        Booking booking = new Booking("mr tan", targetTiming, "meeting");
 
         List<Booking> targetBooking = List.of(booking);
 
@@ -245,7 +245,7 @@ public class DeleteCommandTest {
 
         //Create new booking
         LocalDateTime targetTiming = LocalDateTime.of(3000, 10, 10, 10, 10);
-        Booking booking = new Booking("1", "mr tan", targetTiming, "meeting");
+        Booking booking = new Booking("mr tan", targetTiming, "meeting");
 
         List<Booking> targetBooking = List.of(booking);
 

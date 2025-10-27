@@ -30,8 +30,8 @@ import seedu.address.testutil.PersonBuilder;
 
 public class BookCommandTest {
 
-    private static final LocalDateTime VALID_DATETIME = LocalDateTime.of(2025, 12, 25, 10, 0);
-    private static final LocalDateTime VALID_DATETIME_2 = LocalDateTime.of(2025, 12, 26, 14, 30);
+    private static final LocalDateTime VALID_DATETIME = LocalDateTime.of(2026, 12, 25, 10, 0);
+    private static final LocalDateTime VALID_DATETIME_2 = LocalDateTime.of(2026, 12, 26, 14, 30);
     private static final String VALID_CLIENT_NAME = "John Doe";
     private static final String VALID_DESCRIPTION = "Consultation";
 
@@ -70,12 +70,34 @@ public class BookCommandTest {
     }
 
     @Test
-    public void parseDateTime_pastDate_rejected() {
-        // Test that parsing rejects past dates
-        // Note: This tests the Booking.parseDateTime and isFutureDateTime methods
-        // The actual command parser (BookCommandParser) should reject past dates
+    public void parseDateTime_pastDate_nowAccepted() {
+        // Test that past dates are now accepted
+        // Note: Past dates are now allowed, with a warning message
         LocalDateTime pastDate = LocalDateTime.of(2020, 1, 1, 10, 0);
-        assertFalse(Booking.isFutureDateTime(pastDate), "Past date should not be accepted as future date");
+        assertFalse(Booking.isFutureDateTime(pastDate), "Past date should be detected as past date");
+    }
+
+    @Test
+    public void execute_pastDateBooking_showsWarning() throws Exception {
+        ModelStubAcceptingBooking modelStub = new ModelStubAcceptingBooking();
+        Person personWithBooking = new PersonBuilder(ALICE).build();
+        modelStub.addPerson(personWithBooking);
+
+        // Create a booking with a past date
+        LocalDateTime pastDateTime = LocalDateTime.of(2020, 10, 26, 17, 0);
+        BookCommand bookCommand = new BookCommand(ALICE.getName(), VALID_CLIENT_NAME,
+                pastDateTime, VALID_DESCRIPTION);
+
+        CommandResult result = bookCommand.execute(modelStub);
+
+        String expectedMessage = String.format(BookCommand.MESSAGE_SUCCESS,
+                ALICE.getName(),
+                VALID_CLIENT_NAME,
+                Booking.parseDateTime("2020-10-26 17:00").format(Booking.DATETIME_FORMATTER),
+                VALID_DESCRIPTION)
+                + "\nNote that this is a Booking that is in the past!";
+
+        assertEquals(expectedMessage, result.getFeedbackToUser());
     }
 
     @Test
@@ -90,7 +112,7 @@ public class BookCommandTest {
         CommandResult commandResult = bookCommand.execute(modelStub);
 
         String expectedMessage = String.format(BookCommand.MESSAGE_SUCCESS, ALICE.getName(),
-                VALID_CLIENT_NAME, "2025-12-25 10:00", VALID_DESCRIPTION);
+                VALID_CLIENT_NAME, "2026-12-25 10:00", VALID_DESCRIPTION);
         assertEquals(expectedMessage, commandResult.getFeedbackToUser());
         assertTrue(modelStub.personsUpdated.size() == 1);
     }
@@ -104,10 +126,10 @@ public class BookCommandTest {
 
         // Try to book at the same time as existing booking
         BookCommand bookCommand = new BookCommand(CARL.getName(), "Different Client",
-                LocalDateTime.of(2025, 10, 20, 10, 0), "Different Description");
+                LocalDateTime.of(2026, 10, 20, 10, 0), "Different Description");
 
         String expectedMessage = String.format(BookCommand.MESSAGE_DOUBLE_BOOKING, CARL.getName(),
-                "2025-10-20 10:00", "Carl Kurz", "Haircut");
+                "2026-10-20 10:00", "Carl Kurz", "Haircut");
         assertCommandFailure(bookCommand, modelStub, expectedMessage);
     }
 
@@ -125,7 +147,7 @@ public class BookCommandTest {
         CommandResult commandResult = bookCommand.execute(modelStub);
 
         String expectedMessage = String.format(BookCommand.MESSAGE_SUCCESS, CARL.getName(),
-                VALID_CLIENT_NAME, "2025-12-26 14:30", VALID_DESCRIPTION);
+                VALID_CLIENT_NAME, "2026-12-26 14:30", VALID_DESCRIPTION);
         assertEquals(expectedMessage, commandResult.getFeedbackToUser());
         assertTrue(modelStub.personsUpdated.size() == 1);
     }
@@ -137,13 +159,18 @@ public class BookCommandTest {
         modelStub.addPerson(new PersonBuilder(FIONA).build());
 
         // Book Alice at same time as Fiona's existing booking - should succeed (different people)
+        LocalDateTime testDateTime = LocalDateTime.of(2026, 10, 20, 14, 0);
         BookCommand bookCommand = new BookCommand(ALICE.getName(), VALID_CLIENT_NAME,
-                LocalDateTime.of(2025, 10, 20, 14, 0), VALID_DESCRIPTION);
+                testDateTime, VALID_DESCRIPTION);
 
         CommandResult commandResult = bookCommand.execute(modelStub);
 
+        boolean isPastDate = !Booking.isFutureDateTime(testDateTime);
         String expectedMessage = String.format(BookCommand.MESSAGE_SUCCESS, ALICE.getName(),
-                VALID_CLIENT_NAME, "2025-10-20 14:00", VALID_DESCRIPTION);
+                VALID_CLIENT_NAME, "2026-10-20 14:00", VALID_DESCRIPTION);
+        if (isPastDate) {
+            expectedMessage += "\nNote that this is a Booking that is in the past!";
+        }
         assertEquals(expectedMessage, commandResult.getFeedbackToUser());
         assertTrue(modelStub.personsUpdated.size() == 1);
     }
@@ -168,7 +195,7 @@ public class BookCommandTest {
         CommandResult commandResult = bookCommand.execute(modelStub);
 
         String expectedMessage = String.format(BookCommand.MESSAGE_SUCCESS, carl.getName(),
-                VALID_CLIENT_NAME, "2025-12-25 10:00", VALID_DESCRIPTION);
+                VALID_CLIENT_NAME, "2026-12-25 10:00", VALID_DESCRIPTION);
         assertEquals(expectedMessage, commandResult.getFeedbackToUser());
         assertTrue(modelStub.personsUpdated.size() == 1);
     }
@@ -222,7 +249,7 @@ public class BookCommandTest {
         CommandResult commandResult = bookCommand.execute(modelStub);
 
         String expectedMessage = String.format(BookCommand.MESSAGE_SUCCESS, ABHIJAY.getName(),
-                VALID_CLIENT_NAME, "2025-12-25 10:00", VALID_DESCRIPTION);
+                VALID_CLIENT_NAME, "2026-12-25 10:00", VALID_DESCRIPTION);
         assertEquals(expectedMessage, commandResult.getFeedbackToUser());
         assertTrue(modelStub.personsUpdated.size() == 1);
     }
@@ -240,7 +267,7 @@ public class BookCommandTest {
         CommandResult commandResult = bookCommand.execute(modelStub);
 
         String expectedMessage = String.format(BookCommand.MESSAGE_SUCCESS, ALICE.getName(),
-                clientNameWithSlash, "2025-12-25 10:00", VALID_DESCRIPTION);
+                clientNameWithSlash, "2026-12-25 10:00", VALID_DESCRIPTION);
         assertEquals(expectedMessage, commandResult.getFeedbackToUser());
         assertTrue(modelStub.personsUpdated.size() == 1);
     }
