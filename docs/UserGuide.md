@@ -381,7 +381,7 @@ Additionally, past bookings will appear greyed out (with reduced opacity) in the
 </div>
 
 <div markdown="span" class="alert alert-warning">:exclamation: **Warning:**
-Dates must be valid calendar dates. Invalid dates like 2026-02-31 will be rejected with: "Invalid date/time format or value! Please use the format: YYYY-MM-DD HH:MM (e.g., 2024-12-25 14:30). The booking must be scheduled for a future date and time."
+Dates must be valid calendar dates. Invalid dates like 2026-02-31 will be rejected with: "Invalid date/time format or value! Please use the format: YYYY-MM-DD HH:MM (e.g., 2024-12-25 14:30).
 </div>
 
 Examples:
