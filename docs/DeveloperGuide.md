@@ -593,7 +593,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 3. FirstImpressions adds person to the list
 4. Use case ends
 
-<img src="images/addMockup.JPG" width="200px" alt="add person mockup">
+<img src="images/add-DG.png" width="400px" alt="add person">
 
 **Extensions**
 
@@ -629,7 +629,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 3. FirstImpressions deletes person in the list
 4. Use case ends
 
-<img src="images/deleteMockup.JPG" width="200px" alt="delete person mockup">
+<img src="images/delete-DG.png" width="400px" alt="delete person">
 
 **Extensions**
 
@@ -653,7 +653,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 3. FirstImpressions adds booking to team member
 4. Use case ends
 
-<img src="images/bookMockup.JPG" width="200px" alt="book person mockup">
+<img src="images/book-DG.png" width="400px" alt="book person">
 
 **Extensions**
 
@@ -690,7 +690,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
    > “3 persons listed!”
 4. Use case ends.
 
-<img src="images/findMockup.JPG" width="200px" alt="find person mockup">
+<img src="images/find-DG.png" width="400px" alt="find person">
 
 #### **Delimeters & Usage**
 
@@ -734,7 +734,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 2. FirstImpressions shows pop-up menu with all command usage
 3. Use case ends
 
-<img src="images/helpMockup.png" width="200px" alt="help mockup">
+<img src="images/help-DG.png" width="400px" alt="help">
 
 
 
