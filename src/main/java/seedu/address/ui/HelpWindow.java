@@ -19,18 +19,25 @@ public class HelpWindow extends UiPart<Stage> {
 
     public static final String USERGUIDE_URL = "https://ay2526s1-cs2103t-t08-4.github.io/tp/UserGuide.html";
 
-    public static final String ADD_COMMAND = "Add: add n/NAME [p/PHONE] [e/EMAIL] [t/TAG ...]";
-    public static final String DELETE_COMMAND = "Delete: delete n/NAME [t/TAG ...]";
-    public static final String BOOK_COMMAND = "Book: book d/DATETIME c/CLIENT_NAME "
+    public static final String ADD_COMMAND = "Add: add n/NAME [p/PHONE_NUMBER] [e/EMAIL] [t/TAG]...";
+    public static final String LIST_COMMAND = "List: list";
+    public static final String EDIT_COMMAND = "Edit: edit n/OLD_NAME [n/NEW_NAME] [p/PHONE] [e/EMAIL] [t/TAG]...";
+    public static final String FIND_COMMAND = "Find: find n/NAME or find t/TAG... or find d/DATE...";
+    public static final String DELETE_COMMAND = "Delete: delete n/PERSON_NAME [t/TAG]... [b/BOOKING_INDEX]...";
+    public static final String BOOK_COMMAND = "Book: book dt/DATETIME c/CLIENT_NAME "
             + "n/PERSON_NAME [desc/DESCRIPTION]";
-    public static final String FIND_COMMAND = "Find: find [n/NAME] [t/TAG] [d/DATE] **";
-    public static final String ENDING_NOTE = "Note: Any fields within [] and () are optional.\n"
-            + "** Any 1 field is required for find command.";
+    public static final String CLEAR_COMMAND = "Clear: clear f/";
+    public static final String ENDING_NOTE =
+            "Note: Fields in [] are optional. ... means can be used multiple times.\n"
+            + "At least 1 optional field is required for edit and find commands.";
 
     public static final String HELP_MESSAGE = ADD_COMMAND + "\n"
+            + LIST_COMMAND + "\n"
+            + EDIT_COMMAND + "\n"
+            + FIND_COMMAND + "\n"
             + DELETE_COMMAND + "\n"
             + BOOK_COMMAND + "\n"
-            + FIND_COMMAND + "\n\n"
+            + CLEAR_COMMAND + "\n\n"
             + ENDING_NOTE + "\n\n"
             + "For more information, please refer to the user guide: " + USERGUIDE_URL;
 
