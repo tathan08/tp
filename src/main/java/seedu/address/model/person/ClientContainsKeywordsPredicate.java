@@ -20,53 +20,39 @@ public class ClientContainsKeywordsPredicate implements Predicate<Person> {
 
     @Override
     public boolean test(Person person) {
-        for (Map.Entry<String, List<String>> entry : searchCriteria.entrySet()) {
+        // Empty map should not happen here; OR across fields
+        return searchCriteria.entrySet().stream().anyMatch(entry -> {
             String fieldType = entry.getKey();
             List<String> keywords = entry.getValue();
 
-            // Empty keyword list = wildcard (matches everyone)
+            // Empty keyword list = wildcard = match everyone
             if (keywords.isEmpty()) {
-                continue;
+                return true;
             }
 
-            boolean matches = switch (fieldType) {
+            return switch (fieldType) {
             case "name" -> matchesName(person, keywords);
             case "tag" -> matchesTag(person, keywords);
             case "date" -> matchesDate(person, keywords);
             default -> false;
             };
-
-            if (!matches) {
-                return false; // if any filter fails, skip
-            }
-        }
-        return true; // all criteria passed (or were wildcards)
+        });
     }
 
     private boolean matchesName(Person person, List<String> keywords) {
-        // Each entry in keywords is a phrase from a single prefix occurrence
-        // (e.g. "David Li").
         String fullName = person.getName().fullName.toLowerCase();
-
-        // If multiple name phrases provided (n/A n/B), treat them as OR: match
-        // if any phrase is contained.
-        return keywords.stream().map(String::toLowerCase).anyMatch(phrase -> fullName.contains(phrase));
+        return keywords.stream().map(String::toLowerCase).anyMatch(fullName::contains);
     }
 
     private boolean matchesTag(Person person, List<String> keywords) {
-        // Tags: if any of the person's tags contain any of the provided tag
-        // phrases -> match
         return person.getTags().stream().anyMatch(tag -> keywords.stream().map(String::toLowerCase)
-                                        .anyMatch(phrase -> tag.tagName.toLowerCase().contains(phrase)));
+                                        .anyMatch(tag.tagName.toLowerCase()::contains));
     }
 
     private boolean matchesDate(Person person, List<String> keywords) {
-        // Each person may have multiple bookings; match if any booking date
-        // (LocalDate) contains any phrase.
         return person.getBookings().stream().anyMatch(booking -> {
             String bookingDate = booking.getDateTime().toLocalDate().toString();
-
-            return keywords.stream().anyMatch(kw -> bookingDate.contains(kw));
+            return keywords.stream().anyMatch(bookingDate::contains);
         });
     }
 
