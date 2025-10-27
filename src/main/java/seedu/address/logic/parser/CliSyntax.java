@@ -15,5 +15,6 @@ public class CliSyntax {
     public static final Prefix PREFIX_CLIENT = new Prefix("c/");
     public static final Prefix PREFIX_DESCRIPTION = new Prefix("desc/");
     public static final Prefix PREFIX_BOOKING = new Prefix("b/");
+    public static final Prefix PREFIX_FORCE = new Prefix("f/");
 
 }
