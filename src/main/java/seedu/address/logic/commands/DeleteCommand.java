@@ -1,6 +1,9 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_BOOKING;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -29,22 +32,27 @@ public class DeleteCommand extends Command {
     public static final String COMMAND_WORD = "delete";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
-            + ": Deletes the person, tag or booking specified from the displayed person list.\n"
-            + "Parameters:\n NAME (must be a saved contact)\n"
-            + "TAG (optional, an available tag saved with the contact) \n"
-            + "BOOKING (Optional, an available booking saved under the contact) \n"
-            + "Example:\n" + COMMAND_WORD + " n/" + "Alex" + " (to delete a whole contact)\n"
-            + COMMAND_WORD + " n/" + "Alex" + " t/tag_1 t/tag_2... (to delete 1 or more specific tags from 'Alex')\n"
+            + ": Deletes the person, tag or booking specified in the address book.\n"
+            + "Parameters: "
+            + PREFIX_NAME + "NAME "
+            + "[" + PREFIX_TAG + "TAG]..."
+            + " OR "
+            + "[" + PREFIX_BOOKING + "BOOKING ID] \n"
+            + "Examples: \n" + COMMAND_WORD + " n/" + "Alex" + " (to delete a whole contact)\n"
+            + COMMAND_WORD + " n/" + "Alex" + " t/tag1 t/tag2... (to delete 1 or more specific tags from 'Alex')\n"
             + COMMAND_WORD + " n/" + "Alex" + " b/booking_ID (to delete a specified booking with 'Alex')";
 
     public static final String MESSAGE_DELETE_PERSON_SUCCESS = "Deleted Person: %1$s";
     public static final String MESSAGE_DELETE_PERSON_NOT_FOUND = "No such person found: %s";
-    public static final String MESSAGE_DELETE_PERSON_MULTIPLE_MATCH = "Multiple matches for %s: \n%s\n";
+    public static final String MESSAGE_DELETE_PERSON_MULTIPLE_MATCH = "Multiple partial matches for %s: \n%s\n";
+    public static final String MESSAGE_DELETE_PERSON_PARTIAL_FOUND =
+            "We found a partial match containing %1$s, did you mean '%2$s'?";
     public static final String MESSAGE_DELETE_TAG_SUCCESS = "Removed tags %1$s from %2$s!";
     public static final String MESSAGE_DELETE_TAG_PARTIAL = "Removed %1$s. Not found: %2$s from %3$s";
     public static final String MESSAGE_DELETE_TAG_NOT_FOUND = "'%1$s' does not have the tag(s) '%2$s'";
+    public static final String MESSAGE_DELETE_TAG_NO_SPACES = "Tags should not contain any whitespaces!";
     public static final String MESSAGE_DELETE_TAG_USAGE = "Please provide a tag after 't/'!";
-    public static final String MESSAGE_DELETE_BOOKING_SUCCESS = "Removed booking %1$s from %2$s!";
+    public static final String MESSAGE_DELETE_BOOKING_SUCCESS = "Removed booking: %1$s with %2$s for %3$s!";
     public static final String MESSAGE_DELETE_BOOKING_NOT_FOUND = "'%1$s' does not have booking ID %2$d!";
     public static final String MESSAGE_DELETE_BOOKING_USAGE = "Please provide a valid booking ID after b/!";
     public static final String MESSAGE_DELETE_BOOKING_OR_TAG = "Only use either 'b/' or 't/', and not both!";
@@ -98,6 +106,7 @@ public class DeleteCommand extends Command {
                         personToDelete.getName().fullName, targetBooking));
             }
             List<Booking> newBookings = new ArrayList<>(bookingList);
+            Booking removedBooking = newBookings.get(targetBooking - 1);
             newBookings.remove(targetBooking - 1);
 
             Person updatedPerson = new Person(
@@ -110,8 +119,8 @@ public class DeleteCommand extends Command {
             model.setPerson(personToDelete, updatedPerson);
             model.updateFilteredPersonList(Model.PREDICATE_SHOW_ALL_PERSONS);
 
-            return new CommandResult(String.format(MESSAGE_DELETE_BOOKING_SUCCESS, targetBooking,
-                    personToDelete.getName().fullName));
+            return new CommandResult(String.format(MESSAGE_DELETE_BOOKING_SUCCESS, removedBooking.getDateTimeString(),
+                    removedBooking.getClientName(), personToDelete.getName().fullName));
         }
 
         if (tags.isEmpty()) {
@@ -159,8 +168,8 @@ public class DeleteCommand extends Command {
         model.setPerson(personToDelete, updatedPerson);
         model.updateFilteredPersonList(Model.PREDICATE_SHOW_ALL_PERSONS);
 
-        String removed = tagsToRemove.stream().map(Tag::toString).collect(Collectors.joining(", "));
-        logger.info(String.format("Successfully removed tags %s from person: %s", present, personToDelete.getName()));
+        String removed = present.stream().map(Tag::toString).collect(Collectors.joining(", "));
+        logger.info(String.format("Successfully removed tags %s from person: %s", removed, personToDelete.getName()));
 
         if (!missing.isEmpty()) {
             return new CommandResult(String.format(MESSAGE_DELETE_TAG_PARTIAL, present,
@@ -217,7 +226,7 @@ public class DeleteCommand extends Command {
 
         List<Person> exactMatch = list.stream()
                 .filter(x -> x.getName().toString().replaceAll("\\s+", " ")
-                        .equalsIgnoreCase(queryName))
+                        .equals(queryName))
                 .toList();
         if (exactMatch.size() == 1) {
             logger.fine(String.format("Found exact match for person: %s", targetName.fullName));
@@ -233,12 +242,13 @@ public class DeleteCommand extends Command {
         }
 
         List<Person> contains = list.stream()
-                .filter(x -> x.getName().toString().toLowerCase().replaceAll("\\s+", " ")
-                        .contains(queryName.toLowerCase()))
+                .filter(x -> x.getName().toString().replaceAll("\\s+", " ")
+                        .contains(queryName))
                 .toList();
         if (contains.size() == 1) {
             logger.fine(String.format("Found partial match for person: %s", targetName.fullName));
-            return contains.get(0);
+            throw new CommandException(
+                    String.format(MESSAGE_DELETE_PERSON_PARTIAL_FOUND, queryName, contains.get(0).getName()));
         }
 
         if (contains.isEmpty()) {

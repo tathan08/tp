@@ -74,7 +74,7 @@ public class BookCommand extends Command {
 
         // Find the person by name
         Person personToBook = null;
-        for (Person person : model.getFilteredPersonList()) {
+        for (Person person : model.getAddressBook().getPersonList()) {
             if (person.getName().equals(personName)) {
                 personToBook = person;
                 break;
