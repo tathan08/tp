@@ -11,14 +11,14 @@ public class Name {
 
     public static final int MAX_NAME_LENGTH = 50;
     public static final String MESSAGE_CONSTRAINTS =
-            "Names should only contain alphabetic characters, spaces, apostrophes, and hyphens";
+            "Names should only contain alphabetic characters, spaces, apostrophes, hyphens, and slashes";
     public static final String MESSAGE_LENGTH_CONSTRAINT = "Name too long (max 50 chars).";
 
     /*
      * The first character must be alphabetic.
-     * Subsequent characters can be alphabetic, spaces, apostrophes, or hyphens.
+     * Subsequent characters can be alphabetic, spaces, apostrophes, hyphens, forward slashes, or backslashes.
      */
-    public static final String VALIDATION_REGEX = "[a-zA-Z][a-zA-Z' -]*";
+    public static final String VALIDATION_REGEX = "[a-zA-Z][a-zA-Z' \\\\/-]*";
 
     public final String fullName;
 

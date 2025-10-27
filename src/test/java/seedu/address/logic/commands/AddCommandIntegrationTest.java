@@ -165,4 +165,21 @@ public class AddCommandIntegrationTest {
                 expectedModel);
     }
 
+    @Test
+    public void execute_newPersonWithSlashesInName_addsPersonSuccessfully() {
+        Person personWithSlash = new PersonBuilder()
+                .withName("Raj s/o Kumar")
+                .withPhone("81234567")
+                .withEmail("raj@example.com")
+                .withTags("family")
+                .build();
+
+        Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+        expectedModel.addPerson(personWithSlash);
+
+        assertCommandSuccess(new AddCommand(personWithSlash), model,
+                String.format(AddCommand.MESSAGE_SUCCESS, Messages.format(personWithSlash)),
+                expectedModel);
+    }
+
 }

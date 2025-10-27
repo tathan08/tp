@@ -605,11 +605,15 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
     FirstImpressions throws error "Name too long" \
     Use case ends
 
- - 2c. Too many tags \
+ - 2c. Invalid name characters \
+    FirstImpressions throws error "Names should only contain alphabetic characters, spaces, apostrophes, hyphens, and slashes" \
+    Use case ends
+
+ - 2d. Too many tags \
     FirstImpressions throws error "Remove existing tag before adding new one" \
     Use case ends
 
- - 2d. Invalid tag \
+ - 2e. Invalid tag \
     FirstImpressions throws error "Tag contains invalid characters" \
     Use case ends
 
@@ -661,11 +665,15 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
   FirstImpressions throws error "Booking requires datetime, client, team member, and description." \
   Use case ends
 
-- 2c. Duplicate parameter \
+- 2c. Invalid client name \
+  FirstImpressions throws error "Invalid client name. Must be 1-100 characters with at least one letter. Only letters, numbers, spaces, hyphens, apostrophes, periods, and slashes are allowed." \
+  Use case ends
+
+- 2d. Duplicate parameter \
   FirstImpressions throws error "Parameter [parameter] specified multiple times. Each parameter should appear only once." \
   Use case ends
 
-- 3d. Unknown parameter \
+- 3e. Unknown parameter \
   FirstImpressions throws error "Unknown parameter: [parameter]. Valid parameters are /d, /c, /p, /desc" \
   Use case ends
 
