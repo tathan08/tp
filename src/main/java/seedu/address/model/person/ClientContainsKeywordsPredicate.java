@@ -1,74 +1,73 @@
 package seedu.address.model.person;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.function.Predicate;
 
-import seedu.address.commons.util.ToStringBuilder;
-
 /**
- * Tests that a {@code Person}'s {@code Name} matches any of the keywords given.
+ * Tests that a {@code Person} matches all of the given search criteria. The
+ * search criteria map contains field types (e.g. "name", "tag", "date") mapped
+ * to lists of keywords.
  */
 public class ClientContainsKeywordsPredicate implements Predicate<Person> {
 
-    /**
-     * The type of search to be performed.
-     */
-    public enum SearchType {
-        NAME, TAG, DATE
-    }
+    private final Map<String, List<String>> searchCriteria;
 
-    private final List<String> keywords;
-    private final SearchType type;
-
-    /**
-     * Constructs a ClientContainsKeywordsPredicate with the given search type
-     * and keywords.
-     */
-    public ClientContainsKeywordsPredicate(SearchType type, List<String> keywords) {
-        // Developer checks — these should never be null
-        assert type != null : "SearchType must not be null";
-        assert keywords != null : "Keywords list must not be null";
-
-        this.keywords = keywords;
-        this.type = type;
+    public ClientContainsKeywordsPredicate(Map<String, List<String>> searchCriteria) {
+        this.searchCriteria = searchCriteria;
     }
 
     @Override
     public boolean test(Person person) {
-        switch (type) {
+        for (Map.Entry<String, List<String>> entry : searchCriteria.entrySet()) {
+            String fieldType = entry.getKey();
+            List<String> keywords = entry.getValue();
 
-        case NAME:
-            // Filter out empty keywords
-            List<String> validKeywords = keywords.stream().filter(kw -> !kw.trim().isEmpty()).toList();
-
-            // If there are no valid keywords, return false (no match)
-            if (validKeywords.isEmpty()) {
-                return true;
+            // Empty keyword list = wildcard (matches everyone)
+            if (keywords.isEmpty()) {
+                continue;
             }
-            String combinedKeyword = String.join(" ", keywords).trim();
-            assert combinedKeyword != null : "Combined keyword string should not be null";
-            return person.getName().fullName.toLowerCase().contains(combinedKeyword.toLowerCase());
 
-        case TAG:
-            // Ensure tag list is non-null
-            assert person.getTags() != null : "Person should have a non-null tag list";
+            boolean matches = switch (fieldType) {
+            case "name" -> matchesName(person, keywords);
+            case "tag" -> matchesTag(person, keywords);
+            case "date" -> matchesDate(person, keywords);
+            default -> false;
+            };
 
-            return person.getTags().stream().map(tag -> tag.tagName.toLowerCase()).anyMatch(tagName -> keywords.stream()
-                                            .filter(keyword -> !keyword.trim().isEmpty())
-                                            .anyMatch(keyword -> tagName.equals(keyword.toLowerCase())));
-
-        case DATE:
-            // Ensure booking list is non-null
-            assert person.getBookings() != null : "Person should have a non-null booking list";
-
-            return keywords.stream().filter(keyword -> !keyword.trim().isEmpty()).anyMatch(keyword -> person
-                                            .getBookings().stream()
-                                            .map(booking -> booking.getDateTime().toLocalDate().toString())
-                                            .anyMatch(date -> date.equals(keyword)));
-
-        default:
-            throw new IllegalStateException("Unexpected Value:" + type);
+            if (!matches) {
+                return false; // if any filter fails, skip
+            }
         }
+        return true; // all criteria passed (or were wildcards)
+    }
+
+    private boolean matchesName(Person person, List<String> keywords) {
+        // Each entry in keywords is a phrase from a single prefix occurrence
+        // (e.g. "David Li").
+        String fullName = person.getName().fullName.toLowerCase();
+
+        // If multiple name phrases provided (n/A n/B), treat them as OR: match
+        // if any phrase is contained.
+        return keywords.stream().map(String::toLowerCase).anyMatch(phrase -> fullName.contains(phrase));
+    }
+
+    private boolean matchesTag(Person person, List<String> keywords) {
+        // Tags: if any of the person's tags contain any of the provided tag
+        // phrases -> match
+        return person.getTags().stream().anyMatch(tag -> keywords.stream().map(String::toLowerCase)
+                                        .anyMatch(phrase -> tag.tagName.toLowerCase().contains(phrase)));
+    }
+
+    private boolean matchesDate(Person person, List<String> keywords) {
+        // Each person may have multiple bookings; match if any booking date
+        // (LocalDate) contains any phrase.
+        return person.getBookings().stream().anyMatch(booking -> {
+            String bookingDate = booking.getDateTime().toLocalDate().toString();
+
+            return keywords.stream().anyMatch(kw -> bookingDate.contains(kw));
+        });
     }
 
     @Override
@@ -77,25 +76,24 @@ public class ClientContainsKeywordsPredicate implements Predicate<Person> {
             return true;
         }
 
-        // instanceof handles nulls
-        if (!(other instanceof ClientContainsKeywordsPredicate)) {
+        if (!(other instanceof ClientContainsKeywordsPredicate otherPredicate)) {
             return false;
         }
 
-        ClientContainsKeywordsPredicate otherNameContainsKeywordsPredicate =
-                                            (ClientContainsKeywordsPredicate) other;
+        return Objects.equals(this.searchCriteria, otherPredicate.searchCriteria);
+    }
 
-        // Sanity check for equality invariants
-        assert this.type != null : "SearchType should not be null when comparing predicates";
-        assert this.keywords != null : "Keywords list should not be null when comparing predicates";
-
-        return (this.type == otherNameContainsKeywordsPredicate.type)
-                                        && (keywords.equals(otherNameContainsKeywordsPredicate.keywords));
+    // ✅ toString() override
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder("ClientContainsKeywordsPredicate with criteria: ");
+        searchCriteria.forEach((key, value) ->
+                sb.append(key).append("=").append(value).append("; "));
+        return sb.toString();
     }
 
     @Override
-    public String toString() {
-        return new ToStringBuilder(this).add("searchType", type)
-                    .add("keywords", keywords).toString();
+    public int hashCode() {
+        return Objects.hash(searchCriteria);
     }
 }
