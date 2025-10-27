@@ -33,7 +33,7 @@ public class TypicalPersons {
     public static final Person CARL = new PersonBuilder().withName("Carl Kurz").withPhone("95352563")
             .withEmail("heinz@example.com")
             .withBookings(Arrays.asList(
-                    new Booking("Carl Kurz", LocalDateTime.of(2025, 10, 20, 10, 0), "Haircut")))
+                    new Booking("1", "Carl Kurz", LocalDateTime.of(2025, 10, 20, 10, 0), "Haircut")))
             .build();
     public static final Person DANIEL = new PersonBuilder().withName("Daniel Meier").withPhone("87652533")
             .withEmail("cornelia@example.com").withTags("friends").build();
@@ -42,7 +42,7 @@ public class TypicalPersons {
     public static final Person FIONA = new PersonBuilder().withName("Fiona Kunz").withPhone("9482427")
             .withEmail("lydia@example.com")
             .withBookings(Arrays.asList(
-                    new Booking("Fiona Kunz", LocalDateTime.of(2025, 10, 20, 14, 0), "Spa treatment")))
+                    new Booking("1", "Fiona Kunz", LocalDateTime.of(2025, 10, 20, 14, 0), "Spa treatment")))
             .build();
     public static final Person GEORGE = new PersonBuilder().withName("George Best").withPhone("9482442")
             .withEmail("anna@example.com").build();
@@ -52,6 +52,8 @@ public class TypicalPersons {
             .withEmail("stefan@example.com").build();
     public static final Person IDA = new PersonBuilder().withName("Ida Mueller").withPhone("8482131")
             .withEmail("hans@example.com").build();
+    public static final Person ABHIJAY = new PersonBuilder().withName("Abhijay s/o Abhi").withPhone("91234567")
+            .withEmail("abhijay@example.com").withTags("family").build();
 
     // Manually added - Person's details found in {@code CommandTestUtil}
     public static final Person AMY = new PersonBuilder().withName(VALID_NAME_AMY).withPhone(VALID_PHONE_AMY)
@@ -76,6 +78,6 @@ public class TypicalPersons {
     }
 
     public static List<Person> getTypicalPersons() {
-        return new ArrayList<>(Arrays.asList(ALICE, BENSON, CARL, DANIEL, ELLE, FIONA, GEORGE));
+        return new ArrayList<>(Arrays.asList(ALICE, BENSON, CARL, DANIEL, ELLE, FIONA, GEORGE, ABHIJAY));
     }
 }

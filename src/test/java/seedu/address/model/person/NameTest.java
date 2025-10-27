@@ -46,6 +46,9 @@ public class NameTest {
         assertTrue(Name.isValidName("O'Brien")); // with apostrophe
         assertTrue(Name.isValidName("Mary-Jane")); // with hyphen
         assertTrue(Name.isValidName("Jean-Paul O'Connor")); // with both apostrophe and hyphen
+        assertTrue(Name.isValidName("John/Doe")); // with forward slash
+        assertTrue(Name.isValidName("John\\Doe")); // with backslash
+        assertTrue(Name.isValidName("Jean-Paul O'Connor/Mary-Jane")); // with all special chars
         assertTrue(Name.isValidName("a".repeat(50))); // exactly 50 chars (max length)
     }
 
