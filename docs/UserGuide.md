@@ -122,7 +122,7 @@ Always backup your `addressbook.json` file before making major changes. Data los
 
    * `delete n/Alice Tan` : Deletes the contact named Alice Tan from the whole list of contacts.
 
-   * `clear` : Deletes all contacts.
+   * `clear f/` : Deletes all contacts.
 
    * `exit` : Exits the app.
 
@@ -148,7 +148,7 @@ Always backup your `addressbook.json` file before making major changes. Data los
 * Parameters can be in any order.<br>
   e.g. if the command specifies `n/NAME p/PHONE_NUMBER`, `p/PHONE_NUMBER n/NAME` is also acceptable.
 
-* Extraneous parameters for commands that do not take in parameters (such as `help`, `list`, `exit` and `clear`) will be ignored.<br>
+* Extraneous parameters for commands that do not take in parameters (such as `help`, `list`, and `exit`) will be ignored.<br>
   e.g. if the command specifies `help 123`, it will be interpreted as `help`.
 
 * If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines as space characters surrounding line-breaks may be omitted when copied over to the application.
@@ -316,11 +316,23 @@ Examples:
 
 Clears all entries from the contact list.
 
-Format: `clear`
+Format: `clear f/`
+
+* The command `clear` without the `f/` flag will display a warning message and will NOT delete any data.
+* You must use `clear f/` to confirm and execute the deletion of all contacts and bookings.
+* This two-step process helps prevent accidental data loss.
 
 <div markdown="span" class="alert alert-warning">:exclamation: **Warning:**
-The `clear` command permanently deletes ALL contacts and bookings. This action cannot be undone. Make sure to backup your data before using this command.
+The `clear f/` command permanently deletes ALL contacts and bookings. This action cannot be undone. Make sure to backup your data before using this command.
 </div>
+
+<div markdown="span" class="alert alert-primary">:bulb: **Tip:**
+If you accidentally type `clear`, don't worry! The system will show you a warning message instead of deleting your data. You must explicitly use `clear f/` to confirm the deletion.
+</div>
+
+Examples:
+* `clear` - Shows a warning message without deleting any data
+* `clear f/` - Clears all entries from the contact list
 
 ![clear message](images\clearMessage.jpg)
 *Figure 8: Success message after clearing all entries from the contact list*
@@ -389,6 +401,9 @@ Furthermore, certain edits can cause the FirstImpressions to behave in unexpecte
 **Q**: What happens if I accidentally delete a person?<br>
 **A**: Unfortunately, there is no built-in undo feature. However, you can restore your data by copying a backup of your `addressbook.json` file from the `data` folder.
 
+**Q**: What happens if I accidentally type `clear`?<br>
+**A**: Don't worry! The system will show you a warning message without deleting any data. You must explicitly use `clear f/` with the force flag to confirm the deletion of all contacts.
+
 **Q**: Can I import contacts from other applications?<br>
 **A**: Currently, FirstImpressions does not support direct import from other applications. You would need to manually add contacts using the `add` command.
 
@@ -429,6 +444,6 @@ Action | Format, Examples
 **Edit** | `edit n/OLD_NAME [n/NEW_NAME] [p/PHONE_NUMBER] [e/EMAIL] [t/TAG]…​`<br> e.g.,`edit n/John Doe n/Jane Doe p/91234567 e/janedoe@example.com`
 **Find** | `find n/NAME` or `find t/TAG1 t/TAG2...` or `find d/DATE1 d/DATE2...`<br> e.g., `find n/John` or `find d/2025-08-18`
 **Delete** | `delete n/PERSON_NAME [t/TAG]…​ [b/BOOKING_INDEX]…​`<br> e.g., `delete n/Alex Yeoh` or `delete n/Alex t/vipHandler` or `delete n/Alex Yeoh b/1`
-**Clear** | `clear`
+**Clear** | `clear f/`
 **Book** | `book d/DATETIME c/CLIENT_NAME n/PERSON_NAME [desc/DESCRIPTION]` <br> e.g., `book d/2025-09-18 14:00 c/Mr Lim n/Alice Tan desc/first consultation`
 **Exit** | `exit`
