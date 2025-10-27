@@ -39,7 +39,9 @@ public class DeleteCommand extends Command {
 
     public static final String MESSAGE_DELETE_PERSON_SUCCESS = "Deleted Person: %1$s";
     public static final String MESSAGE_DELETE_PERSON_NOT_FOUND = "No such person found: %s";
-    public static final String MESSAGE_DELETE_PERSON_MULTIPLE_MATCH = "Multiple matches for %s: \n%s\n";
+    public static final String MESSAGE_DELETE_PERSON_MULTIPLE_MATCH = "Multiple partial matches for %s: \n%s\n";
+    public static final String MESSAGE_DELETE_PERSON_PARTIAL_FOUND =
+            "We found a partial match containing %1$s, did you mean '%2$s'?";
     public static final String MESSAGE_DELETE_TAG_SUCCESS = "Removed tags %1$s from %2$s!";
     public static final String MESSAGE_DELETE_TAG_PARTIAL = "Removed %1$s. Not found: %2$s from %3$s";
     public static final String MESSAGE_DELETE_TAG_NOT_FOUND = "'%1$s' does not have the tag(s) '%2$s'";
@@ -218,7 +220,7 @@ public class DeleteCommand extends Command {
 
         List<Person> exactMatch = list.stream()
                 .filter(x -> x.getName().toString().replaceAll("\\s+", " ")
-                        .equalsIgnoreCase(queryName))
+                        .equals(queryName))
                 .toList();
         if (exactMatch.size() == 1) {
             logger.fine(String.format("Found exact match for person: %s", targetName.fullName));
@@ -234,12 +236,13 @@ public class DeleteCommand extends Command {
         }
 
         List<Person> contains = list.stream()
-                .filter(x -> x.getName().toString().toLowerCase().replaceAll("\\s+", " ")
-                        .contains(queryName.toLowerCase()))
+                .filter(x -> x.getName().toString().replaceAll("\\s+", " ")
+                        .contains(queryName))
                 .toList();
         if (contains.size() == 1) {
             logger.fine(String.format("Found partial match for person: %s", targetName.fullName));
-            return contains.get(0);
+            throw new CommandException(
+                    String.format(MESSAGE_DELETE_PERSON_PARTIAL_FOUND, queryName, contains.get(0).getName()));
         }
 
         if (contains.isEmpty()) {
