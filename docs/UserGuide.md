@@ -80,6 +80,7 @@ Adds a person to the contact list.
 Format: `add n/NAME [p/PHONE_NUMBER] [e/EMAIL] [t/TAG]…​`
 
 * Consecutive spaces in name are removed. e.g. "Alice&nbsp;&nbsp;Tan" will be saved as `Alice Tan`.
+* Names can contain letters, spaces, apostrophes, hyphens, and slashes. e.g. `s/o` (son of), `d/o` (daughter of).
 * Phone numbers must be numeric only.
 * Tags must be alphanumeric and have no spaces.
 
@@ -92,6 +93,7 @@ Examples:
 
 * `add n/Alice Tan p/98702930 e/alicetan@gmail.com t/teamLead t/vipHandler` <br> will add a Person called `Alice Tan`, with phone number `98702930`, with email `alicetan@gmail.com`, with tags `teamLead` and `vipHandler` to the contact list.
 * `add n/Bob Lee t/mandarinSpeaking` <br> will add a Person called `Bob Lee` with tag `mandarinSpeaking` to the contact list.
+* `add n/Abhijay s/o Abhi p/91234567 e/abhijay@example.com t/family` <br> will add a Person called `Abhijay s/o Abhi` (with slash for "son of") with tag `family` to the contact list.
 * `add n/Germaine` <br> will add a Person called `Germaine` to the contact list.
 
 ![add message](images\addMessage.jpg)
@@ -195,12 +197,14 @@ Assigns a client meeting to a person at a given date and time, with an optional 
 Format: `book dt/DATETIME c/CLIENT_NAME n/PERSON_NAME [desc/DESCRIPTION]`
 
 * Name of person provided must be in the current contact list.
+* Client name can contain letters, spaces, apostrophes, hyphens, periods, and slashes. e.g. `s/o` (son of), `d/o` (daughter of).
 * Datetime must be in `YYYY-MM-DD HH:MM` format in 24-hour notation.
 
 Examples:
 
 * `book dt/2025-09-20 10:30 c/Madam Chen n/Bob Lee` will assign a booking on 20th September 2025 10.30am to Bob Lee. The client will be Madam Chen.
-* `book dt/2025-10-18 14:00 c/Mr Lim n/Alice Tan desc/first consultation` will assign a booking on 18th October 2025 2pm to Alice Tan. The client will be Mr Lim and the description is "first consultation". <br>
+* `book dt/2025-10-18 14:00 c/Mr Lim n/Alice Tan desc/first consultation` will assign a booking on 18th October 2025 2pm to Alice Tan. The client will be Mr Lim and the description is "first consultation".
+* `book dt/2025-11-15 15:00 c/Raj s/o Kumar n/Abhijay s/o Abhi desc/follow-up` will assign a booking on 15th November 2025 3pm to Abhijay s/o Abhi. The client Raj s/o Kumar (with slash for "son of") and the description is "follow-up". <br>
   ![book messsage](images\bookMessage.jpg)
 
 ### Exiting the program : `exit`
