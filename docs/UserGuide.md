@@ -181,18 +181,20 @@ Format: `add n/NAME [p/PHONE_NUMBER] [e/EMAIL] [t/TAG]…​`
 * Tags must be alphanumeric and have no spaces.
 
 <div markdown="span" class="alert alert-warning">:exclamation: **Warning:**
-Duplicate names are not allowed. Each person in the contact list must have a unique name. If you try to add a person with an existing name, the command will fail.
+Duplicate names are not allowed. Each person in the contact list must have a unique name. If you try to add a person with an existing name, you'll see: "A person with this name already exists in your address book. Please use a different name or edit the existing contact."
 </div>
 
 <div markdown="span" class="alert alert-warning">:exclamation: **Warning:**
-Tags must be alphanumeric only (no spaces, hyphens, or special characters). Use camelCase for multi-word tags (e.g., `vipHandler`, not `vip-handler` or `vip handler`).
+Tags must be alphanumeric only (no spaces, hyphens, or special characters). Use camelCase for multi-word tags (e.g., `vipHandler`, not `vip-handler` or `vip handler`). Invalid tags will show: "Tag names should only contain letters and numbers (no spaces or special characters). Examples: 'VIP', 'friend', 'colleague2024'"
 </div>
 
 <div markdown="span" class="alert alert-info">:information_source: **Character Limits:**
-* Names: Maximum 100 characters
+* Names: Maximum 100 characters (must start with a letter, can contain letters, spaces, apostrophes, hyphens, and slashes)
 * Phone: Can contain any characters (numbers, +, (), -, spaces, letters, etc.), cannot be whitespace-only
-* Email: Must be a valid email format
+* Email: Must be a valid email format (username@domain.com)
 * Tags: Alphanumeric only, use camelCase for multi-word tags
+* Client names (for bookings): 1-100 characters, must contain at least one letter
+* Booking descriptions: 1-500 characters
 </div>
 
 <div markdown="span" class="alert alert-primary">:bulb: **Tip:**
@@ -256,11 +258,11 @@ Format: `edit n/OLD_NAME [n/NEW_NAME] [p/PHONE] [e/EMAIL] [t/TAG]…​`
     specifying any tags after it.
 
 <div markdown="span" class="alert alert-warning">:exclamation: **Warning:**
-Person names are case-sensitive. `edit n/john doe` will not edit `John Doe`. Use the exact name as shown in the contact list.
+Person names are case-sensitive. `edit n/john doe` will not edit `John Doe`. Use the exact name as shown in the contact list. If the person is not found, you'll see: "Could not find anyone named 'john doe' in your address book. Please check the name and try again."
 </div>
 
 <div markdown="span" class="alert alert-warning">:exclamation: **Warning:**
-When editing tags, the existing tags of the person will be **completely replaced** (not added to). If you want to keep existing tags, you must include them in the edit command. For example, if a person has tags `teamLead` and `sales`, using `edit n/John t/manager` will replace both tags with only `manager`.
+When editing tags, the existing tags of the person will be **completely replaced** (not added to). If you want to keep existing tags, you must include them in the edit command. For example, if a person has tags `teamLead` and `sales`, using `edit n/John t/manager` will replace both tags with only `manager`. If you don't specify any changes, you'll see: "No changes specified! Please provide at least one field to edit (name, phone, email, or tags)."
 </div>
 
 Examples:
@@ -315,11 +317,15 @@ Format: `delete n/PERSON_NAME [t/TAG]…​ [b/BOOKING_INDEX]…​`
 * The name provided must exactly match (case-sensitive) a person in the contact list. e.g. `delete n/Alex` will not delete `Alex Yeoh`
 
 <div markdown="span" class="alert alert-warning">:exclamation: **Warning:**
-Person names are case-sensitive. `delete n/alice` will not delete `Alice Tan`. Use the exact name as shown in the contact list.
+Person names are case-sensitive. `delete n/alice` will not delete `Alice Tan`. Use the exact name as shown in the contact list. If the person is not found, you'll see: "Could not find anyone named 'alice' in your address book. Please check the name and try again."
 </div>
 
 <div markdown="span" class="alert alert-warning">:exclamation: **Warning:**
-You cannot use both `t/` (tags) and `b/` (bookings) in the same delete command. The command will fail with: "Invalid command format! Only use either 'b/' or 't/', and not both!"
+You cannot use both `t/` (tags) and `b/` (bookings) in the same delete command. The command will fail with: "You can only delete either tags (t/) OR bookings (b/), not both at the same time!"
+</div>
+
+<div markdown="span" class="alert alert-warning">:exclamation: **Warning:**
+Tag names cannot contain spaces. If you want to delete multiple tags, use separate `t/` prefixes. Example: `delete n/John t/friend t/colleague`. If you use spaces in a tag name, you'll see: "Tag names cannot contain spaces! If you want to delete multiple tags, use separate t/ prefixes."
 </div>
 
 Examples:
@@ -361,7 +367,7 @@ Assigns a client meeting to a person at a given date and time, with an optional 
 Format: `book dt/DATETIME c/CLIENT_NAME n/PERSON_NAME [desc/DESCRIPTION]`
 
 * Name of person provided must be in the current contact list.
-* Client name can contain letters, spaces, apostrophes, hyphens, periods, and slashes. e.g. `s/o` (son of), `d/o` (daughter of).
+* Client name can contain letters, numbers, spaces, apostrophes, hyphens, periods, and slashes. e.g. `s/o` (son of), `d/o` (daughter of). Must be 1-100 characters and contain at least one letter.
 * Datetime must be in `YYYY-MM-DD HH:MM` format in 24-hour notation.
 
 <div markdown="span" class="alert alert-info">:information_source: **Time Format:**
@@ -369,11 +375,11 @@ Time must be in 24-hour format (HH:MM). Use `14:00` for 2:00 PM, `09:00` for 9:0
 </div>
 
 <div markdown="span" class="alert alert-warning">:exclamation: **Warning:**
-Bookings must be scheduled for future dates and times. Past dates will be rejected with an error message.
+Bookings must be scheduled for future dates and times. Past dates will be rejected with: "Booking date and time must be in the future. You cannot create bookings for past dates."
 </div>
 
 <div markdown="span" class="alert alert-warning">:exclamation: **Warning:**
-Dates must be valid calendar dates. Invalid dates like 2026-02-31 will be rejected. Always verify your date is correct before booking.
+Dates must be valid calendar dates. Invalid dates like 2026-02-31 will be rejected with: "Invalid date/time format or value! Please use the format: YYYY-MM-DD HH:MM (e.g., 2024-12-25 14:30). The booking must be scheduled for a future date and time."
 </div>
 
 Examples:
@@ -385,7 +391,7 @@ Examples:
   *Figure 9: Success message after creating a new booking*
 
 <div markdown="span" class="alert alert-warning">:exclamation: **Warning:**
-Double booking is not allowed. If you try to book the same person at the same time, the system will show an error message.
+Double booking is not allowed. If you try to book the same person at the same time, you'll see: "This person already has a booking at this time. Please choose a different time slot."
 </div>
 
 ### Exiting the program : `exit`
