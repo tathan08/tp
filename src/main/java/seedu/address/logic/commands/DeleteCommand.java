@@ -44,7 +44,7 @@ public class DeleteCommand extends Command {
     public static final String MESSAGE_DELETE_TAG_PARTIAL = "Removed %1$s. Not found: %2$s from %3$s";
     public static final String MESSAGE_DELETE_TAG_NOT_FOUND = "'%1$s' does not have the tag(s) '%2$s'";
     public static final String MESSAGE_DELETE_TAG_USAGE = "Please provide a tag after 't/'!";
-    public static final String MESSAGE_DELETE_BOOKING_SUCCESS = "Removed booking %1$s from %2$s!";
+    public static final String MESSAGE_DELETE_BOOKING_SUCCESS = "Removed booking: %1$s with %2$s for %3$s!";
     public static final String MESSAGE_DELETE_BOOKING_NOT_FOUND = "'%1$s' does not have booking ID %2$d!";
     public static final String MESSAGE_DELETE_BOOKING_USAGE = "Please provide a valid booking ID after b/!";
     public static final String MESSAGE_DELETE_BOOKING_OR_TAG = "Only use either 'b/' or 't/', and not both!";
@@ -98,6 +98,7 @@ public class DeleteCommand extends Command {
                         personToDelete.getName().fullName, targetBooking));
             }
             List<Booking> newBookings = new ArrayList<>(bookingList);
+            Booking removedBooking = newBookings.get(targetBooking - 1);
             newBookings.remove(targetBooking - 1);
 
             Person updatedPerson = new Person(
@@ -110,8 +111,8 @@ public class DeleteCommand extends Command {
             model.setPerson(personToDelete, updatedPerson);
             model.updateFilteredPersonList(Model.PREDICATE_SHOW_ALL_PERSONS);
 
-            return new CommandResult(String.format(MESSAGE_DELETE_BOOKING_SUCCESS, targetBooking,
-                    personToDelete.getName().fullName));
+            return new CommandResult(String.format(MESSAGE_DELETE_BOOKING_SUCCESS, removedBooking.getDateTimeString(),
+                    removedBooking.getClientName(), personToDelete.getName().fullName));
         }
 
         if (tags.isEmpty()) {
