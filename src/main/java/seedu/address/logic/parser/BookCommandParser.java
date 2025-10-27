@@ -31,7 +31,8 @@ public class BookCommandParser implements Parser<BookCommand> {
 
         if (!arePrefixesPresent(argMultimap, PREFIX_DATETIME, PREFIX_CLIENT, PREFIX_NAME)
                 || !argMultimap.getPreamble().isEmpty()) {
-            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, BookCommand.MESSAGE_USAGE));
+            throw new ParseException(
+                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, BookCommand.MESSAGE_USAGE.toString()));
         }
 
         argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_DATETIME, PREFIX_CLIENT, PREFIX_NAME, PREFIX_DESCRIPTION);

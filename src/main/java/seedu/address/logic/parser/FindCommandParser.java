@@ -57,7 +57,8 @@ public class FindCommandParser implements Parser<FindCommand> {
         } else if (args.startsWith("d/")) {
             return "d/";
         } else {
-            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+            throw new ParseException(
+                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE.toString()));
         }
     }
 
@@ -97,7 +98,8 @@ public class FindCommandParser implements Parser<FindCommand> {
             return new FindCommand(new ClientContainsKeywordsPredicate(ClientContainsKeywordsPredicate.SearchType.DATE,
                                             keywords));
         default:
-            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+            throw new ParseException(
+                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE.toString()));
         }
     }
 
