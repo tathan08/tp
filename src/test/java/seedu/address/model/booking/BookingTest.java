@@ -158,7 +158,7 @@ public class BookingTest {
         String clientName = "Raj s/o Kumar";
         LocalDateTime datetime = LocalDateTime.of(2026, 12, 25, 10, 0);
         String description = "Consultation";
-        
+
         Booking booking = new Booking(clientName, datetime, description);
         assertEquals(clientName, booking.getClientName());
     }

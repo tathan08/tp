@@ -156,7 +156,7 @@ public class BookCommandTest {
         Person carl = new PersonBuilder(CARL).withBookings(new ArrayList<>()).build(); // Carl with no bookings
         modelStub.addPerson(alice);
         modelStub.addPerson(carl);
-        
+
         // Set filtered list to only show Alice (simulating a find command)
         modelStub.setFilteredPersons(List.of(alice));
 
