@@ -31,10 +31,20 @@ public class DeleteCommandParser implements Parser<DeleteCommand> {
             ArgumentMultimap multimap = ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_TAG, PREFIX_BOOKING);
             String name = multimap.getValue(PREFIX_NAME).orElse("").trim();
             List<String> allTags = multimap.getAllValues(PREFIX_TAG);
+
+            for (String raw : allTags) {
+                String r = raw.trim();
+                if (r.isEmpty() || r.chars().anyMatch(Character::isWhitespace)) {
+                    throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                            DeleteCommand.MESSAGE_DELETE_TAG_NO_SPACES));
+                }
+            }
+
             List<String> rawTags = allTags.stream()
-                    .flatMap(x -> Arrays.stream(x.trim().split(" ")))
+                    .map(String::trim)
                     .filter(y -> !y.isEmpty())
                     .toList();
+
 
             if (name.isEmpty()) {
                 throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));

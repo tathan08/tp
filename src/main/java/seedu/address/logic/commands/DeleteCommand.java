@@ -45,6 +45,7 @@ public class DeleteCommand extends Command {
     public static final String MESSAGE_DELETE_TAG_SUCCESS = "Removed tags %1$s from %2$s!";
     public static final String MESSAGE_DELETE_TAG_PARTIAL = "Removed %1$s. Not found: %2$s from %3$s";
     public static final String MESSAGE_DELETE_TAG_NOT_FOUND = "'%1$s' does not have the tag(s) '%2$s'";
+    public static final String MESSAGE_DELETE_TAG_NO_SPACES = "Tags should not contain any whitespaces!";
     public static final String MESSAGE_DELETE_TAG_USAGE = "Please provide a tag after 't/'!";
     public static final String MESSAGE_DELETE_BOOKING_SUCCESS = "Removed booking: %1$s with %2$s for %3$s!";
     public static final String MESSAGE_DELETE_BOOKING_NOT_FOUND = "'%1$s' does not have booking ID %2$d!";
