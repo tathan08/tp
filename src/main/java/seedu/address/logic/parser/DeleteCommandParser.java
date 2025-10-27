@@ -33,7 +33,7 @@ public class DeleteCommandParser implements Parser<DeleteCommand> {
 
             for (String raw : allTags) {
                 String r = raw.trim();
-                if (r.isEmpty() || r.chars().anyMatch(Character::isWhitespace)) {
+                if (r.chars().anyMatch(Character::isWhitespace)) {
                     throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
                             DeleteCommand.MESSAGE_DELETE_TAG_NO_SPACES));
                 }
