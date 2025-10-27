@@ -130,6 +130,11 @@ public class PersonCard extends UiPart<Region> {
         return TAG_COLORS[colorIndex];
     }
 
+    /**
+     * Sets up the booking table with proper sorting.
+     * Bookings are reordered at each render: future bookings first (ascending),
+     * then past bookings (ascending). Past bookings are greyed out.
+     */
     private void setupBookingTable(Person person) {
         // Define column mappings
         colBookingId.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -162,7 +167,10 @@ public class PersonCard extends UiPart<Region> {
         DateTimeFormatter dateFmt = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         DateTimeFormatter timeFmt = DateTimeFormatter.ofPattern("HH:mm");
 
-        // Sort bookings: future bookings first (ascending), then past bookings (ascending)
+        // Reorder bookings based on CURRENT datetime (fetched at each app start/render)
+        // Future bookings appear first (in chronological order)
+        // Past bookings appear after (also in chronological order)
+        // Past bookings are greyed out in the UI
         Comparator<Booking> bookingComparator = (b1, b2) -> {
             boolean b1IsFuture = Booking.isFutureDateTime(b1.getDateTime());
             boolean b2IsFuture = Booking.isFutureDateTime(b2.getDateTime());
@@ -196,6 +204,7 @@ public class PersonCard extends UiPart<Region> {
         bookingTable.setTableMenuButtonVisible(false);
 
         // Style rows based on whether they are past bookings
+        // Style rows: past bookings are greyed out with reduced opacity
         bookingTable.setRowFactory(tv -> new TableRow<BookingRow>() {
             @Override
             protected void updateItem(BookingRow bookingRow, boolean empty) {

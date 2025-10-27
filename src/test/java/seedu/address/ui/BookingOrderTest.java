@@ -164,5 +164,39 @@ public class BookingOrderTest {
         int result = bookingComparator.compare(futureBooking, pastBooking);
         assertTrue(result < 0, "Future booking should come before past booking");
     }
+
+    @Test
+    public void isFutureDateTime_usesCurrentTime() {
+        // This test verifies that the method dynamically checks against current time
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime oneMinuteAgo = now.minusMinutes(1);
+        LocalDateTime oneMinuteFromNow = now.plusMinutes(1);
+
+        Booking pastBooking = new Booking("1", "Client A", oneMinuteAgo, "Past");
+        Booking futureBooking = new Booking("2", "Client B", oneMinuteFromNow, "Future");
+
+        // Verify that isFutureDateTime correctly identifies past and future
+        assertTrue(Booking.isFutureDateTime(futureBooking.getDateTime()),
+                "Booking one minute from now should be future");
+        assertTrue(!Booking.isFutureDateTime(pastBooking.getDateTime()),
+                "Booking one minute ago should be past");
+
+        // The comparator should sort them correctly
+        Comparator<Booking> bookingComparator = (b1, b2) -> {
+            boolean b1IsFuture = Booking.isFutureDateTime(b1.getDateTime());
+            boolean b2IsFuture = Booking.isFutureDateTime(b2.getDateTime());
+
+            if (b1IsFuture && b2IsFuture) {
+                return b1.getDateTime().compareTo(b2.getDateTime());
+            } else if (!b1IsFuture && !b2IsFuture) {
+                return b1.getDateTime().compareTo(b2.getDateTime());
+            } else {
+                return b1IsFuture ? -1 : 1;
+            }
+        };
+
+        int result = bookingComparator.compare(futureBooking, pastBooking);
+        assertTrue(result < 0, "Future booking should come before past booking based on current time");
+    }
 }
 
