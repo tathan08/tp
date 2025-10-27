@@ -14,6 +14,7 @@ import java.util.Set;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import seedu.address.commons.ErrorMessage;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
@@ -31,16 +32,17 @@ public class DeleteCommand extends Command {
 
     public static final String COMMAND_WORD = "delete";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD
-            + ": Deletes the person, tag or booking specified in the address book.\n"
-            + "Parameters: "
-            + PREFIX_NAME + "NAME "
-            + "[" + PREFIX_TAG + "TAG]..."
-            + " OR "
-            + "[" + PREFIX_BOOKING + "BOOKING ID] \n"
-            + "Examples: \n" + COMMAND_WORD + " n/" + "Alex" + " (to delete a whole contact)\n"
-            + COMMAND_WORD + " n/" + "Alex" + " t/tag1 t/tag2... (to delete 1 or more specific tags from 'Alex')\n"
-            + COMMAND_WORD + " n/" + "Alex" + " b/booking_ID (to delete a specified booking with 'Alex')";
+    public static final ErrorMessage MESSAGE_USAGE = new ErrorMessage(
+            "Deletes the person, tag or booking specified in the address book.",
+            PREFIX_NAME + "NAME ["
+                    + PREFIX_TAG + "TAG]... OR [" + PREFIX_BOOKING + "BOOKING ID]",
+            "\n"
+                    + COMMAND_WORD + " " + PREFIX_NAME + "Alex (to delete a whole contact)\n"
+                    + COMMAND_WORD + " " + PREFIX_NAME + "Alex "
+                    + PREFIX_TAG + "tag1 " + PREFIX_TAG + "tag2 (to delete specific tags)\n"
+                    + COMMAND_WORD + " " + PREFIX_NAME + "Alex "
+                    + PREFIX_BOOKING + "1 (to delete booking with ID 1)"
+    );
 
     public static final String MESSAGE_DELETE_PERSON_SUCCESS = "Deleted Person: %1$s";
     public static final String MESSAGE_DELETE_PERSON_NOT_FOUND = "No such person found: %s";

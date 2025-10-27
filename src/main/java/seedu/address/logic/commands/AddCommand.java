@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
 
+import seedu.address.commons.ErrorMessage;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
@@ -26,18 +27,18 @@ public class AddCommand extends Command {
 
     public static final String COMMAND_WORD = "add";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Adds a person or adds tags to an existing person "
-            + "in the address book. \n"
-            + "Parameters: "
-            + PREFIX_NAME + "NAME "
-            + "[" + PREFIX_PHONE + "PHONE] "
-            + "[" + PREFIX_EMAIL + "EMAIL] "
-            + "[" + PREFIX_TAG + "TAG]...\n"
-            + "Example: " + COMMAND_WORD + " "
-            + PREFIX_NAME + "John Doe "
-            + PREFIX_PHONE + "98765432 "
-            + PREFIX_EMAIL + "johnd@example.com "
-            + PREFIX_TAG + "friends";
+    public static final ErrorMessage MESSAGE_USAGE = new ErrorMessage(
+            "Adds a person or adds tags to an existing person in the address book.",
+            PREFIX_NAME + "NAME "
+                    + "[" + PREFIX_PHONE + "PHONE] "
+                    + "[" + PREFIX_EMAIL + "EMAIL] "
+                    + "[" + PREFIX_TAG + "TAG]...",
+            COMMAND_WORD + " "
+                    + PREFIX_NAME + "John Doe "
+                    + PREFIX_PHONE + "98765432 "
+                    + PREFIX_EMAIL + "johnd@example.com "
+                    + PREFIX_TAG + "friends"
+    );
 
     public static final String MESSAGE_SUCCESS = "New person added: %1$s";
     public static final String MESSAGE_TAGS_ADDED = "Tags added to existing person: %1$s";
