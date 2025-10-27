@@ -9,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.FlowPane;
@@ -169,12 +170,30 @@ public class PersonCard extends UiPart<Region> {
                         b.getDateTime().format(dateFmt),
                         b.getDateTime().format(timeFmt),
                         b.getClientName(),
-                        b.getDescription())));
+                        b.getDescription(),
+                        !Booking.isFutureDateTime(b.getDateTime()))));
 
         bookingTable.setItems(rows);
         bookingTable.setFixedCellSize(-1);
         bookingTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         bookingTable.setTableMenuButtonVisible(false);
+
+        // Style rows based on whether they are past bookings
+        bookingTable.setRowFactory(tv -> new TableRow<BookingRow>() {
+            @Override
+            protected void updateItem(BookingRow bookingRow, boolean empty) {
+                super.updateItem(bookingRow, empty);
+                if (bookingRow == null || empty) {
+                    setStyle("");
+                } else {
+                    if (bookingRow.getIsPastBooking()) {
+                        setStyle("-fx-opacity: 0.5; -fx-text-fill: #888888;");
+                    } else {
+                        setStyle("");
+                    }
+                }
+            }
+        });
     }
 
     /**
@@ -186,16 +205,22 @@ public class PersonCard extends UiPart<Region> {
         private final String time;
         private final String client;
         private final String desc;
+        private final boolean isPastBooking;
 
         /**
          * Creates a row representation of a booking.
          */
-        public BookingRow(String id, String date, String time, String client, String desc) {
+        public BookingRow(String id, String date, String time, String client, String desc, boolean isPastBooking) {
             this.id = id;
             this.date = date;
             this.time = time;
             this.client = client;
             this.desc = desc;
+            this.isPastBooking = isPastBooking;
+        }
+
+        public boolean getIsPastBooking() {
+            return isPastBooking;
         }
 
 
