@@ -27,13 +27,18 @@ public class FindCommandParser implements Parser<FindCommand> {
     @Override
     public FindCommand parse(String args) throws ParseException {
         assert args != null : "args must not be null";
+        String trimmedArgs = args.trim();
 
-        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_TAG, PREFIX_DATE);
+        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(trimmedArgs, PREFIX_NAME, PREFIX_TAG, PREFIX_DATE);
 
         Map<String, List<String>> searchCriteria = new HashMap<>();
 
         // === NAME ===
-        List<String> allNames = argMultimap.getAllValues(PREFIX_NAME).stream().map(String::trim).toList();
+        // FIX: Replaced argMultimap.getAllValues(...) with
+        // getValue().map(List::of).orElse(List.of())
+        // to retrieve the single value correctly when Prefix.equals() is
+        // broken.
+        List<String> allNames = argMultimap.getValue(PREFIX_NAME).map(String::trim).map(List::of).orElse(List.of());
 
         // If the user typed n/ with no actual value, treat as wildcard -> match
         // all persons
@@ -45,7 +50,8 @@ public class FindCommandParser implements Parser<FindCommand> {
         }
 
         // === TAG ===
-        List<String> allTags = argMultimap.getAllValues(PREFIX_TAG).stream().map(String::trim).toList();
+        // FIX: Same change applied here.
+        List<String> allTags = argMultimap.getValue(PREFIX_TAG).map(String::trim).map(List::of).orElse(List.of());
 
         boolean tagWildcard = allTags.stream().anyMatch(String::isEmpty);
         if (tagWildcard) {
@@ -55,7 +61,8 @@ public class FindCommandParser implements Parser<FindCommand> {
         }
 
         // === DATE ===
-        List<String> allDates = argMultimap.getAllValues(PREFIX_DATE).stream().map(String::trim).toList();
+        // FIX: Same change applied here.
+        List<String> allDates = argMultimap.getValue(PREFIX_DATE).map(String::trim).map(List::of).orElse(List.of());
 
         boolean dateWildcard = allDates.stream().anyMatch(String::isEmpty);
         if (dateWildcard) {

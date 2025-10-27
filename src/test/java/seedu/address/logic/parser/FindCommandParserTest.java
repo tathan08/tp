@@ -4,7 +4,9 @@ import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSuccess;
 
-import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 
@@ -13,7 +15,22 @@ import seedu.address.model.person.ClientContainsKeywordsPredicate;
 
 public class FindCommandParserTest {
 
-    private FindCommandParser parser = new FindCommandParser();
+    private final FindCommandParser parser = new FindCommandParser();
+
+    /** Helper to create a FindCommand with a single field and its keywords. */
+    private FindCommand buildExpectedCommand(String field, List<String> keywords) {
+        Map<String, List<String>> criteria = new HashMap<>();
+        criteria.put(field, keywords);
+        return new FindCommand(new ClientContainsKeywordsPredicate(criteria));
+    }
+
+    /** Helper to create a FindCommand with multiple criteria. */
+    private FindCommand buildExpectedCommand(Map<String, List<String>> criteria) {
+        return new FindCommand(new ClientContainsKeywordsPredicate(criteria));
+    }
+
+    // ------------------------------ Failure Tests
+    // ------------------------------
 
     @Test
     public void parse_emptyArg_throwsParseException() {
@@ -21,66 +38,95 @@ public class FindCommandParserTest {
     }
 
     @Test
-    public void parse_validArgs_returnsFindCommandName() {
-        // no leading and trailing whitespaces - searching by name
-        FindCommand expectedFindCommand =
-                new FindCommand(new ClientContainsKeywordsPredicate(
-                        ClientContainsKeywordsPredicate.SearchType.NAME,
-                        Arrays.asList("Alice", "Bob")));
-        assertParseSuccess(parser, "n/ Alice Bob", expectedFindCommand);
-
-        // Multiple whitespaces between keywords
-        assertParseSuccess(parser, " n/ \n Alice \n \t Bob  ", expectedFindCommand);
-
-        // No space after prefix
-        assertParseSuccess(parser, "n/Alice Bob", expectedFindCommand);
-        assertParseSuccess(parser, "n/Alice  Bob", expectedFindCommand);
-    }
-
-    @Test
-    public void parse_validArgs_returnsFindCommandTag() {
-        // no leading and trailing whitespaces - searching by tag
-        FindCommand expectedFindCommand =
-                new FindCommand(new ClientContainsKeywordsPredicate(
-                        ClientContainsKeywordsPredicate.SearchType.TAG,
-                        Arrays.asList("good", "friend")));
-        assertParseSuccess(parser, "t/ good friend", expectedFindCommand);
-
-        // Multiple whitespaces between keywords
-        assertParseSuccess(parser, " t/   good friend   ", expectedFindCommand);
-
-        // No space after prefix
-        assertParseSuccess(parser, "t/good friend", expectedFindCommand);
-    }
-
-    @Test
-    public void parse_validDateArgs_returnsFindCommandDate() {
-        // no leading and trailing whitespaces - searching by booking date
-        FindCommand expectedFindCommand =
-                new FindCommand(new ClientContainsKeywordsPredicate(
-                        ClientContainsKeywordsPredicate.SearchType.DATE,
-                        Arrays.asList("2025-10-15", "2025-10-20")));
-        assertParseSuccess(parser, "d/ 2025-10-15 2025-10-20", expectedFindCommand);
-
-        // multiple whitespaces between keywords
-        assertParseSuccess(parser, " d/    2025-10-15    2025-10-20  ", expectedFindCommand);
-
-        // No space after prefix
-        assertParseSuccess(parser, "d/2025-10-15 2025-10-20", expectedFindCommand);
-    }
-
-    @Test
     public void parse_missingPrefix_throwsParseException() {
-        // should fail if prefix (n/, t/, d/) is missing
         assertParseFailure(parser, "Alice Bob",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+                                        String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
     }
 
     @Test
     public void parse_unknownPrefix_throwsParseException() {
-        // invalid prefix for command
-        assertParseFailure(parser, "x/ Alice",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+        assertParseFailure(parser, "x/Alice", String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
     }
 
+    // ------------------------------- Single Field Success Tests
+    // -------------------------------
+
+    @Test
+    public void parse_singleName_success() {
+        FindCommand expected = buildExpectedCommand("name", List.of("Alice"));
+        assertParseSuccess(parser, "n/Alice", expected);
+
+        expected = buildExpectedCommand("name", List.of("Alice Pauline"));
+        assertParseSuccess(parser, "n/Alice Pauline", expected);
+    }
+
+    @Test
+    public void parse_multipleNames_success() {
+        FindCommand expected = buildExpectedCommand("name", List.of("Alice Bob"));
+        assertParseSuccess(parser, "n/Alice Bob", expected);
+    }
+
+    @Test
+    public void parse_singleTag_success() {
+        FindCommand expected = buildExpectedCommand("tag", List.of("friend"));
+        assertParseSuccess(parser, "t/friend", expected);
+    }
+
+    @Test
+    public void parse_multipleTags_success() {
+        FindCommand expected = buildExpectedCommand("tag", List.of("friend good"));
+        assertParseSuccess(parser, "t/friend good", expected);
+    }
+
+    @Test
+    public void parse_singleDate_success() {
+        FindCommand expected = buildExpectedCommand("date", List.of("2025-10-15"));
+        assertParseSuccess(parser, "d/2025-10-15", expected);
+    }
+
+    @Test
+    public void parse_multipleDates_success() {
+        // Multiple dates treated as one search term
+        FindCommand expected = buildExpectedCommand("date", List.of("2025-10-15 2025-10-20"));
+        assertParseSuccess(parser, "d/2025-10-15 2025-10-20", expected);
+    }
+
+    // ------------------------------- Multiple Field Success Tests
+    // -------------------------------
+
+    @Test
+    public void parse_multipleFields_success() {
+        Map<String, List<String>> criteria = new HashMap<>();
+        criteria.put("name", List.of("Alice Bob"));
+        criteria.put("tag", List.of("friend"));
+        criteria.put("date", List.of("2025-10-15"));
+
+        FindCommand expected = buildExpectedCommand(criteria);
+
+        assertParseSuccess(parser, "n/Alice Bob t/friend d/2025-10-15", expected);
+        assertParseSuccess(parser, "t/friend d/2025-10-15 n/Alice Bob", expected);
+    }
+
+    // ------------------------------- Wildcard Success Tests
+    // -------------------------------
+
+    @Test
+    public void parse_wildcard_success() {
+        Map<String, List<String>> criteria = new HashMap<>();
+        criteria.put("name", List.of());
+
+        FindCommand expected = buildExpectedCommand(criteria);
+        assertParseSuccess(parser, "n/", expected);
+    }
+
+    @Test
+    public void parse_multipleFieldsWithWildcard_success() {
+        Map<String, List<String>> criteria = new HashMap<>();
+        criteria.put("name", List.of()); // Wildcard
+        criteria.put("tag", List.of("friend")); // Specific tag
+
+        FindCommand expected = buildExpectedCommand(criteria);
+        assertParseSuccess(parser, "n/ t/friend", expected);
+        assertParseSuccess(parser, "t/friend n/", expected);
+    }
 }

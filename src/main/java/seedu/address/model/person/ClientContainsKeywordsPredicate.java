@@ -20,7 +20,12 @@ public class ClientContainsKeywordsPredicate implements Predicate<Person> {
 
     @Override
     public boolean test(Person person) {
-        // Empty map should not happen here; OR across fields
+        // If searchCriteria is empty, match all persons
+        if (searchCriteria.isEmpty()) {
+            return true;
+        }
+
+        // Otherwise, check each field
         return searchCriteria.entrySet().stream().anyMatch(entry -> {
             String fieldType = entry.getKey();
             List<String> keywords = entry.getValue();

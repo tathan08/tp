@@ -11,6 +11,7 @@ import static seedu.address.testutil.Assert.assertThrows;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.exceptions.CommandException;
@@ -115,9 +116,10 @@ public class CommandTestUtil {
         Person person = model.getFilteredPersonList().get(targetIndex.getZeroBased());
         final String[] splitName = person.getName().fullName.split("\\s+");
         model.updateFilteredPersonList(new ClientContainsKeywordsPredicate(
-                ClientContainsKeywordsPredicate.SearchType.NAME, Arrays.asList(splitName[0])));
+                Map.of("name", Arrays.asList(splitName[0]))));
 
         assertEquals(1, model.getFilteredPersonList().size());
     }
+
 
 }

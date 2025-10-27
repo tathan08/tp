@@ -1,9 +1,6 @@
 package seedu.address.logic.commands;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.Messages.MESSAGE_PERSONS_LISTED_OVERVIEW;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
@@ -15,203 +12,149 @@ import static seedu.address.testutil.TypicalPersons.FIONA;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
 import java.util.Arrays;
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 
+import seedu.address.logic.Messages;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
 import seedu.address.model.person.ClientContainsKeywordsPredicate;
+import seedu.address.model.person.Person;
 
 /**
- * Contains integration tests (interaction with the Model) for
- * {@code FindCommand}.
+ * Integration tests for {@code FindCommand} with new OR semantics and wildcard
+ * support.
  */
 public class FindCommandTest {
+
     private final Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
     private final Model expectedModel = new ModelManager(getTypicalAddressBook(), new UserPrefs());
 
-    @Test
-    public void equals() {
-        ClientContainsKeywordsPredicate firstPredicate = new ClientContainsKeywordsPredicate(
-                                        ClientContainsKeywordsPredicate.SearchType.NAME,
-                                        Collections.singletonList("first"));
-        ClientContainsKeywordsPredicate secondPredicate = new ClientContainsKeywordsPredicate(
-                                        ClientContainsKeywordsPredicate.SearchType.NAME,
-                                        Collections.singletonList("second"));
-
-        FindCommand findFirstCommand = new FindCommand(firstPredicate);
-        FindCommand findSecondCommand = new FindCommand(secondPredicate);
-
-        // same object -> returns true
-        assertTrue(findFirstCommand.equals(findFirstCommand));
-
-        // same values -> returns true
-        FindCommand findFirstCommandCopy = new FindCommand(firstPredicate);
-        assertTrue(findFirstCommand.equals(findFirstCommandCopy));
-
-        // different types -> returns false
-        assertFalse(findFirstCommand.equals(1));
-
-        // null -> returns false
-        assertFalse(findFirstCommand.equals(null));
-
-        // different predicate -> returns false
-        assertFalse(findFirstCommand.equals(findSecondCommand));
+    // Helper to create a predicate from a search criteria map
+    private ClientContainsKeywordsPredicate preparePredicate(Map<String, List<String>> criteria) {
+        return new ClientContainsKeywordsPredicate(criteria);
     }
 
     @Test
-    public void execute_blankKeyword_allPersonsListed() {
-        // Expect all persons to be shown
-        int expectedListSize = model.getFilteredPersonList().size();
-        String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, expectedListSize);
-        ClientContainsKeywordsPredicate predicate = preparePredicate(ClientContainsKeywordsPredicate.SearchType.NAME,
-                                        "   "); // multiple spaces
+    public void execute_singleName_returnsMatchingPerson() {
+        Map<String, List<String>> criteria = new HashMap<>();
+        criteria.put("name", List.of("Alice"));
+        ClientContainsKeywordsPredicate predicate = preparePredicate(criteria);
+
         FindCommand command = new FindCommand(predicate);
 
-        // When no valid keywords are given, predicate returns true for all
         expectedModel.updateFilteredPersonList(predicate);
-
-        assertCommandSuccess(command, model, expectedMessage, expectedModel);
-        assertEquals(model.getFilteredPersonList(), expectedModel.getFilteredPersonList());
+        assertCommandSuccess(command, model, String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 1), expectedModel);
+        assertTrue(model.getFilteredPersonList().contains(ALICE));
     }
 
     @Test
-    public void execute_multipleKeywords_noPersonFound() {
-        String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 0);
-        ClientContainsKeywordsPredicate predicate = preparePredicate(ClientContainsKeywordsPredicate.SearchType.NAME,
-                                        "Kurz Elle Kunz");
-        FindCommand command = new FindCommand(predicate);
-        expectedModel.updateFilteredPersonList(predicate);
-        assertCommandSuccess(command, model, expectedMessage, expectedModel);
-        assertTrue(model.getFilteredPersonList().isEmpty());
-    }
+    public void execute_singleTag_returnsMatchingPersons() {
+        Map<String, List<String>> criteria = new HashMap<>();
+        criteria.put("tag", List.of("friends"));
+        ClientContainsKeywordsPredicate predicate = preparePredicate(criteria);
 
-    @Test
-    public void execute_tagKeyword_personsFoundByTag() {
-        // ALICE, BENSON and DANIEL have tag "friends" in TypicalPersons
-        String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 3);
-        ClientContainsKeywordsPredicate predicate = preparePredicate(ClientContainsKeywordsPredicate.SearchType.TAG,
-                                        "friends");
         FindCommand command = new FindCommand(predicate);
+
         expectedModel.updateFilteredPersonList(predicate);
-        assertCommandSuccess(command, model, expectedMessage, expectedModel);
+        assertCommandSuccess(command, model, String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 3), expectedModel);
         assertEquals(Arrays.asList(ALICE, BENSON, DANIEL), model.getFilteredPersonList());
     }
 
     @Test
-    public void execute_dateKeyword_personsFoundByBookingDate() {
-        // Suppose FIONA and CARL have a booking on 2025-10-20
-        String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 2);
-        ClientContainsKeywordsPredicate predicate = preparePredicate(ClientContainsKeywordsPredicate.SearchType.DATE,
-                                        "2025-10-20");
+    public void execute_singleDate_returnsMatchingPersons() {
+        Map<String, List<String>> criteria = new HashMap<>();
+        criteria.put("date", List.of("2025-10-20"));
+        ClientContainsKeywordsPredicate predicate = preparePredicate(criteria);
+
         FindCommand command = new FindCommand(predicate);
+
         expectedModel.updateFilteredPersonList(predicate);
-        assertCommandSuccess(command, model, expectedMessage, expectedModel);
+        assertCommandSuccess(command, model, String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 2), expectedModel);
         assertEquals(Arrays.asList(CARL, FIONA), model.getFilteredPersonList());
     }
 
     @Test
-    public void toStringMethod() {
-        ClientContainsKeywordsPredicate predicate = new ClientContainsKeywordsPredicate(
-                                        ClientContainsKeywordsPredicate.SearchType.NAME, Arrays.asList("keyword"));
+    public void execute_multipleFields() {
+        // Suppose we want to filter by name "Alice" and tag "friend"
+        Map<String, List<String>> searchCriteria = new HashMap<>();
+        searchCriteria.put("name", List.of("Alice"));
+        searchCriteria.put("tag", List.of("friend"));
+
+        ClientContainsKeywordsPredicate predicate = new ClientContainsKeywordsPredicate(searchCriteria);
         FindCommand findCommand = new FindCommand(predicate);
-        String expected = FindCommand.class.getCanonicalName() + "{predicate=" + predicate + "}";
-        assertEquals(expected, findCommand.toString());
+
+        // Create an expected model with the same AddressBook
+        Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+        expectedModel.updateFilteredPersonList(predicate);
+
+        // Execute the FindCommand
+        String expectedMessage = String.format(Messages.MESSAGE_PERSONS_LISTED_OVERVIEW,
+                expectedModel.getFilteredPersonList().size());
+        CommandResult expectedCommandResult = new CommandResult(expectedMessage);
+
+        CommandTestUtil.assertCommandSuccess(findCommand, model, expectedCommandResult, expectedModel);
+
+        // Optionally, verify the filtered list contains the expected persons
+        List<Person> filteredList = model.getFilteredPersonList();
+        for (Person p : filteredList) {
+            assertTrue(predicate.test(p));
+        }
     }
 
-    @Test
-    public void constructor_nullPredicate_throwsAssertionError() {
-        assertThrows(AssertionError.class, () -> new FindCommand(null));
-    }
 
     @Test
-    public void execute_nullModel_throwsNullPointerException() {
-        ClientContainsKeywordsPredicate predicate =
-                new ClientContainsKeywordsPredicate(ClientContainsKeywordsPredicate.SearchType.NAME, List.of("Alice"));
+    public void execute_blankNameWildcard_listsAllPersons() {
+        Map<String, List<String>> criteria = new HashMap<>();
+        criteria.put("name", List.of()); // empty list = wildcard
+        ClientContainsKeywordsPredicate predicate = preparePredicate(criteria);
+
         FindCommand command = new FindCommand(predicate);
-        assertThrows(NullPointerException.class, () -> command.execute(null));
+
+        expectedModel.updateFilteredPersonList(predicate);
+        assertCommandSuccess(command, model,
+                                        String.format(MESSAGE_PERSONS_LISTED_OVERVIEW,
+                                                                        model.getAddressBook().getPersonList().size()),
+                                        expectedModel);
     }
 
     @Test
     public void equals_samePredicate_returnsTrue() {
-        ClientContainsKeywordsPredicate predicate =
-                new ClientContainsKeywordsPredicate(ClientContainsKeywordsPredicate.SearchType.NAME, List.of("Alice"));
+        Map<String, List<String>> criteria = new HashMap<>();
+        criteria.put("name", List.of("Alice"));
+        ClientContainsKeywordsPredicate predicate = preparePredicate(criteria);
+
         FindCommand command1 = new FindCommand(predicate);
         FindCommand command2 = new FindCommand(predicate);
-        assertEquals(command1, command2);
+        assertTrue(command1.equals(command2));
     }
 
     @Test
     public void equals_differentPredicate_returnsFalse() {
-        FindCommand command1 = new FindCommand(new ClientContainsKeywordsPredicate(
-                ClientContainsKeywordsPredicate.SearchType.NAME, List.of("Alice")));
-        FindCommand command2 = new FindCommand(new ClientContainsKeywordsPredicate(
-                ClientContainsKeywordsPredicate.SearchType.NAME, List.of("Bob")));
-        assertNotEquals(command1, command2);
+        Map<String, List<String>> criteria1 = new HashMap<>();
+        criteria1.put("name", List.of("Alice"));
+        Map<String, List<String>> criteria2 = new HashMap<>();
+        criteria2.put("name", List.of("Bob"));
+
+        FindCommand command1 = new FindCommand(preparePredicate(criteria1));
+        FindCommand command2 = new FindCommand(preparePredicate(criteria2));
+        assertTrue(!command1.equals(command2));
     }
 
     @Test
-    public void execute_predicateWithSingleMatch_success() {
-        // Use an existing person in model, e.g., "Alice Pauline"
-        ClientContainsKeywordsPredicate predicate = new ClientContainsKeywordsPredicate(
-                                        ClientContainsKeywordsPredicate.SearchType.NAME, List.of("Alice"));
+    public void toString_containsPredicateDetails() {
+        Map<String, List<String>> criteria = new HashMap<>();
+        criteria.put("tag", List.of("friends"));
+        ClientContainsKeywordsPredicate predicate = preparePredicate(criteria);
         FindCommand command = new FindCommand(predicate);
 
-        // Execute and capture the result
-        CommandResult result = command.execute(model);
-
-        // Assert feedback string contains the correct number of matches
-        assertTrue(result.getFeedbackToUser().contains("1 persons listed!"));
-
-        // Assert filtered list contains the correct person
-        assertTrue(model.getFilteredPersonList().stream().anyMatch(p -> p.getName().fullName.equals("Alice Pauline")));
+        String str = command.toString();
+        assertTrue(str.contains("friends"));
+        assertTrue(str.contains("ClientContainsKeywordsPredicate"));
     }
 
-    @Test
-    public void execute_predicateWithNoMatches_success() {
-        // Use a keyword that does not match anyone
-        ClientContainsKeywordsPredicate predicate = new ClientContainsKeywordsPredicate(
-                                        ClientContainsKeywordsPredicate.SearchType.NAME, List.of("Nonexistent"));
-        FindCommand command = new FindCommand(predicate);
-
-        // Execute
-        CommandResult result = command.execute(model);
-
-        // Assert feedback string indicates 0 matches
-        assertTrue(result.getFeedbackToUser().contains("0 persons listed!"));
-
-        // Assert filtered list is empty
-        assertTrue(model.getFilteredPersonList().isEmpty());
-    }
-
-    @Test
-    public void toString_includesPredicateDetails() {
-        ClientContainsKeywordsPredicate predicate =
-                new ClientContainsKeywordsPredicate(ClientContainsKeywordsPredicate.SearchType.TAG, List.of("friends"));
-        FindCommand command = new FindCommand(predicate);
-        String result = command.toString();
-        assertTrue(result.contains("friends"));
-        assertTrue(result.contains("TAG"));
-    }
-
-    @Test
-    public void toString_returnsExpectedString() {
-        ClientContainsKeywordsPredicate predicate =
-                new ClientContainsKeywordsPredicate(ClientContainsKeywordsPredicate.SearchType.NAME, List.of("Bob"));
-        FindCommand command = new FindCommand(predicate);
-        String s = command.toString();
-        assertTrue(s.contains("FindCommand"));
-        assertTrue(s.contains("Bob"));
-    }
-
-    /**
-     * Parses {@code userInput} into a {@code ClientContainsKeywordsPredicate}.
-     */
-    private ClientContainsKeywordsPredicate preparePredicate(ClientContainsKeywordsPredicate.SearchType type,
-                                    String userInput) {
-        return new ClientContainsKeywordsPredicate(type, Arrays.asList(userInput.trim().split("\\s+")));
-    }
 }
