@@ -1,74 +1,64 @@
 package seedu.address.model.person;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.function.Predicate;
 
-import seedu.address.commons.util.ToStringBuilder;
-
 /**
- * Tests that a {@code Person}'s {@code Name} matches any of the keywords given.
+ * Tests that a {@code Person} matches all of the given search criteria. The
+ * search criteria map contains field types (e.g. "name", "tag", "date") mapped
+ * to lists of keywords.
  */
 public class ClientContainsKeywordsPredicate implements Predicate<Person> {
 
-    /**
-     * The type of search to be performed.
-     */
-    public enum SearchType {
-        NAME, TAG, DATE
-    }
+    private final Map<String, List<String>> searchCriteria;
 
-    private final List<String> keywords;
-    private final SearchType type;
-
-    /**
-     * Constructs a ClientContainsKeywordsPredicate with the given search type
-     * and keywords.
-     */
-    public ClientContainsKeywordsPredicate(SearchType type, List<String> keywords) {
-        // Developer checks — these should never be null
-        assert type != null : "SearchType must not be null";
-        assert keywords != null : "Keywords list must not be null";
-
-        this.keywords = keywords;
-        this.type = type;
+    public ClientContainsKeywordsPredicate(Map<String, List<String>> searchCriteria) {
+        this.searchCriteria = searchCriteria;
     }
 
     @Override
     public boolean test(Person person) {
-        switch (type) {
+        // If searchCriteria is empty, match all persons
+        if (searchCriteria.isEmpty()) {
+            return true;
+        }
 
-        case NAME:
-            // Filter out empty keywords
-            List<String> validKeywords = keywords.stream().filter(kw -> !kw.trim().isEmpty()).toList();
+        // Otherwise, check each field
+        return searchCriteria.entrySet().stream().anyMatch(entry -> {
+            String fieldType = entry.getKey();
+            List<String> keywords = entry.getValue();
 
-            // If there are no valid keywords, return false (no match)
-            if (validKeywords.isEmpty()) {
+            // Empty keyword list = wildcard = match everyone
+            if (keywords.isEmpty()) {
                 return true;
             }
-            String combinedKeyword = String.join(" ", keywords).trim();
-            assert combinedKeyword != null : "Combined keyword string should not be null";
-            return person.getName().fullName.toLowerCase().contains(combinedKeyword.toLowerCase());
 
-        case TAG:
-            // Ensure tag list is non-null
-            assert person.getTags() != null : "Person should have a non-null tag list";
+            return switch (fieldType) {
+            case "name" -> matchesName(person, keywords);
+            case "tag" -> matchesTag(person, keywords);
+            case "date" -> matchesDate(person, keywords);
+            default -> false;
+            };
+        });
+    }
 
-            return person.getTags().stream().map(tag -> tag.tagName.toLowerCase()).anyMatch(tagName -> keywords.stream()
-                                            .filter(keyword -> !keyword.trim().isEmpty())
-                                            .anyMatch(keyword -> tagName.equals(keyword.toLowerCase())));
+    private boolean matchesName(Person person, List<String> keywords) {
+        String fullName = person.getName().fullName.toLowerCase();
+        return keywords.stream().map(String::toLowerCase).anyMatch(fullName::contains);
+    }
 
-        case DATE:
-            // Ensure booking list is non-null
-            assert person.getBookings() != null : "Person should have a non-null booking list";
+    private boolean matchesTag(Person person, List<String> keywords) {
+        return person.getTags().stream().anyMatch(tag -> keywords.stream().map(String::toLowerCase)
+                                        .anyMatch(tag.tagName.toLowerCase()::contains));
+    }
 
-            return keywords.stream().filter(keyword -> !keyword.trim().isEmpty()).anyMatch(keyword -> person
-                                            .getBookings().stream()
-                                            .map(booking -> booking.getDateTime().toLocalDate().toString())
-                                            .anyMatch(date -> date.equals(keyword)));
-
-        default:
-            throw new IllegalStateException("Unexpected Value:" + type);
-        }
+    private boolean matchesDate(Person person, List<String> keywords) {
+        return person.getBookings().stream().anyMatch(booking -> {
+            String bookingDate = booking.getDateTime().toLocalDate().toString();
+            return keywords.stream().anyMatch(bookingDate::contains);
+        });
     }
 
     @Override
@@ -77,25 +67,24 @@ public class ClientContainsKeywordsPredicate implements Predicate<Person> {
             return true;
         }
 
-        // instanceof handles nulls
-        if (!(other instanceof ClientContainsKeywordsPredicate)) {
+        if (!(other instanceof ClientContainsKeywordsPredicate otherPredicate)) {
             return false;
         }
 
-        ClientContainsKeywordsPredicate otherNameContainsKeywordsPredicate =
-                                            (ClientContainsKeywordsPredicate) other;
+        return Objects.equals(this.searchCriteria, otherPredicate.searchCriteria);
+    }
 
-        // Sanity check for equality invariants
-        assert this.type != null : "SearchType should not be null when comparing predicates";
-        assert this.keywords != null : "Keywords list should not be null when comparing predicates";
-
-        return (this.type == otherNameContainsKeywordsPredicate.type)
-                                        && (keywords.equals(otherNameContainsKeywordsPredicate.keywords));
+    // ✅ toString() override
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder("ClientContainsKeywordsPredicate with criteria: ");
+        searchCriteria.forEach((key, value) ->
+                sb.append(key).append("=").append(value).append("; "));
+        return sb.toString();
     }
 
     @Override
-    public String toString() {
-        return new ToStringBuilder(this).add("searchType", type)
-                    .add("keywords", keywords).toString();
+    public int hashCode() {
+        return Objects.hash(searchCriteria);
     }
 }

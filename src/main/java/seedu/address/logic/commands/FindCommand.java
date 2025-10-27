@@ -19,7 +19,7 @@ public class FindCommand extends Command {
     public static final String COMMAND_WORD = "find";
 
     public static final ErrorMessage MESSAGE_USAGE = new ErrorMessage(
-            "Finds all persons whose names contain any of the specified keywords "
+            "Finds all persons whose names partially contain any of the specified keywords "
                     + "(case-insensitive) and displays them as a list with index numbers.",
             "find [n/NAME] [t/TAG] [d/DATE]",
             COMMAND_WORD + " n/Alex"
