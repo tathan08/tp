@@ -187,6 +187,9 @@ public class PersonCard extends UiPart<Region> {
             }
         };
 
+        // Display ID: Sequential numbering (1, 2, 3...) for user convenience
+        // Note: This is different from the internal booking ID stored in JSON
+        // The delete command uses this display ID to reference bookings
         final int[] counter = {1};
         person.getBookings().stream()
                 .sorted(bookingComparator)

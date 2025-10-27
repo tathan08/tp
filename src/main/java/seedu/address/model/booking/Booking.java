@@ -8,7 +8,6 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.format.ResolverStyle;
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Represents a Booking in the address book.
@@ -31,34 +30,18 @@ public class Booking {
     // Validation regex for client name
     private static final String CLIENT_NAME_VALIDATION_REGEX = "^[a-zA-Z0-9 .'\\\\/\\-]+$";
 
-    private static final AtomicLong idCounter = new AtomicLong(1);
-
-    private final String id;
     private final String clientName;
     private final LocalDateTime datetime;
     private final String description;
 
     /**
-     * Constructs a {@code Booking} with auto-generated ID.
+     * Constructs a {@code Booking}.
      *
      * @param clientName Client name for the booking.
      * @param datetime DateTime of the booking.
      * @param description Description of the booking.
      */
     public Booking(String clientName, LocalDateTime datetime, String description) {
-        this(String.valueOf(idCounter.getAndIncrement()), clientName, datetime, description);
-    }
-
-    /**
-     * Constructs a {@code Booking} with specified ID (for loading from storage).
-     *
-     * @param id Unique identifier for the booking.
-     * @param clientName Client name for the booking.
-     * @param datetime DateTime of the booking.
-     * @param description Description of the booking.
-     */
-    public Booking(String id, String clientName, LocalDateTime datetime, String description) {
-        requireNonNull(id);
         requireNonNull(clientName);
         requireNonNull(datetime);
         requireNonNull(description);
@@ -66,18 +49,9 @@ public class Booking {
         checkArgument(isValidClientName(clientName), MESSAGE_CONSTRAINTS_CLIENT);
         checkArgument(isValidDescription(description), MESSAGE_CONSTRAINTS_DESCRIPTION);
 
-        this.id = id;
         this.clientName = clientName.trim().replaceAll("\\s+", " "); // Normalize spaces
         this.datetime = datetime;
         this.description = description.trim();
-
-        // Update counter if loading from storage
-        try {
-            long loadedId = Long.parseLong(id);
-            idCounter.updateAndGet(current -> Math.max(current, loadedId + 1));
-        } catch (NumberFormatException e) {
-            // Non-numeric ID, ignore
-        }
     }
 
     /**
@@ -193,10 +167,6 @@ public class Booking {
         return datetime.isAfter(LocalDateTime.now());
     }
 
-    public String getId() {
-        return id;
-    }
-
     public String getClientName() {
         return clientName;
     }
@@ -231,21 +201,20 @@ public class Booking {
         }
 
         Booking otherBooking = (Booking) other;
-        return id.equals(otherBooking.id)
-                && clientName.equals(otherBooking.clientName)
+        return clientName.equals(otherBooking.clientName)
                 && datetime.equals(otherBooking.datetime)
                 && description.equals(otherBooking.description);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, clientName, datetime, description);
+        return Objects.hash(clientName, datetime, description);
     }
 
     @Override
     public String toString() {
-        return String.format("[ID: %s] Client: %s at %s - %s",
-                id, clientName, getDateTimeString(), description);
+        return String.format("Client: %s at %s - %s",
+                clientName, getDateTimeString(), description);
     }
 }
 

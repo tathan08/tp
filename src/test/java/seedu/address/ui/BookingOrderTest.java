@@ -21,8 +21,8 @@ public class BookingOrderTest {
         LocalDateTime future = LocalDateTime.of(2026, 1, 15, 10, 0);
         LocalDateTime past = LocalDateTime.of(2023, 3, 4, 10, 0);
 
-        Booking futureBooking = new Booking("1", "Client A", future, "Future");
-        Booking pastBooking = new Booking("2", "Client B", past, "Past");
+        Booking futureBooking = new Booking("Client A", future, "Future");
+        Booking pastBooking = new Booking("Client B", past, "Past");
 
         // Use the same comparator logic from PersonCard
         Comparator<Booking> bookingComparator = (b1, b2) -> {
@@ -51,8 +51,8 @@ public class BookingOrderTest {
         LocalDateTime future1 = LocalDateTime.of(2026, 1, 20, 10, 0);
         LocalDateTime future2 = LocalDateTime.of(2026, 1, 15, 14, 0);
 
-        Booking booking1 = new Booking("1", "Client A", future1, "Later");
-        Booking booking2 = new Booking("2", "Client B", future2, "Earlier");
+        Booking booking1 = new Booking("Client A", future1, "Later");
+        Booking booking2 = new Booking("Client B", future2, "Earlier");
 
         Comparator<Booking> bookingComparator = (b1, b2) -> {
             boolean b1IsFuture = Booking.isFutureDateTime(b1.getDateTime());
@@ -77,8 +77,8 @@ public class BookingOrderTest {
         LocalDateTime past1 = LocalDateTime.of(2024, 4, 4, 10, 0);
         LocalDateTime past2 = LocalDateTime.of(2023, 3, 4, 14, 0);
 
-        Booking booking1 = new Booking("1", "Client A", past1, "Later");
-        Booking booking2 = new Booking("2", "Client B", past2, "Earlier");
+        Booking booking1 = new Booking("Client A", past1, "Later");
+        Booking booking2 = new Booking("Client B", past2, "Earlier");
 
         Comparator<Booking> bookingComparator = (b1, b2) -> {
             boolean b1IsFuture = Booking.isFutureDateTime(b1.getDateTime());
@@ -101,10 +101,10 @@ public class BookingOrderTest {
     public void bookingComparator_mixedOrdering() {
         // Create mixed future and past bookings
         ArrayList<Booking> bookings = new ArrayList<>();
-        bookings.add(new Booking("1", "Client A", LocalDateTime.of(2023, 3, 4, 10, 0), "Past 1"));
-        bookings.add(new Booking("2", "Client B", LocalDateTime.of(2026, 1, 20, 14, 0), "Future 2"));
-        bookings.add(new Booking("3", "Client C", LocalDateTime.of(2026, 1, 15, 10, 0), "Future 1"));
-        bookings.add(new Booking("4", "Client D", LocalDateTime.of(2024, 4, 4, 14, 0), "Past 2"));
+        bookings.add(new Booking("Client A", LocalDateTime.of(2023, 3, 4, 10, 0), "Past 1"));
+        bookings.add(new Booking("Client B", LocalDateTime.of(2026, 1, 20, 14, 0), "Future 2"));
+        bookings.add(new Booking("Client C", LocalDateTime.of(2026, 1, 15, 10, 0), "Future 1"));
+        bookings.add(new Booking("Client D", LocalDateTime.of(2024, 4, 4, 14, 0), "Past 2"));
 
         Comparator<Booking> bookingComparator = (b1, b2) -> {
             boolean b1IsFuture = Booking.isFutureDateTime(b1.getDateTime());
@@ -145,8 +145,8 @@ public class BookingOrderTest {
         LocalDateTime nearFuture = LocalDateTime.of(2025, 12, 31, 23, 59);
         LocalDateTime past = LocalDateTime.of(2024, 1, 1, 10, 0);
 
-        Booking futureBooking = new Booking("1", "Client A", nearFuture, "Near Future");
-        Booking pastBooking = new Booking("2", "Client B", past, "Past");
+        Booking futureBooking = new Booking("Client A", nearFuture, "Near Future");
+        Booking pastBooking = new Booking("Client B", past, "Past");
 
         Comparator<Booking> bookingComparator = (b1, b2) -> {
             boolean b1IsFuture = Booking.isFutureDateTime(b1.getDateTime());
@@ -172,8 +172,8 @@ public class BookingOrderTest {
         LocalDateTime oneMinuteAgo = now.minusMinutes(1);
         LocalDateTime oneMinuteFromNow = now.plusMinutes(1);
 
-        Booking pastBooking = new Booking("1", "Client A", oneMinuteAgo, "Past");
-        Booking futureBooking = new Booking("2", "Client B", oneMinuteFromNow, "Future");
+        Booking pastBooking = new Booking("Client A", oneMinuteAgo, "Past");
+        Booking futureBooking = new Booking("Client B", oneMinuteFromNow, "Future");
 
         // Verify that isFutureDateTime correctly identifies past and future
         assertTrue(Booking.isFutureDateTime(futureBooking.getDateTime()),

@@ -16,7 +16,6 @@
     "email" : "heinz@example.com",
     "tags" : [ ],
     "bookings" : [ {
-      "id" : "1",
       "clientName" : "Carl Kurz",
       "datetime" : "2026-10-20 10:00",
       "description" : "Haircut"
@@ -37,7 +36,6 @@
     "email" : "lydia@example.com",
     "tags" : [ ],
     "bookings" : [ {
-      "id" : "1",
       "clientName" : "Fiona Kunz",
       "datetime" : "2026-10-20 14:00",
       "description" : "Spa treatment"
