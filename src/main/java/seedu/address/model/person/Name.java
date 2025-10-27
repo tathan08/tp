@@ -9,10 +9,13 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
  */
 public class Name {
 
-    public static final int MAX_NAME_LENGTH = 50;
+    public static final int MAX_NAME_LENGTH = 100;
     public static final String MESSAGE_CONSTRAINTS =
-            "Names should only contain alphabetic characters, spaces, apostrophes, hyphens, and slashes";
-    public static final String MESSAGE_LENGTH_CONSTRAINT = "Name too long (max 50 chars).";
+            "Names should only contain letters, spaces, apostrophes ('), hyphens (-), and slashes (/).\n"
+            + "The name must start with a letter.\n"
+            + "Examples: 'John Doe', 'Mary-Jane', 'O'Brien', 'Ahmad S/O Rahman'";
+    public static final String MESSAGE_LENGTH_CONSTRAINT =
+            "Name is too long! Please keep it to 100 characters or less.";
 
     /*
      * The first character must be alphabetic.

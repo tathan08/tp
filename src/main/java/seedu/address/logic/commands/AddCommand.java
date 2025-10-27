@@ -42,9 +42,11 @@ public class AddCommand extends Command {
 
     public static final String MESSAGE_SUCCESS = "New person added: %1$s";
     public static final String MESSAGE_TAGS_ADDED = "Tags added to existing person: %1$s";
-    public static final String MESSAGE_DUPLICATE_PERSON = "This person already exists in the address book. "
-            + "If you want to add tags to this person, please also include a "
-            + PREFIX_TAG + "TAG field.";
+    public static final String MESSAGE_DUPLICATE_PERSON =
+            "A person with this name already exists in your address book!\n"
+            + "If you want to add tags to this person, please include a "
+            + PREFIX_TAG + "TAG field in your command.\n"
+            + "Example: add n/John Doe t/VIP";
 
     private static final Logger logger = LogsCenter.getLogger(AddCommand.class);
 
@@ -82,9 +84,11 @@ public class AddCommand extends Command {
 
                     // Check if any new tags would exceed the limit
                     if (existingTags.size() + newTags.size() > Person.MAX_TAGS) {
-                        throw new CommandException(String.format("Tag limit reached for %s. Maximum %d tags allowed. "
-                                + "Current tags: %d, trying to add: %d. Remove existing tags before adding new ones.",
-                                toAdd.getName(), Person.MAX_TAGS, existingTags.size(), newTags.size()));
+                        throw new CommandException(String.format("Cannot add tags - tag limit reached!\n"
+                                + "Contact '%s' already has %d tag(s), and you're trying to add %d more.\n"
+                                + "Maximum allowed: %d tags per contact.\n"
+                                + "Please remove some existing tags before adding new ones.",
+                                toAdd.getName(), existingTags.size(), newTags.size(), Person.MAX_TAGS));
                     }
 
                     // Add new tags (duplicates will be automatically handled by Set)

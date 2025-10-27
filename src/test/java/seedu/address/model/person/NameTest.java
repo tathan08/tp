@@ -21,7 +21,7 @@ public class NameTest {
 
     @Test
     public void constructor_nameTooLong_throwsIllegalArgumentException() {
-        String longName = "a".repeat(51); // 51 characters, exceeds max of 50
+        String longName = "a".repeat(101); // 101 characters, exceeds max of 100
         assertThrows(IllegalArgumentException.class, () -> new Name(longName));
     }
 
@@ -49,7 +49,7 @@ public class NameTest {
         assertTrue(Name.isValidName("John/Doe")); // with forward slash
         assertTrue(Name.isValidName("John\\Doe")); // with backslash
         assertTrue(Name.isValidName("Jean-Paul O'Connor/Mary-Jane")); // with all special chars
-        assertTrue(Name.isValidName("a".repeat(50))); // exactly 50 chars (max length)
+        assertTrue(Name.isValidName("a".repeat(100))); // exactly 100 chars (max length)
     }
 
     @Test

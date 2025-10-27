@@ -45,19 +45,31 @@ public class DeleteCommand extends Command {
     );
 
     public static final String MESSAGE_DELETE_PERSON_SUCCESS = "Deleted Person: %1$s";
-    public static final String MESSAGE_DELETE_PERSON_NOT_FOUND = "No such person found: %s";
-    public static final String MESSAGE_DELETE_PERSON_MULTIPLE_MATCH = "Multiple partial matches for %s: \n%s\n";
+    public static final String MESSAGE_DELETE_PERSON_NOT_FOUND =
+            "Could not find anyone named '%s' in your address book.\n"
+            + "Please check the name and try again.";
+    public static final String MESSAGE_DELETE_PERSON_MULTIPLE_MATCH =
+            "Found multiple people matching '%s':\n%s\n"
+            + "Please be more specific with the full name.";
     public static final String MESSAGE_DELETE_PERSON_PARTIAL_FOUND =
-            "We found a partial match containing %1$s, did you mean '%2$s'?";
+            "We found someone whose name contains '%1$s': '%2$s'\n"
+            + "Did you mean this person? Please use their full name to delete.";
     public static final String MESSAGE_DELETE_TAG_SUCCESS = "Removed tags %1$s from %2$s!";
-    public static final String MESSAGE_DELETE_TAG_PARTIAL = "Removed %1$s. Not found: %2$s from %3$s";
-    public static final String MESSAGE_DELETE_TAG_NOT_FOUND = "'%1$s' does not have the tag(s) '%2$s'";
-    public static final String MESSAGE_DELETE_TAG_NO_SPACES = "Tags should not contain any whitespaces!";
-    public static final String MESSAGE_DELETE_TAG_USAGE = "Please provide a tag after 't/'!";
+    public static final String MESSAGE_DELETE_TAG_PARTIAL = "Removed %1$s.\n"
+            + "However, these tags were not found: %2$s from %3$s";
+    public static final String MESSAGE_DELETE_TAG_NOT_FOUND = "'%1$s' doesn't have the tag(s) '%2$s'.\n"
+            + "Please check the tag names and try again.";
+    public static final String MESSAGE_DELETE_TAG_NO_SPACES = "Tag names cannot contain spaces!\n"
+            + "If you want to delete multiple tags, use separate t/ prefixes.\n"
+            + "Example: delete n/John t/friend t/colleague";
+    public static final String MESSAGE_DELETE_TAG_USAGE = "Please specify a tag name after 't/'!";
     public static final String MESSAGE_DELETE_BOOKING_SUCCESS = "Removed booking: %1$s with %2$s for %3$s!";
-    public static final String MESSAGE_DELETE_BOOKING_NOT_FOUND = "'%1$s' does not have booking ID %2$d!";
-    public static final String MESSAGE_DELETE_BOOKING_USAGE = "Please provide a valid booking ID after b/!";
-    public static final String MESSAGE_DELETE_BOOKING_OR_TAG = "Only use either 'b/' or 't/', and not both!";
+    public static final String MESSAGE_DELETE_BOOKING_NOT_FOUND =
+            "'%1$s' doesn't have a booking with ID %2$d.\n"
+            + "Please check the booking ID and try again.";
+    public static final String MESSAGE_DELETE_BOOKING_USAGE = "Please provide a valid booking ID after 'b/'!";
+    public static final String MESSAGE_DELETE_BOOKING_OR_TAG =
+            "You can only delete either tags (t/) OR bookings (b/), not both at the same time!";
 
     private static final Logger logger = LogsCenter.getLogger(DeleteCommand.class);
 
