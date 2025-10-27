@@ -159,8 +159,8 @@ public class DeleteCommand extends Command {
         model.setPerson(personToDelete, updatedPerson);
         model.updateFilteredPersonList(Model.PREDICATE_SHOW_ALL_PERSONS);
 
-        String removed = tagsToRemove.stream().map(Tag::toString).collect(Collectors.joining(", "));
-        logger.info(String.format("Successfully removed tags %s from person: %s", present, personToDelete.getName()));
+        String removed = present.stream().map(Tag::toString).collect(Collectors.joining(", "));
+        logger.info(String.format("Successfully removed tags %s from person: %s", removed, personToDelete.getName()));
 
         if (!missing.isEmpty()) {
             return new CommandResult(String.format(MESSAGE_DELETE_TAG_PARTIAL, present,
