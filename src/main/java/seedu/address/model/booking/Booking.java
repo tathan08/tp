@@ -21,7 +21,7 @@ public class Booking {
             "Invalid date: booking date must be in the future.";
     public static final String MESSAGE_CONSTRAINTS_CLIENT =
             "Invalid client name. Must be 1-100 characters with at least one letter. "
-            + "Only letters, numbers, spaces, hyphens, apostrophes, and periods are allowed.";
+            + "Only letters, numbers, spaces, hyphens, apostrophes, periods, and slashes are allowed.";
     public static final String MESSAGE_CONSTRAINTS_DESCRIPTION =
             "Description must be 1-500 characters.";
 
@@ -29,7 +29,7 @@ public class Booking {
             .withResolverStyle(ResolverStyle.STRICT);
 
     // Validation regex for client name
-    private static final String CLIENT_NAME_VALIDATION_REGEX = "^[a-zA-Z0-9 .'-]+$";
+    private static final String CLIENT_NAME_VALIDATION_REGEX = "^[a-zA-Z0-9 .'\\\\/\\-]+$";
 
     private static final AtomicLong idCounter = new AtomicLong(1);
 

@@ -37,7 +37,7 @@
     "email" : "lydia@example.com",
     "tags" : [ ],
     "bookings" : [ {
-      "id" : "2",
+      "id" : "1",
       "clientName" : "Fiona Kunz",
       "datetime" : "2025-10-20 14:00",
       "description" : "Spa treatment"
@@ -47,5 +47,10 @@
     "phone" : "9482442",
     "email" : "anna@example.com",
     "tags" : [ ]
+  }, {
+    "name" : "Abhijay s/o Abhi",
+    "phone" : "91234567",
+    "email" : "abhijay@example.com",
+    "tags" : [ "family" ]
   } ]
 }

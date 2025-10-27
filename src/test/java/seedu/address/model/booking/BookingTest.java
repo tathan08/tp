@@ -131,5 +131,36 @@ public class BookingTest {
         assertNotNull(error, "Invalid format should return error message");
         assertEquals(Booking.MESSAGE_CONSTRAINTS_DATETIME, error);
     }
+
+    @Test
+    public void isValidClientName() {
+        // invalid client names
+        assertFalse(Booking.isValidClientName("")); // empty string
+        assertFalse(Booking.isValidClientName(" ")); // spaces only
+        assertFalse(Booking.isValidClientName("!")); // only invalid characters
+        assertFalse(Booking.isValidClientName("John@Doe")); // contains invalid character
+        assertFalse(Booking.isValidClientName("".repeat(101))); // too long (101 characters)
+
+        // valid client names
+        assertTrue(Booking.isValidClientName("John Doe")); // alphabets only
+        assertTrue(Booking.isValidClientName("John O'Brien")); // with apostrophe
+        assertTrue(Booking.isValidClientName("Mary-Jane")); // with hyphen
+        assertTrue(Booking.isValidClientName("Dr. Smith")); // with period
+        assertTrue(Booking.isValidClientName("Abhijay s/o Abhi")); // with forward slash
+        assertTrue(Booking.isValidClientName("John\\Doe")); // with backslash
+        assertTrue(Booking.isValidClientName("Jean-Paul O'Connor/Smith")); // with all special chars
+        assertTrue(Booking.isValidClientName("a".repeat(100))); // exactly 100 chars (max length)
+    }
+
+    @Test
+    public void constructor_clientNameWithSlashes_success() {
+        // Test that booking can be created with slashes in client name
+        String clientName = "Raj s/o Kumar";
+        LocalDateTime datetime = LocalDateTime.of(2026, 12, 25, 10, 0);
+        String description = "Consultation";
+        
+        Booking booking = new Booking(clientName, datetime, description);
+        assertEquals(clientName, booking.getClientName());
+    }
 }
 

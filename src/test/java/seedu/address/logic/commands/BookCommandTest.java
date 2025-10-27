@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.testutil.Assert.assertThrows;
+import static seedu.address.testutil.TypicalPersons.ABHIJAY;
 import static seedu.address.testutil.TypicalPersons.ALICE;
 import static seedu.address.testutil.TypicalPersons.CARL;
 import static seedu.address.testutil.TypicalPersons.FIONA;
@@ -207,6 +208,41 @@ public class BookCommandTest {
         BookCommand differentDescriptionCommand = new BookCommand(ALICE.getName(), VALID_CLIENT_NAME,
                 VALID_DATETIME, "Different Description");
         assertFalse(bookAliceCommand.equals(differentDescriptionCommand));
+    }
+
+    @Test
+    public void execute_bookPersonWithSlash_success() throws Exception {
+        ModelStubAcceptingBooking modelStub = new ModelStubAcceptingBooking();
+        Person personWithSlash = new PersonBuilder(ABHIJAY).build();
+        modelStub.addPerson(personWithSlash);
+
+        BookCommand bookCommand = new BookCommand(ABHIJAY.getName(), VALID_CLIENT_NAME,
+                VALID_DATETIME, VALID_DESCRIPTION);
+
+        CommandResult commandResult = bookCommand.execute(modelStub);
+
+        String expectedMessage = String.format(BookCommand.MESSAGE_SUCCESS, ABHIJAY.getName(),
+                VALID_CLIENT_NAME, "2025-12-25 10:00", VALID_DESCRIPTION);
+        assertEquals(expectedMessage, commandResult.getFeedbackToUser());
+        assertTrue(modelStub.personsUpdated.size() == 1);
+    }
+
+    @Test
+    public void execute_bookWithClientNameWithSlashes_success() throws Exception {
+        ModelStubAcceptingBooking modelStub = new ModelStubAcceptingBooking();
+        Person person = new PersonBuilder(ALICE).build();
+        modelStub.addPerson(person);
+
+        String clientNameWithSlash = "Raj s/o Kumar";
+        BookCommand bookCommand = new BookCommand(ALICE.getName(), clientNameWithSlash,
+                VALID_DATETIME, VALID_DESCRIPTION);
+
+        CommandResult commandResult = bookCommand.execute(modelStub);
+
+        String expectedMessage = String.format(BookCommand.MESSAGE_SUCCESS, ALICE.getName(),
+                clientNameWithSlash, "2025-12-25 10:00", VALID_DESCRIPTION);
+        assertEquals(expectedMessage, commandResult.getFeedbackToUser());
+        assertTrue(modelStub.personsUpdated.size() == 1);
     }
 
     @Test

@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.Messages.MESSAGE_PERSONS_LISTED_OVERVIEW;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
+import static seedu.address.testutil.TypicalPersons.ABHIJAY;
 import static seedu.address.testutil.TypicalPersons.ALICE;
 import static seedu.address.testutil.TypicalPersons.BENSON;
 import static seedu.address.testutil.TypicalPersons.CARL;
@@ -205,6 +206,30 @@ public class FindCommandTest {
         String s = command.toString();
         assertTrue(s.contains("FindCommand"));
         assertTrue(s.contains("Bob"));
+    }
+
+    @Test
+    public void execute_findPersonWithSlash_success() {
+        // Find person with slash in name
+        String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 1);
+        ClientContainsKeywordsPredicate predicate = preparePredicate(ClientContainsKeywordsPredicate.SearchType.NAME,
+                                        "Abhijay");
+        FindCommand command = new FindCommand(predicate);
+        expectedModel.updateFilteredPersonList(predicate);
+        assertCommandSuccess(command, model, expectedMessage, expectedModel);
+        assertEquals(Arrays.asList(ABHIJAY), model.getFilteredPersonList());
+    }
+
+    @Test
+    public void execute_findPersonWithSlashByPartialName_success() {
+        // Find by searching for part of the name with slash
+        String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 1);
+        ClientContainsKeywordsPredicate predicate = preparePredicate(ClientContainsKeywordsPredicate.SearchType.NAME,
+                                        "s/o");
+        FindCommand command = new FindCommand(predicate);
+        expectedModel.updateFilteredPersonList(predicate);
+        assertCommandSuccess(command, model, expectedMessage, expectedModel);
+        assertEquals(Arrays.asList(ABHIJAY), model.getFilteredPersonList());
     }
 
     /**
