@@ -2,8 +2,8 @@ package seedu.address.model.booking;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -256,9 +256,9 @@ public class BookingTest {
 
     @Test
     public void toStringTest() {
-        Booking booking = new Booking("5", "Raj s/o Kumar", 
+        Booking booking = new Booking("5", "Raj s/o Kumar",
             LocalDateTime.of(2026, 12, 25, 10, 0), "Follow-up consultation");
-        
+
         String result = booking.toString();
         assertTrue(result.contains("5"));
         assertTrue(result.contains("Raj s/o Kumar"));
