@@ -35,6 +35,12 @@ class FindCommandParserTest {
     }
 
     @Test
+    void parse_invalidDate_parseFailure() {
+        String userInput = "d/2025-13-40"; // invalid month and day
+        assertThrows(ParseException.class, () -> parser.parse(userInput));
+    }
+
+    @Test
     void parse_missingPrefix_throwsParseException() {
         String userInput = "Alice"; // no prefix at all
         assertThrows(ParseException.class, () -> parser.parse(userInput));
