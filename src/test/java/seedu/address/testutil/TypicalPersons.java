@@ -33,7 +33,7 @@ public class TypicalPersons {
     public static final Person CARL = new PersonBuilder().withName("Carl Kurz").withPhone("95352563")
             .withEmail("heinz@example.com")
             .withBookings(Arrays.asList(
-                    new Booking("1", "Carl Kurz", LocalDateTime.of(2025, 10, 20, 10, 0), "Haircut")))
+                    new Booking("1", "Carl Kurz", LocalDateTime.of(2026, 10, 20, 10, 0), "Haircut")))
             .build();
     public static final Person DANIEL = new PersonBuilder().withName("Daniel Meier").withPhone("87652533")
             .withEmail("cornelia@example.com").withTags("friends").build();
@@ -42,7 +42,7 @@ public class TypicalPersons {
     public static final Person FIONA = new PersonBuilder().withName("Fiona Kunz").withPhone("9482427")
             .withEmail("lydia@example.com")
             .withBookings(Arrays.asList(
-                    new Booking("1", "Fiona Kunz", LocalDateTime.of(2025, 10, 20, 14, 0), "Spa treatment")))
+                    new Booking("1", "Fiona Kunz", LocalDateTime.of(2026, 10, 20, 14, 0), "Spa treatment")))
             .build();
     public static final Person GEORGE = new PersonBuilder().withName("George Best").withPhone("9482442")
             .withEmail("anna@example.com").build();

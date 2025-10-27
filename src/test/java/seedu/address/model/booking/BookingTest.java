@@ -111,11 +111,10 @@ public class BookingTest {
     }
 
     @Test
-    public void validateDateTime_pastDate_returnsPastDateError() {
-        // Test that past dates return past date error
+    public void validateDateTime_pastDate_nowAccepted() {
+        // Test that past dates are now accepted (returns null)
         String error = Booking.validateDateTime("2020-01-01 10:00");
-        assertNotNull(error, "Past date should return error message");
-        assertEquals(Booking.MESSAGE_CONSTRAINTS_PAST_DATETIME, error);
+        assertNull(error, "Past date should now be accepted");
     }
 
     @Test

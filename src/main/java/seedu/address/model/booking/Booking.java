@@ -16,7 +16,7 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 public class Booking {
     public static final String MESSAGE_CONSTRAINTS_DATETIME =
-            "Invalid date: must be in format YYYY-MM-DD HH:MM and in the future.";
+            "Invalid date: must be in format YYYY-MM-DD HH:MM.";
     public static final String MESSAGE_CONSTRAINTS_PAST_DATETIME =
             "Invalid date: booking date must be in the future.";
     public static final String MESSAGE_CONSTRAINTS_CLIENT =
@@ -151,9 +151,7 @@ public class Booking {
             }
             return MESSAGE_CONSTRAINTS_DATETIME;
         }
-        if (!isFutureDateTime(parsed)) {
-            return MESSAGE_CONSTRAINTS_PAST_DATETIME;
-        }
+        // Past dates are now allowed, no validation needed
         return null; // Valid
     }
 
