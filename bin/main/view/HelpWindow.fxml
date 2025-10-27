@@ -33,7 +33,7 @@
               </Label>
             </content>
           </ScrollPane>
-          
+
           <!-- Button Bar at Bottom -->
           <HBox fx:id="buttonBar" alignment="CENTER" spacing="15">
             <children>
