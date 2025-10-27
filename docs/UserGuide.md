@@ -31,26 +31,31 @@ With FirstImpressions, no client request is too hard to handle as our system is 
 
 ## Table of Contents
 
-1. [Quick Start](#quick-start)
-   - [Prerequisites](#prerequisites)
-   - [Installation Steps](#installation-steps)
-2. [Features](#features)
-   - [Viewing help](#viewing-help--help)
-   - [Adding a person](#adding-a-person-add)
-   - [Adding a tag to an existing person](#adding-a-tag-to-an-existing-person-add)
-   - [Listing all persons](#listing-all-persons--list)
-   - [Editing a person](#editing-a-person--edit)
-   - [Locating team members by name](#locating-team-members-by-name-find)
-   - [Deleting a person](#deleting-a-person--delete)
-   - [Clearing all entries](#clearing-all-entries--clear)
-   - [Assigning a booking](#assigning-a-booking--book)
-   - [Exiting the program](#exiting-the-program--exit)
-3. [Data Management](#data-management)
-   - [Saving the data](#saving-the-data)
-   - [Editing the data file](#editing-the-data-file)
-4. [FAQ](#faq)
-5. [Known Issues](#known-issues)
-6. [Command Summary](#command-summary)
+- [Introduction](#introduction)
+  - [Target Users](#target-users)
+  - [User Proficiency Level](#user-proficiency-level)
+  - [What FirstImpressions Does](#what-firstimpressions-does)
+- [Table of Contents](#table-of-contents)
+- [Quick start](#quick-start)
+  - [Prerequisites](#prerequisites)
+  - [Installation Steps](#installation-steps)
+- [Features](#features)
+  - [Viewing help : `help`](#viewing-help--help)
+  - [Adding a person: `add`](#adding-a-person-add)
+  - [Adding a tag to an existing person: `add`](#adding-a-tag-to-an-existing-person-add)
+  - [Listing all persons : `list`](#listing-all-persons--list)
+  - [Editing a person : `edit`](#editing-a-person--edit)
+  - [Locating team members by name: `find`](#locating-team-members-by-name-find)
+  - [Deleting a person : `delete`](#deleting-a-person--delete)
+  - [Clearing all entries : `clear`](#clearing-all-entries--clear)
+  - [Assigning a booking : `book`](#assigning-a-booking--book)
+  - [Exiting the program : `exit`](#exiting-the-program--exit)
+- [Data Management](#data-management)
+  - [Saving the data](#saving-the-data)
+  - [Editing the data file](#editing-the-data-file)
+- [FAQ](#faq)
+- [Known issues](#known-issues)
+- [Command summary](#command-summary)
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -171,7 +176,8 @@ Adds a person to the contact list.
 Format: `add n/NAME [p/PHONE_NUMBER] [e/EMAIL] [t/TAG]…​`
 
 * Consecutive spaces in name are removed. e.g. "Alice&nbsp;&nbsp;Tan" will be saved as `Alice Tan`.
-* Phone numbers must be numeric only.
+* Names can contain letters, spaces, apostrophes, hyphens, and slashes. e.g. `s/o` (son of), `d/o` (daughter of).
+* Phone numbers can contain any characters including `+`, `()`, `-`, spaces, and letters. Only whitespace-only phone numbers are not allowed.
 * Tags must be alphanumeric and have no spaces.
 
 <div markdown="span" class="alert alert-warning">:exclamation: **Warning:**
@@ -184,7 +190,7 @@ Tags must be alphanumeric only (no spaces, hyphens, or special characters). Use 
 
 <div markdown="span" class="alert alert-info">:information_source: **Character Limits:**
 * Names: Maximum 100 characters
-* Phone: Numeric only, no specific length limit
+* Phone: Can contain any characters (numbers, +, (), -, spaces, letters, etc.), cannot be whitespace-only
 * Email: Must be a valid email format
 * Tags: Alphanumeric only, use camelCase for multi-word tags
 </div>
@@ -194,10 +200,16 @@ A person can have any number of tags (including 0). <br>
 Use camelCase for multiword tags. e.g. teamLead
 </div>
 
+<div markdown="span" class="alert alert-primary">:bulb: **Tip:**
+Phone numbers are flexible! You can use any format that works for you: international format with `+` (e.g., `+65 9123 4567`), with parentheses and hyphens (e.g., `(123) 456-7890`), or plain numbers (e.g., `98765432`). Extensions and additional text are also supported (e.g., `123-456 ext. 789`).
+</div>
+
 Examples:
 
 * `add n/Alice Tan p/98702930 e/alicetan@gmail.com t/teamLead t/vipHandler` <br> will add a Person called `Alice Tan`, with phone number `98702930`, with email `alicetan@gmail.com`, with tags `teamLead` and `vipHandler` to the contact list.
-* `add n/Bob Lee t/mandarinSpeaking` <br> will add a Person called `Bob Lee` with tag `mandarinSpeaking` to the contact list.
+* `add n/Bob Lee p/+65 9123 4567 t/mandarinSpeaking` <br> will add a Person called `Bob Lee` with phone number `+65 9123 4567` and tag `mandarinSpeaking` to the contact list.
+* `add n/Abhijay s/o Abhi p/91234567 e/abhijay@example.com t/family` <br> will add a Person called `Abhijay s/o Abhi` (with slash for "son of") with tag `family` to the contact list.
+* `add n/Charlie Wong p/(123) 456-7890` <br> will add a Person called `Charlie Wong` with phone number `(123) 456-7890` to the contact list.
 * `add n/Germaine` <br> will add a Person called `Germaine` to the contact list.
 
 ![add message](images\addMessage.jpg)
@@ -253,6 +265,7 @@ When editing tags, the existing tags of the person will be **completely replaced
 
 Examples:
 *  `edit n/John Doe p/91234567 e/johntan@gmail.com` Edits the phone number and email address of the person named `John Doe` to be `91234567` and `johntan@gmail.com` respectively.
+*  `edit n/Alice Tan p/+1 (555) 123-4567` Edits the phone number of `Alice Tan` to be `+1 (555) 123-4567`.
 *  `edit n/John Doe n/Jane Doe t/` Edits the name of `John Doe` to be `Jane Doe` and clears all existing tags.
 
 ![edit message](images\editMessage.jpg)
@@ -341,9 +354,10 @@ Examples:
 
 Assigns a client meeting to a person at a given date and time, with an optional description.
 
-Format: `book d/DATETIME c/CLIENT_NAME n/PERSON_NAME [desc/DESCRIPTION]`
+Format: `book dt/DATETIME c/CLIENT_NAME n/PERSON_NAME [desc/DESCRIPTION]`
 
 * Name of person provided must be in the current contact list.
+* Client name can contain letters, spaces, apostrophes, hyphens, periods, and slashes. e.g. `s/o` (son of), `d/o` (daughter of).
 * Datetime must be in `YYYY-MM-DD HH:MM` format in 24-hour notation.
 
 <div markdown="span" class="alert alert-info">:information_source: **Time Format:**
@@ -360,8 +374,9 @@ Dates must be valid calendar dates. Invalid dates like 2026-02-31 will be reject
 
 Examples:
 
-* `book d/2025-09-20 10:30 c/Madam Chen n/Bob Lee` will assign a booking on 20th September 2025 10.30am to Bob Lee. The client will be Madam Chen.
-* `book d/2025-10-18 14:00 c/Mr Lim n/Alice Tan desc/first consultation` will assign a booking on 18th October 2025 2pm to Alice Tan. The client will be Mr Lim and the description is "first consultation". <br>
+* `book dt/2025-09-20 10:30 c/Madam Chen n/Bob Lee` will assign a booking on 20th September 2025 10.30am to Bob Lee. The client will be Madam Chen.
+* `book dt/2025-10-18 14:00 c/Mr Lim n/Alice Tan desc/first consultation` will assign a booking on 18th October 2025 2pm to Alice Tan. The client will be Mr Lim and the description is "first consultation".
+* `book dt/2025-11-15 15:00 c/Raj s/o Kumar n/Abhijay s/o Abhi desc/follow-up` will assign a booking on 15th November 2025 3pm to Abhijay s/o Abhi. The client Raj s/o Kumar (with slash for "son of") and the description is "follow-up". <br>
   ![book messsage](images\bookMessage.jpg)
   *Figure 9: Success message after creating a new booking*
 
@@ -425,6 +440,17 @@ Furthermore, certain edits can cause the FirstImpressions to behave in unexpecte
 **Q**: What should I do if the application crashes or won't start?<br>
 **A**: First, ensure Java 17+ is properly installed. If the problem persists, try deleting the `preferences.json` file and restarting the application. If data corruption is suspected, restore from a backup of your `addressbook.json` file.
 
+**Q**: What phone number formats are supported?<br>
+**A**: Phone numbers are very flexible in FirstImpressions! You can use any format including:
+- Plain numbers: `98765432`
+- International format: `+65 9123 4567`
+- With parentheses and hyphens: `(123) 456-7890`
+- With extensions: `123-456 ext. 789`
+- Mixed format: `+1 (555) 123-4567`
+
+The only restriction is that phone numbers cannot be empty or contain only whitespace.
+If you do want an empty phone number, set the phone number to "-"!
+
 --------------------------------------------------------------------------------------------------------------------
 
 ## Known issues
@@ -445,5 +471,5 @@ Action | Format, Examples
 **Find** | `find n/NAME` or `find t/TAG1 t/TAG2...` or `find d/DATE1 d/DATE2...`<br> e.g., `find n/John` or `find d/2025-08-18`
 **Delete** | `delete n/PERSON_NAME [t/TAG]…​ [b/BOOKING_INDEX]…​`<br> e.g., `delete n/Alex Yeoh` or `delete n/Alex t/vipHandler` or `delete n/Alex Yeoh b/1`
 **Clear** | `clear f/`
-**Book** | `book d/DATETIME c/CLIENT_NAME n/PERSON_NAME [desc/DESCRIPTION]` <br> e.g., `book d/2025-09-18 14:00 c/Mr Lim n/Alice Tan desc/first consultation`
+**Book** | `book dt/DATETIME c/CLIENT_NAME n/PERSON_NAME [desc/DESCRIPTION]` <br> e.g., `book dt/2025-09-18 14:00 c/Mr Lim n/Alice Tan desc/first consultation`
 **Exit** | `exit`

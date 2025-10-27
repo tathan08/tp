@@ -38,13 +38,11 @@ public class BookCommandParser implements Parser<BookCommand> {
 
         // Parse datetime
         String datetimeStr = argMultimap.getValue(PREFIX_DATETIME).get().trim();
+        String validationError = Booking.validateDateTime(datetimeStr);
+        if (validationError != null) {
+            throw new ParseException(validationError);
+        }
         LocalDateTime datetime = Booking.parseDateTime(datetimeStr);
-        if (datetime == null) {
-            throw new ParseException(Booking.MESSAGE_CONSTRAINTS_DATETIME);
-        }
-        if (!Booking.isFutureDateTime(datetime)) {
-            throw new ParseException(Booking.MESSAGE_CONSTRAINTS_DATETIME);
-        }
 
         // Parse client name
         String clientName = argMultimap.getValue(PREFIX_CLIENT).get().trim();

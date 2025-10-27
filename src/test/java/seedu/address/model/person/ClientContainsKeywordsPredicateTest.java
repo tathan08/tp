@@ -1,14 +1,14 @@
 package seedu.address.model.person;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 
@@ -17,237 +17,129 @@ import seedu.address.testutil.PersonBuilder;
 
 public class ClientContainsKeywordsPredicateTest {
 
-    @Test
-    public void equals() {
-        List<String> firstKeywordList = Collections.singletonList("first");
-        List<String> secondKeywordList = Arrays.asList("first", "second");
-
-        ClientContainsKeywordsPredicate firstPredicate = new ClientContainsKeywordsPredicate(
-                                        ClientContainsKeywordsPredicate.SearchType.NAME, firstKeywordList);
-        ClientContainsKeywordsPredicate secondPredicate = new ClientContainsKeywordsPredicate(
-                                        ClientContainsKeywordsPredicate.SearchType.NAME, secondKeywordList);
-
-        // same object -> returns true
-        assertTrue(firstPredicate.equals(firstPredicate));
-
-        // same values -> returns true
-        ClientContainsKeywordsPredicate firstPredicateCopy = new ClientContainsKeywordsPredicate(
-                                        ClientContainsKeywordsPredicate.SearchType.NAME, firstKeywordList);
-        assertTrue(firstPredicate.equals(firstPredicateCopy));
-
-        // different types -> returns false
-        assertFalse(firstPredicate.equals(1));
-
-        // null -> returns false
-        assertFalse(firstPredicate.equals(null));
-
-        // different keyword list -> returns false
-        assertFalse(firstPredicate.equals(secondPredicate));
-
-        // different search type -> returns false
-        ClientContainsKeywordsPredicate tagPredicate = new ClientContainsKeywordsPredicate(
-                                        ClientContainsKeywordsPredicate.SearchType.TAG, firstKeywordList);
-        assertFalse(firstPredicate.equals(tagPredicate));
+    // Helper to build predicate from field→keywords map
+    private ClientContainsKeywordsPredicate buildPredicate(Map<String, List<String>> criteria) {
+        return new ClientContainsKeywordsPredicate(criteria);
     }
 
     @Test
-    public void constructor_nullType_throwsAssertionError() {
-        List<String> keywords = List.of("Alice");
-        AssertionError thrown = assertThrows(AssertionError.class, () ->
-                new ClientContainsKeywordsPredicate(null, keywords));
-        assertEquals("SearchType must not be null", thrown.getMessage());
+    public void equals_sameAndDifferentPredicate() {
+        Map<String, List<String>> map1 = new HashMap<>();
+        map1.put("name", List.of("Alice"));
+        Map<String, List<String>> map2 = new HashMap<>();
+        map2.put("name", List.of("Bob"));
+
+        ClientContainsKeywordsPredicate pred1 = new ClientContainsKeywordsPredicate(map1);
+        ClientContainsKeywordsPredicate pred2 = new ClientContainsKeywordsPredicate(map2);
+
+        // same object
+        assertTrue(pred1.equals(pred1));
+
+        // same content → use the same map instance to avoid subtle differences
+        assertTrue(pred1.equals(new ClientContainsKeywordsPredicate(map1)));
+
+        // different content
+        assertFalse(pred1.equals(pred2));
+
+        // null and different type
+        assertFalse(pred1.equals(null));
+        assertFalse(pred1.equals("string"));
     }
 
-    // ===============================
-    // NAME TESTS
-    // ===============================
+    @Test
+    public void test_emptyMap_matchesAll() {
+        ClientContainsKeywordsPredicate predicate = buildPredicate(Collections.emptyMap());
+        assertTrue(predicate.test(new PersonBuilder().withName("Alice").build()));
+        assertTrue(predicate.test(new PersonBuilder().withName("Bob").build()));
+    }
 
     @Test
-    public void test_nameContainsKeywords_returnsTrue() {
-        // Single keyword: should match any name containing "Alice"
-        ClientContainsKeywordsPredicate predicate = new ClientContainsKeywordsPredicate(
-                                        ClientContainsKeywordsPredicate.SearchType.NAME,
-                                        Collections.singletonList("Alice"));
+    public void test_nameMatching() {
+        Map<String, List<String>> map = new HashMap<>();
+        map.put("name", List.of("Alice"));
+        ClientContainsKeywordsPredicate predicate = buildPredicate(map);
+
+        // matches
         assertTrue(predicate.test(new PersonBuilder().withName("Alice Bob").build()));
         assertTrue(predicate.test(new PersonBuilder().withName("Bob Alice").build()));
-        assertTrue(predicate.test(new PersonBuilder().withName("Alice Lim").build()));
 
-        // Combined keywords: "Alice Bob" should match names containing that
-        // full phrase
-        predicate = new ClientContainsKeywordsPredicate(ClientContainsKeywordsPredicate.SearchType.NAME,
-                                        Arrays.asList("Alice", "Bob"));
-        assertTrue(predicate.test(new PersonBuilder().withName("Alice Bob").build()));
-
-        // "Alice Bob" should NOT match "Bob Alice" anymore, since we now join
-        // keywords into one phrase
-        assertFalse(predicate.test(new PersonBuilder().withName("Bob Alice").build()));
-
-        // Combined keywords "Bob Carol" should match names containing that full
-        // phrase, case-insensitive
-        predicate = new ClientContainsKeywordsPredicate(ClientContainsKeywordsPredicate.SearchType.NAME,
-                                        Arrays.asList("Bob", "Carol"));
-        assertTrue(predicate.test(new PersonBuilder().withName("Mr Bob Carol").build()));
-
-        // Case-insensitivity check
-        predicate = new ClientContainsKeywordsPredicate(ClientContainsKeywordsPredicate.SearchType.NAME,
-                                        Arrays.asList("aLIce", "bOB"));
-        assertTrue(predicate.test(new PersonBuilder().withName("Alice Bob").build()));
+        // does not match
+        assertFalse(predicate.test(new PersonBuilder().withName("Charlie").build()));
     }
 
     @Test
-    public void test_nameDoesNotContainKeywords_returnsFalse() {
-        // Empty keyword → all persons should pass
-        ClientContainsKeywordsPredicate predicate = new ClientContainsKeywordsPredicate(
-                                        ClientContainsKeywordsPredicate.SearchType.NAME, Collections.emptyList());
-        assertTrue(predicate.test(new PersonBuilder().withName("Alice").build()));
+    public void test_tagMatching() {
+        Map<String, List<String>> map = new HashMap<>();
+        map.put("tag", List.of("vip"));
+        ClientContainsKeywordsPredicate predicate = buildPredicate(map);
 
-        // Non-matching keyword → false
-        predicate = new ClientContainsKeywordsPredicate(ClientContainsKeywordsPredicate.SearchType.NAME,
-                                        Arrays.asList("Carol"));
-        assertFalse(predicate.test(new PersonBuilder().withName("Alice Bob").build()));
-
-        // Combined keywords that don't appear together → false
-        predicate = new ClientContainsKeywordsPredicate(ClientContainsKeywordsPredicate.SearchType.NAME,
-                                        Arrays.asList("Alice", "Carol"));
-        assertFalse(predicate.test(new PersonBuilder().withName("Alice Bob").build()));
-
-        // Partial match still counts → true
-        predicate = new ClientContainsKeywordsPredicate(ClientContainsKeywordsPredicate.SearchType.NAME,
-                                        Arrays.asList("carol"));
-        assertTrue(predicate.test(new PersonBuilder().withName("Carolyn").build()));
-
-        predicate = new ClientContainsKeywordsPredicate(
-                                        ClientContainsKeywordsPredicate.SearchType.NAME, List.of("Alice"));
-        Person person = new PersonBuilder().withName("Bob").build();
-        assertFalse(predicate.test(person)); // covers false branch
-    }
-
-    @Test
-    public void constructor_nullKeywords_throwsAssertionError() {
-        AssertionError thrown = assertThrows(AssertionError.class, () -> new ClientContainsKeywordsPredicate(
-                                                                        ClientContainsKeywordsPredicate.SearchType.NAME,
-                                                                        null));
-        assertEquals("Keywords list must not be null", thrown.getMessage());
-    }
-
-    @Test
-    public void test_invalidSearchType_throwsException() {
-        // Use reflection to bypass the enum and simulate an invalid state
-        ClientContainsKeywordsPredicate predicate = new ClientContainsKeywordsPredicate(
-                                        ClientContainsKeywordsPredicate.SearchType.NAME, List.of("Alice")) {
-            @Override
-            public boolean test(Person person) {
-                throw new IllegalStateException("Unexpected Value:" + "INVALID");
-            }
-        };
-
-        assertThrows(IllegalStateException.class, () -> predicate.test(new PersonBuilder().withName("Alice").build()));
-    }
-
-    @Test
-    public void test_assertions_validInputs() {
-        // Valid case just to hit the asserts
-        ClientContainsKeywordsPredicate predicate = new ClientContainsKeywordsPredicate(
-                                        ClientContainsKeywordsPredicate.SearchType.NAME, List.of("Alice"));
-        assertTrue(predicate.test(new PersonBuilder().withName("Alice Bob").build()));
-    }
-
-    // ===============================
-    // TAG TESTS
-    // ===============================
-
-    @Test
-    public void test_tagContainsKeywords_returnsTrue() {
-        ClientContainsKeywordsPredicate predicate = new ClientContainsKeywordsPredicate(
-                                        ClientContainsKeywordsPredicate.SearchType.TAG,
-                                        Collections.singletonList("vip"));
-        assertTrue(predicate.test(new PersonBuilder().withTags("vip", "friendly").build()));
-
-        predicate = new ClientContainsKeywordsPredicate(ClientContainsKeywordsPredicate.SearchType.TAG,
-                                        Arrays.asList("vip", "regular"));
-        assertTrue(predicate.test(new PersonBuilder().withTags("regular", "active").build()));
-
-        predicate = new ClientContainsKeywordsPredicate(ClientContainsKeywordsPredicate.SearchType.TAG,
-                                        Arrays.asList("ViP"));
-        assertTrue(predicate.test(new PersonBuilder().withTags("vip").build())); // case-insensitive
-    }
-
-    @Test
-    public void test_tagDoesNotContainKeywords_returnsFalse() {
-        ClientContainsKeywordsPredicate predicate = new ClientContainsKeywordsPredicate(
-                                        ClientContainsKeywordsPredicate.SearchType.TAG,
-                                        Collections.singletonList("vip"));
+        assertTrue(predicate.test(new PersonBuilder().withTags("vip", "friend").build()));
         assertFalse(predicate.test(new PersonBuilder().withTags("friend").build()));
-
-        predicate = new ClientContainsKeywordsPredicate(ClientContainsKeywordsPredicate.SearchType.TAG,
-                                        Collections.emptyList());
-        assertFalse(predicate.test(new PersonBuilder().withTags("vip").build()));
     }
 
     @Test
-    public void test_tagSearch_matchesCorrectly() {
-        ClientContainsKeywordsPredicate predicate = new ClientContainsKeywordsPredicate(
-                                        ClientContainsKeywordsPredicate.SearchType.TAG, List.of("friends"));
-        Person person = new PersonBuilder().withTags("friends", "colleague").build();
-        assertTrue(predicate.test(person)); // covers TAG branch
-    }
+    public void test_dateMatching() {
+        Map<String, List<String>> map = new HashMap<>();
+        map.put("date", List.of("2025-10-15"));
+        ClientContainsKeywordsPredicate predicate = buildPredicate(map);
 
-    @Test
-    public void test_tagSearch_doesNotMatch() {
-        ClientContainsKeywordsPredicate predicate = new ClientContainsKeywordsPredicate(
-                                        ClientContainsKeywordsPredicate.SearchType.TAG, List.of("family"));
-        Person person = new PersonBuilder().withTags("friends", "colleague").build();
-        assertFalse(predicate.test(person)); // false branch for TAG path
-    }
+        // Person with matching booking
+        PersonBuilder personWithBooking = new PersonBuilder().withBookings(Arrays.asList(new Booking("100",
+                                        "Test Client", LocalDateTime.of(2025, 10, 15, 10, 0), "desc")));
+        assertTrue(predicate.test(personWithBooking.build()));
 
-    // ===============================
-    // DATE TESTS
-    // ===============================
+        // Person with different booking date
+        PersonBuilder personOtherDate = new PersonBuilder().withBookings(Arrays.asList(new Booking("101", "Test Client",
+                                        LocalDateTime.of(2025, 11, 20, 10, 0), "desc")));
+        assertFalse(predicate.test(personOtherDate.build()));
 
-    @Test
-    public void test_dateContainsKeywords_returnsTrue() {
-        // Assuming booking date stored as "2025-10-15T10:00" in your Booking
-        // class
-        ClientContainsKeywordsPredicate predicate = new ClientContainsKeywordsPredicate(
-                                        ClientContainsKeywordsPredicate.SearchType.DATE,
-                                        Collections.singletonList("2025-10-15"));
-        assertTrue(predicate.test(new PersonBuilder().withBookings(Arrays.asList(new Booking("100", "Test Client",
-                                        LocalDateTime.of(2025, 10, 15, 10, 0), "Test booking"))).build()));
-
-        // multiple possible dates
-        predicate = new ClientContainsKeywordsPredicate(ClientContainsKeywordsPredicate.SearchType.DATE,
-                                        Arrays.asList("2025-10-15", "2025-11-01"));
-        assertTrue(predicate.test(new PersonBuilder().withBookings(Arrays.asList(new Booking("101", "Test Client",
-                                        LocalDateTime.of(2025, 10, 15, 10, 0), "Test booking"))).build()));
-    }
-
-    @Test
-    public void test_dateDoesNotContainKeywords_returnsFalse() {
         // Person with no bookings
-        ClientContainsKeywordsPredicate predicate = new ClientContainsKeywordsPredicate(
-                                        ClientContainsKeywordsPredicate.SearchType.DATE,
-                                        Collections.singletonList("2025-10-15"));
-        assertFalse(predicate.test(new PersonBuilder().build()));
-
-        // Person with booking on different date
-        predicate = new ClientContainsKeywordsPredicate(ClientContainsKeywordsPredicate.SearchType.DATE,
-                                        Collections.singletonList("2025-10-15"));
-        assertFalse(predicate.test(new PersonBuilder().withBookings(Arrays.asList(new Booking("102", "Test Client",
-                                        LocalDateTime.of(2025, 11, 20, 10, 0), "Different date"))).build()));
-
-        predicate = new ClientContainsKeywordsPredicate(ClientContainsKeywordsPredicate.SearchType.DATE,
-                                        Collections.emptyList());
         assertFalse(predicate.test(new PersonBuilder().build()));
     }
 
     @Test
-    public void toStringMethod() {
-        List<String> keywords = List.of("keyword1", "keyword2");
-        ClientContainsKeywordsPredicate predicate = new ClientContainsKeywordsPredicate(
-                                        ClientContainsKeywordsPredicate.SearchType.NAME, keywords);
+    public void test_orAcrossFields() {
+        Map<String, List<String>> map = new HashMap<>();
+        map.put("name", List.of("Alice"));
+        map.put("tag", List.of("friend"));
+        ClientContainsKeywordsPredicate predicate = buildPredicate(map);
 
-        String expected = ClientContainsKeywordsPredicate.class.getCanonicalName() + "{searchType=NAME, keywords="
-                                        + keywords + "}";
-        assertEquals(expected, predicate.toString());
+        // Should match if name matches
+        assertTrue(predicate.test(new PersonBuilder().withName("Alice").withTags("vip").build()));
+
+        // Should match if tag matches
+        assertTrue(predicate.test(new PersonBuilder().withName("Bob").withTags("friend").build()));
+
+        // Should match if both match
+        assertTrue(predicate.test(new PersonBuilder().withName("Alice").withTags("friend").build()));
+
+        // Should not match if neither match
+        assertFalse(predicate.test(new PersonBuilder().withName("Charlie").withTags("vip").build()));
+    }
+
+    @Test
+    public void test_emptyKeywordListWildcard() {
+        Map<String, List<String>> map = new HashMap<>();
+        map.put("name", List.of()); // wildcard
+        map.put("tag", List.of()); // wildcard
+        ClientContainsKeywordsPredicate predicate = buildPredicate(map);
+
+        // Everything should match
+        assertTrue(predicate.test(new PersonBuilder().withName("Alice").withTags("vip").build()));
+        assertTrue(predicate.test(new PersonBuilder().withName("Bob").withTags("friend").build()));
+    }
+
+    @Test
+    public void test_toStringContainsAllCriteria() {
+        Map<String, List<String>> map = new HashMap<>();
+        map.put("name", List.of("Alice"));
+        map.put("tag", List.of("friend"));
+        ClientContainsKeywordsPredicate predicate = buildPredicate(map);
+
+        String str = predicate.toString();
+        assertTrue(str.contains("name"));
+        assertTrue(str.contains("Alice"));
+        assertTrue(str.contains("tag"));
+        assertTrue(str.contains("friend"));
     }
 }

@@ -11,6 +11,7 @@ import static seedu.address.logic.commands.CommandTestUtil.VALID_PHONE_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_HUSBAND;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
+import static seedu.address.testutil.TypicalPersons.ABHIJAY;
 import static seedu.address.testutil.TypicalPersons.ALICE;
 import static seedu.address.testutil.TypicalPersons.BENSON;
 import static seedu.address.testutil.TypicalPersons.GEORGE;
@@ -168,6 +169,31 @@ public class EditCommandTest {
 
         assertEquals(personWithBookings.getBookings().size(), updatedPerson.getBookings().size());
         assertEquals(personWithBookings.getBookings(), updatedPerson.getBookings());
+    }
+
+    @Test
+    public void execute_editPersonWithSlash_success() {
+        // Edit a person with slash in name
+        Person personWithSlash = ABHIJAY;
+        Person editedPerson = new PersonBuilder(personWithSlash)
+                .withPhone("98888888")
+                .withEmail("newabhijay@example.com")
+                .build();
+
+        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder()
+                .withPhone("98888888")
+                .withEmail("newabhijay@example.com")
+                .build();
+
+        EditCommand editCommand = new EditCommand(personWithSlash.getName(), descriptor);
+
+        String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_PERSON_SUCCESS,
+                seedu.address.logic.Messages.format(editedPerson));
+
+        Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
+        expectedModel.setPerson(personWithSlash, editedPerson);
+
+        assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
     }
 
     @Test

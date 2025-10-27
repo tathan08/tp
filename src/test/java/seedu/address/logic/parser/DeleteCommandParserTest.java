@@ -66,9 +66,16 @@ public class DeleteCommandParserTest {
 
     @Test
     public void parse_deleteEmptyTag_throwsParseException() {
-        String input = "delete n/Alex Yeoh t/ ";
+        String input = "delete n/Alex Yeoh t/";
         assertParseFailure(parser, input, String.format(MESSAGE_INVALID_COMMAND_FORMAT,
                 DeleteCommand.MESSAGE_DELETE_TAG_USAGE));
+    }
+
+    @Test
+    public void parse_tagWithSpace_throwsParseException() {
+        String input = "delete n/Alex Yeoh t/ tag 1";
+        assertParseFailure(parser, input, String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                DeleteCommand.MESSAGE_DELETE_TAG_NO_SPACES));
     }
 
     //Tests for parsing bookings
