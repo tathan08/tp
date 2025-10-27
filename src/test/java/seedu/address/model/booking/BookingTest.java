@@ -3,6 +3,7 @@ package seedu.address.model.booking;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -161,6 +162,108 @@ public class BookingTest {
 
         Booking booking = new Booking(clientName, datetime, description);
         assertEquals(clientName, booking.getClientName());
+    }
+
+    @Test
+    public void isValidDescription() {
+        // invalid descriptions
+        assertFalse(Booking.isValidDescription(null)); // null
+        assertFalse(Booking.isValidDescription("")); // empty string
+        assertFalse(Booking.isValidDescription("   ")); // only spaces
+        assertFalse(Booking.isValidDescription("a".repeat(501))); // too long (501 characters)
+
+        // valid descriptions
+        assertTrue(Booking.isValidDescription("Consultation")); // normal description
+        assertTrue(Booking.isValidDescription("a")); // minimum length (1 char)
+        assertTrue(Booking.isValidDescription("a".repeat(500))); // maximum length (500 chars)
+        assertTrue(Booking.isValidDescription("Follow-up appointment with client")); // long description
+    }
+
+    @Test
+    public void validateDateTime_edgeCase_invalidMonthName() {
+        // Test that invalid month (e.g., month > 12) returns proper error message
+        String error = Booking.validateDateTime("2026-13-01 10:00");
+        assertNotNull(error, "Invalid month should return error message");
+        assertTrue(error.contains("does not exist"), "Should contain 'does not exist'");
+    }
+
+    @Test
+    public void validateDateTime_edgeCase_invalidDateExtraction() {
+        // Test date that matches format but cannot be parsed for day extraction
+        String error = Booking.validateDateTime("2026-02-31 10:00");
+        assertNotNull(error, "Invalid date should return error message");
+        assertTrue(error.contains("does not exist"), "Should contain 'does not exist'");
+    }
+
+    @Test
+    public void gettersTest() {
+        String clientName = "John Doe";
+        LocalDateTime datetime = LocalDateTime.of(2026, 12, 25, 10, 0);
+        String description = "Consultation";
+
+        Booking booking = new Booking("999", clientName, datetime, description);
+
+        assertEquals("999", booking.getId());
+        assertEquals(clientName, booking.getClientName());
+        assertEquals(datetime, booking.getDateTime());
+        assertEquals(description, booking.getDescription());
+        assertEquals("2026-12-25 10:00", booking.getDateTimeString());
+    }
+
+    @Test
+    public void conflictsWithTest() {
+        LocalDateTime datetime1 = LocalDateTime.of(2026, 12, 25, 10, 0);
+        LocalDateTime datetime2 = LocalDateTime.of(2026, 12, 25, 14, 0);
+
+        Booking booking1 = new Booking("Client1", datetime1, "Description1");
+        Booking booking2 = new Booking("Client2", datetime1, "Description2");
+        Booking booking3 = new Booking("Client3", datetime2, "Description3");
+
+        assertTrue(booking1.conflictsWith(booking2), "Should conflict at same time");
+        assertTrue(booking2.conflictsWith(booking1), "Should conflict at same time");
+        assertFalse(booking1.conflictsWith(booking3), "Should not conflict at different times");
+        assertFalse(booking3.conflictsWith(booking1), "Should not conflict at different times");
+    }
+
+    @Test
+    public void equalsTest() {
+        LocalDateTime datetime1 = LocalDateTime.of(2026, 12, 25, 10, 0);
+        LocalDateTime datetime2 = LocalDateTime.of(2026, 12, 25, 14, 0);
+
+        Booking booking1 = new Booking("1", "Client1", datetime1, "Description1");
+        Booking booking2 = new Booking("1", "Client1", datetime1, "Description1");
+        Booking booking3 = new Booking("2", "Client1", datetime1, "Description1");
+        Booking booking4 = new Booking("1", "Client2", datetime1, "Description1");
+
+        assertEquals(booking1, booking2); // same values
+        assertTrue(booking1.equals(booking1)); // same object
+        assertFalse(booking1.equals(null)); // null
+        assertFalse(booking1.equals("not a booking")); // different type
+        assertFalse(booking1.equals(booking3)); // different ID
+        assertFalse(booking1.equals(booking4)); // different client name
+    }
+
+    @Test
+    public void hashCodeTest() {
+        LocalDateTime datetime = LocalDateTime.of(2026, 12, 25, 10, 0);
+        Booking booking1 = new Booking("1", "Client1", datetime, "Description1");
+        Booking booking2 = new Booking("1", "Client1", datetime, "Description1");
+        Booking booking3 = new Booking("2", "Client1", datetime, "Description1");
+
+        assertEquals(booking1.hashCode(), booking2.hashCode()); // same values should have same hash
+        assertNotEquals(booking1.hashCode(), booking3.hashCode()); // different ID should have different hash
+    }
+
+    @Test
+    public void toStringTest() {
+        Booking booking = new Booking("5", "Raj s/o Kumar", 
+            LocalDateTime.of(2026, 12, 25, 10, 0), "Follow-up consultation");
+        
+        String result = booking.toString();
+        assertTrue(result.contains("5"));
+        assertTrue(result.contains("Raj s/o Kumar"));
+        assertTrue(result.contains("2026-12-25 10:00"));
+        assertTrue(result.contains("Follow-up consultation"));
     }
 }
 
