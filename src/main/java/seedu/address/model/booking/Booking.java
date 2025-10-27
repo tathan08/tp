@@ -17,9 +17,6 @@ public class Booking {
     public static final String MESSAGE_CONSTRAINTS_DATETIME =
             "Invalid date/time format or value!\n"
             + "Please use the format: YYYY-MM-DD HH:MM (e.g., 2024-12-25 14:30)";
-    public static final String MESSAGE_CONSTRAINTS_PAST_DATETIME =
-            "Booking date and time must be in the future.\n"
-            + "You cannot create bookings for past dates.";
     public static final String MESSAGE_CONSTRAINTS_CLIENT =
             "Client name is invalid!\n"
             + "Requirements:\n"

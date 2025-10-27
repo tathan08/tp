@@ -45,8 +45,8 @@ public class BookCommandParser implements Parser<BookCommand> {
         }
         LocalDateTime datetime = Booking.parseDateTime(datetimeStr);
 
-        // Parse client name
-        String clientName = argMultimap.getValue(PREFIX_CLIENT).get().trim();
+        // Parse client name - trim and normalize whitespace
+        String clientName = argMultimap.getValue(PREFIX_CLIENT).get().trim().replaceAll("\\s+", " ");
         if (!Booking.isValidClientName(clientName)) {
             throw new ParseException(Booking.MESSAGE_CONSTRAINTS_CLIENT);
         }
