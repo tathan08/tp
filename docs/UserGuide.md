@@ -64,13 +64,13 @@ With FirstImpressions, no client request is too hard to handle as our system is 
 ### Prerequisites
 
 1. **Ensure you have Java 17 or above installed in your Computer.**
-   
+
    <div markdown="span" class="alert alert-info">:information_source: **Java Installation Guide:**
-   
+
    **Windows users:** Download Java 17 from [Oracle's official website](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html) or use [OpenJDK 17](https://adoptium.net/temurin/releases/?version=17).
-   
+
    **Mac users:** Ensure you have the precise JDK version prescribed [here](https://se-education.org/guides/tutorials/javaInstallationMac.html).
-   
+
    **Linux users:** Install OpenJDK 17 using your package manager:
    - Ubuntu/Debian: `sudo apt install openjdk-17-jdk`
    - CentOS/RHEL: `sudo yum install java-17-openjdk-devel`
@@ -78,7 +78,7 @@ With FirstImpressions, no client request is too hard to handle as our system is 
    </div>
 
 2. **Verify Java Installation:** <span id="verify-java"></span>
-   Open a command terminal as follows: 
+   Open a command terminal as follows:
    - On Windows, press the Windows key on your keyboard, and type in cmd
    - On Mac, press the Command + Space keys at the same time, and type in terminal
    - On Linux, press the Control + Alt + T keys at the same time.
@@ -105,7 +105,7 @@ Do not move the .jar file after data has been created. The application stores da
 </div>
 
 3. **Run the application:**
-   
+
    - Open your command terminal, [as follows](#verify-java)
    - Navigate to the folder: `cd /path/to/your/folder`
    - Run: `java -jar firstimpressions.jar`
@@ -163,7 +163,7 @@ Always backup your `addressbook.json` file before making major changes. Data los
 
 Shows a short summary of available commands, with a link to access the User Guide.
 
-![help message](images/helpMessage.jpg)
+![help message](images/helpMessage.jpg) <br>
 *Figure 1: Help window showing available commands and User Guide link*
 
 Format: `help`
@@ -212,7 +212,7 @@ Examples:
 * `add n/Charlie Wong p/(123) 456-7890` <br> will add a Person called `Charlie Wong` with phone number `(123) 456-7890` to the contact list.
 * `add n/Germaine` <br> will add a Person called `Germaine` to the contact list.
 
-![add message](images\addMessage.jpg)
+![add message](images\addMessage.jpg) <br>
 *Figure 2: Success message after adding a new person to the contact list*
 
 ### Adding a tag to an existing person: `add`
@@ -231,7 +231,7 @@ Examples:
 
 * `add n/Alice Tan t/sales t/manager` <br> will add tags `sales` and `manager` to the Person called `Alice Tan`.
 
-![add tags](images\addTags.png)
+![add tags](images\addTags.png) <br>
 *Figure 3: Success message after adding tags to an existing person*
 
 ### Listing all persons : `list`
@@ -240,7 +240,7 @@ Shows the list of all persons in the contact list.
 
 Format: `list`
 
-![list message](images\listMessage.jpg)
+![list message](images\listMessage.jpg) <br>
 *Figure 4: Contact list showing all persons in the address book*
 
 ### Editing a person : `edit`
@@ -268,33 +268,37 @@ Examples:
 *  `edit n/Alice Tan p/+1 (555) 123-4567` Edits the phone number of `Alice Tan` to be `+1 (555) 123-4567`.
 *  `edit n/John Doe n/Jane Doe t/` Edits the name of `John Doe` to be `Jane Doe` and clears all existing tags.
 
-![edit message](images\editMessage.jpg)
+![edit message](images\editMessage.jpg) <br>
 *Figure 5: Success message after editing a person's details*
 
 ### Locating team members by name: `find`
 
-Search and lists all people whose name contains the given parameter. <br>
-If given a tag or date, will search all tags and bookings to list all people with an exact match.
+Search and lists all people who contain the given parameter(s). <br>
 
 Format: <br>
-`find n/NAME` <br>
-`find t/TAG1 TAG2...` <br>
-`find d/DATE1 DATE2...` <br>
+`find n/NAME1 n/NAME2...` <br>
+`find t/TAG1 t/TAG2...` <br>
+`find d/DATE1 d/DATE2...` <br>
 
-* Only one field is allowed, subsequent fields will be ignored. e.g. `find n/Hans t/teamLead` will find a person named `Hans t/teamLead`
-* For "t/" and "d/", multiple parameters are allowed, all tags requested and all bookings with the requested dates will be listed. e.g. `find t/teamLead vipHandler` or `find d/2026-11-15 2026-12-25` will list all team member's that contain the requested parameters
+<div markdown="span" class="alert alert-warning">:exclamation: **Warning:**
+Each search parameter must preceded by its respective delimeter.
+
+If multiple tags are being searched for, each paramter must have its own `t/`  <br>
+`find t/teamLead t/friends` displays all persons with the `teamLead` tag OR the `friends` tag
+</div>
+
+* Multiple fields are allowed, and will display all matches to each given parameter. e.g. `find n/Hans t/teamLead` will list every person whose name contains `Hans` AND tags contain `teamLead`.
+* Searching within a field with an empty parameter (e.g. `find n/`, `find t/` or `find d/`) will list all team members within FirstImpressions
 * The search for names and tags are case-insensitive. e.g `hans` will match `Hans`
 * Partial matches will be shown e.g. `find n/Ali` will find a person named `Alice`
 * Date must be in `YYYY-MM-DD` format.
 
-<div markdown="span" class="alert alert-warning">:exclamation: **Warning:**
-For "n/", only one parameter is allowed, subsequent parameters will be considered as part of the name. e.g. `find n/Ali n/Bob` will search for `Ali n/Bob`
-</div>
-
 Examples:
-* `find n/John` returns `john` and `John Doe`
+* `find n/John` returns `john` and `John Doe` <br>
 * `find d/2026-08-18` returns `Alex Yeoh`, `David Li`<br>
-  ![result for 'find alex david'](images/findAlexDavidResult.jpg)
+* `find t/` returns all team members in FirstImpressions <br>
+*
+  ![result for 'find alex david'](images/findAlexDavidResult.jpg) <br>
   *Figure 6: Search results showing team members matching the search criteria*
 
 ### Deleting a person : `delete`
@@ -321,7 +325,7 @@ You cannot use both `t/` (tags) and `b/` (bookings) in the same delete command. 
 Examples:
 * `delete n/Alex t/vipHandler` will remove the tag `vipHandler` from `Alex` in the contact list.
 * `delete n/Alex Yeoh b/1` will remove the first booking from `Alex Yeoh` in the contact list.
-* `delete n/Alex Yeoh` will remove `Alex Yeoh` from the contact list entirely. <br> 
+* `delete n/Alex Yeoh` will remove `Alex Yeoh` from the contact list entirely. <br>
   ![delete message](images\deleteMessage.jpg)
   *Figure 7: Success message after deleting a person from the contact list*
 
@@ -347,7 +351,7 @@ Examples:
 * `clear` - Shows a warning message without deleting any data
 * `clear f/` - Clears all entries from the contact list
 
-![clear message](images\clearMessage.jpg)
+![clear message](images\clearMessage.jpg) <br>
 *Figure 8: Success message after clearing all entries from the contact list*
 
 ### Assigning a booking : `book`
@@ -377,7 +381,7 @@ Examples:
 * `book dt/2025-09-20 10:30 c/Madam Chen n/Bob Lee` will assign a booking on 20th September 2025 10.30am to Bob Lee. The client will be Madam Chen.
 * `book dt/2025-10-18 14:00 c/Mr Lim n/Alice Tan desc/first consultation` will assign a booking on 18th October 2025 2pm to Alice Tan. The client will be Mr Lim and the description is "first consultation".
 * `book dt/2025-11-15 15:00 c/Raj s/o Kumar n/Abhijay s/o Abhi desc/follow-up` will assign a booking on 15th November 2025 3pm to Abhijay s/o Abhi. The client Raj s/o Kumar (with slash for "son of") and the description is "follow-up". <br>
-  ![book messsage](images\bookMessage.jpg)
+  ![book messsage](images\bookMessage.jpg) <br>
   *Figure 9: Success message after creating a new booking*
 
 <div markdown="span" class="alert alert-warning">:exclamation: **Warning:**
