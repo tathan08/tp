@@ -186,7 +186,7 @@ public class EditCommandTest {
         assertFalse(standardCommand.equals(null));
 
         // different types -> returns false
-        assertFalse(standardCommand.equals(new ClearCommand()));
+        assertFalse(standardCommand.equals(new ClearCommand(true)));
 
         // different name -> returns false
         assertFalse(standardCommand.equals(new EditCommand(new Name(VALID_NAME_BOB), DESC_AMY)));
