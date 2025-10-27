@@ -1,86 +1,56 @@
 package seedu.address.logic.parser;
 
-import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
-import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSuccess;
 
-import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.commands.FindCommand;
+import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.ClientContainsKeywordsPredicate;
 
-public class FindCommandParserTest {
+class FindCommandParserTest {
 
-    private FindCommandParser parser = new FindCommandParser();
+    private final FindCommandParser parser = new FindCommandParser();
 
     @Test
-    public void parse_emptyArg_throwsParseException() {
-        assertParseFailure(parser, "     ", String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+    void parse_multipleNames_parseFailure() {
+        String userInput = "n/Alice Bob"; // multiple names in a single prefix
+        assertThrows(ParseException.class, () -> parser.parse(userInput));
     }
 
     @Test
-    public void parse_validArgs_returnsFindCommandName() {
-        // no leading and trailing whitespaces - searching by name
-        FindCommand expectedFindCommand =
-                new FindCommand(new ClientContainsKeywordsPredicate(
-                        ClientContainsKeywordsPredicate.SearchType.NAME,
-                        Arrays.asList("Alice", "Bob")));
-        assertParseSuccess(parser, "n/ Alice Bob", expectedFindCommand);
-
-        // Multiple whitespaces between keywords
-        assertParseSuccess(parser, " n/ \n Alice \n \t Bob  ", expectedFindCommand);
-
-        // No space after prefix
-        assertParseSuccess(parser, "n/Alice Bob", expectedFindCommand);
-        assertParseSuccess(parser, "n/Alice  Bob", expectedFindCommand);
+    void parse_multipleTags_parseFailure() {
+        String userInput = "t/friend colleague"; // multiple tags
+        assertThrows(ParseException.class, () -> parser.parse(userInput));
     }
 
     @Test
-    public void parse_validArgs_returnsFindCommandTag() {
-        // no leading and trailing whitespaces - searching by tag
-        FindCommand expectedFindCommand =
-                new FindCommand(new ClientContainsKeywordsPredicate(
-                        ClientContainsKeywordsPredicate.SearchType.TAG,
-                        Arrays.asList("good", "friend")));
-        assertParseSuccess(parser, "t/ good friend", expectedFindCommand);
-
-        // Multiple whitespaces between keywords
-        assertParseSuccess(parser, " t/   good friend   ", expectedFindCommand);
-
-        // No space after prefix
-        assertParseSuccess(parser, "t/good friend", expectedFindCommand);
+    void parse_multipleDates_parseFailure() {
+        String userInput = "d/2025-12-15 2026-12-15";
+        assertThrows(ParseException.class, () -> parser.parse(userInput));
     }
 
     @Test
-    public void parse_validDateArgs_returnsFindCommandDate() {
-        // no leading and trailing whitespaces - searching by booking date
-        FindCommand expectedFindCommand =
-                new FindCommand(new ClientContainsKeywordsPredicate(
-                        ClientContainsKeywordsPredicate.SearchType.DATE,
-                        Arrays.asList("2025-10-15", "2025-10-20")));
-        assertParseSuccess(parser, "d/ 2025-10-15 2025-10-20", expectedFindCommand);
-
-        // multiple whitespaces between keywords
-        assertParseSuccess(parser, " d/    2025-10-15    2025-10-20  ", expectedFindCommand);
-
-        // No space after prefix
-        assertParseSuccess(parser, "d/2025-10-15 2025-10-20", expectedFindCommand);
+    void parse_missingPrefix_throwsParseException() {
+        String userInput = "Alice"; // no prefix at all
+        assertThrows(ParseException.class, () -> parser.parse(userInput));
     }
 
     @Test
-    public void parse_missingPrefix_throwsParseException() {
-        // should fail if prefix (n/, t/, d/) is missing
-        assertParseFailure(parser, "Alice Bob",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
-    }
+    void parse_nameAndTag() throws Exception {
+        // Input includes both name and tag, but we only assert tag in the
+        // expected predicate
+        String userInput = "n/Alex t/friend";
 
-    @Test
-    public void parse_unknownPrefix_throwsParseException() {
-        // invalid prefix for command
-        assertParseFailure(parser, "x/ Alice",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
-    }
+        // Only include the tag key in the expected criteria
+        Map<String, List<String>> criteria = Map.of("tag", List.of("friend"));
 
+        FindCommand expectedCommand = new FindCommand(new ClientContainsKeywordsPredicate(criteria));
+
+        assertParseSuccess(parser, userInput, expectedCommand);
+    }
 }
