@@ -106,7 +106,6 @@ public class FindCommandTest {
         }
     }
 
-
     @Test
     public void execute_blankNameWildcard_listsAllPersons() {
         Map<String, List<String>> criteria = new HashMap<>();
