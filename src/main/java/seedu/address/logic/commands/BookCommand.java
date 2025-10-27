@@ -41,9 +41,11 @@ public class BookCommand extends Command {
     );
 
     public static final String MESSAGE_SUCCESS = "Booked: %1$s with client '%2$s' at %3$s [%4$s]";
-    public static final String MESSAGE_PERSON_NOT_FOUND = "No team member '%1$s'. Please use an existing team member "
-            + "or add them first.";
-    public static final String MESSAGE_DOUBLE_BOOKING = "%1$s is already booked at %2$s with client '%3$s' for [%4$s].";
+    public static final String MESSAGE_PERSON_NOT_FOUND = "Cannot find team member '%1$s' in your address book.\n"
+            + "Please add this person first, or check the spelling of their name.";
+    public static final String MESSAGE_DOUBLE_BOOKING = "Booking conflict! %1$s is already booked at %2$s.\n"
+            + "Existing booking: Client '%3$s' for [%4$s]\n"
+            + "Please choose a different time slot.";
 
     private static final Logger logger = LogsCenter.getLogger(BookCommand.class);
 

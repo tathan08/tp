@@ -52,9 +52,15 @@ public class EditCommand extends Command {
     );
 
     public static final String MESSAGE_EDIT_PERSON_SUCCESS = "Edited Person: %1$s";
-    public static final String MESSAGE_NOT_EDITED = "At least one field to edit must be provided.";
-    public static final String MESSAGE_DUPLICATE_PERSON = "This person already exists in the address book.";
-    public static final String MESSAGE_PERSON_NOT_FOUND = "Person with name '%1$s' not found in the address book.";
+    public static final String MESSAGE_NOT_EDITED =
+            "No changes specified! Please provide at least one field to edit "
+            + "(name, phone, email, or tags).";
+    public static final String MESSAGE_DUPLICATE_PERSON =
+            "A person with this name already exists in your address book.\n"
+            + "Please use a different name or edit the existing contact.";
+    public static final String MESSAGE_PERSON_NOT_FOUND =
+            "Could not find a person named '%1$s' in your address book.\n"
+            + "Please check the spelling and try again.";
 
     private static final Logger logger = LogsCenter.getLogger(EditCommand.class);
 

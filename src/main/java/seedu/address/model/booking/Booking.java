@@ -16,14 +16,21 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 public class Booking {
     public static final String MESSAGE_CONSTRAINTS_DATETIME =
-            "Invalid date: must be in format YYYY-MM-DD HH:MM and in the future.";
+            "Invalid date/time format or value!\n"
+            + "Please use the format: YYYY-MM-DD HH:MM (e.g., 2024-12-25 14:30)\n"
+            + "The booking must be scheduled for a future date and time.";
     public static final String MESSAGE_CONSTRAINTS_PAST_DATETIME =
-            "Invalid date: booking date must be in the future.";
+            "Booking date and time must be in the future.\n"
+            + "You cannot create bookings for past dates.";
     public static final String MESSAGE_CONSTRAINTS_CLIENT =
-            "Invalid client name. Must be 1-100 characters with at least one letter. "
-            + "Only letters, numbers, spaces, hyphens, apostrophes, periods, and slashes are allowed.";
+            "Client name is invalid!\n"
+            + "Requirements:\n"
+            + "• Must be 1-100 characters long\n"
+            + "• Must contain at least one letter\n"
+            + "• Can include letters, numbers, spaces, hyphens (-), apostrophes ('), periods (.), and slashes (/)\n"
+            + "Examples: 'John Doe', 'Mary-Jane O'Brien', 'Ahmad S/O Rahman'";
     public static final String MESSAGE_CONSTRAINTS_DESCRIPTION =
-            "Description must be 1-500 characters.";
+            "Booking description must be between 1 and 500 characters long.";
 
     public static final DateTimeFormatter DATETIME_FORMATTER = DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm")
             .withResolverStyle(ResolverStyle.STRICT);
