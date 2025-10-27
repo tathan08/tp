@@ -367,7 +367,7 @@ Time must be in 24-hour format (HH:MM). Use `14:00` for 2:00 PM, `09:00` for 9:0
 <div markdown="span" class="alert alert-info">:information_source: **Past Dates:**
 Bookings can be created for past dates, for record-keeping purposes. When booking a past date, a warning message will be displayed: "Note that this is a Booking that is in the past!" to remind you that this appointment has already occurred.
 
-Additionally, past bookings will appear greyed out (with reduced opacity) in the contact list to visually distinguish them from future appointments.
+Additionally, past bookings will appear greyed out (with reduced opacity) in the contact list to visually distinguish them from future appointments. The bookings are sorted with future bookings at the top (in chronological order) and past bookings at the bottom (also in chronological order).
 </div>
 
 <div markdown="span" class="alert alert-warning">:exclamation: **Warning:**

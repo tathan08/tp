@@ -162,9 +162,26 @@ public class PersonCard extends UiPart<Region> {
         DateTimeFormatter dateFmt = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         DateTimeFormatter timeFmt = DateTimeFormatter.ofPattern("HH:mm");
 
+        // Sort bookings: future bookings first (ascending), then past bookings (ascending)
+        Comparator<Booking> bookingComparator = (b1, b2) -> {
+            boolean b1IsFuture = Booking.isFutureDateTime(b1.getDateTime());
+            boolean b2IsFuture = Booking.isFutureDateTime(b2.getDateTime());
+
+            if (b1IsFuture && b2IsFuture) {
+                // Both future: sort ascending
+                return b1.getDateTime().compareTo(b2.getDateTime());
+            } else if (!b1IsFuture && !b2IsFuture) {
+                // Both past: sort ascending
+                return b1.getDateTime().compareTo(b2.getDateTime());
+            } else {
+                // One future, one past: future comes first
+                return b1IsFuture ? -1 : 1;
+            }
+        };
+
         final int[] counter = {1};
         person.getBookings().stream()
-                .sorted(Comparator.comparing(Booking::getDateTime))
+                .sorted(bookingComparator)
                 .forEach(b -> rows.add(new BookingRow(
                         String.valueOf(counter[0]++),
                         b.getDateTime().format(dateFmt),
