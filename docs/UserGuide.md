@@ -163,7 +163,7 @@ Always backup your `addressbook.json` file before making major changes. Data los
 
 Shows a short summary of available commands, with a link to access the User Guide.
 
-![help message](images/helpMessage.jpg)
+![help message](images/helpMessage.jpg) <br>
 *Figure 1: Help window showing available commands and User Guide link*
 
 Format: `help`
@@ -212,7 +212,7 @@ Examples:
 * `add n/Charlie Wong p/(123) 456-7890` <br> will add a Person called `Charlie Wong` with phone number `(123) 456-7890` to the contact list.
 * `add n/Germaine` <br> will add a Person called `Germaine` to the contact list.
 
-![add message](images\addMessage.jpg)
+![add message](images\addMessage.jpg) <br>
 *Figure 2: Success message after adding a new person to the contact list*
 
 ### Adding a tag to an existing person: `add`
@@ -231,7 +231,7 @@ Examples:
 
 * `add n/Alice Tan t/sales t/manager` <br> will add tags `sales` and `manager` to the Person called `Alice Tan`.
 
-![add tags](images\addTags.png)
+![add tags](images\addTags.png) <br>
 *Figure 3: Success message after adding tags to an existing person*
 
 ### Listing all persons : `list`
@@ -240,7 +240,7 @@ Shows the list of all persons in the contact list.
 
 Format: `list`
 
-![list message](images\listMessage.jpg)
+![list message](images\listMessage.jpg) <br>
 *Figure 4: Contact list showing all persons in the address book*
 
 ### Editing a person : `edit`
@@ -268,7 +268,7 @@ Examples:
 *  `edit n/Alice Tan p/+1 (555) 123-4567` Edits the phone number of `Alice Tan` to be `+1 (555) 123-4567`.
 *  `edit n/John Doe n/Jane Doe t/` Edits the name of `John Doe` to be `Jane Doe` and clears all existing tags.
 
-![edit message](images\editMessage.jpg)
+![edit message](images\editMessage.jpg) <br>
 *Figure 5: Success message after editing a person's details*
 
 ### Locating team members by name: `find`
@@ -296,8 +296,9 @@ If multiple tags are being searched for, each paramter must have its own `t/`  <
 Examples:
 * `find n/John` returns `john` and `John Doe` <br>
 * `find d/2026-08-18` returns `Alex Yeoh`, `David Li`<br>
-* `find t/` returns all team members in FirstImpressions
-  ![result for 'find alex david'](images/findAlexDavidResult.jpg)
+* `find t/` returns all team members in FirstImpressions <br>
+*
+  ![result for 'find alex david'](images/findAlexDavidResult.jpg) <br>
   *Figure 6: Search results showing team members matching the search criteria*
 
 ### Deleting a person : `delete`
@@ -338,7 +339,7 @@ Format: `clear`
 The `clear` command permanently deletes ALL contacts and bookings. This action cannot be undone. Make sure to backup your data before using this command.
 </div>
 
-![clear message](images\clearMessage.jpg)
+![clear message](images\clearMessage.jpg) <br>
 *Figure 8: Success message after clearing all entries from the contact list*
 
 ### Assigning a booking : `book`
@@ -368,7 +369,7 @@ Examples:
 * `book dt/2025-09-20 10:30 c/Madam Chen n/Bob Lee` will assign a booking on 20th September 2025 10.30am to Bob Lee. The client will be Madam Chen.
 * `book dt/2025-10-18 14:00 c/Mr Lim n/Alice Tan desc/first consultation` will assign a booking on 18th October 2025 2pm to Alice Tan. The client will be Mr Lim and the description is "first consultation".
 * `book dt/2025-11-15 15:00 c/Raj s/o Kumar n/Abhijay s/o Abhi desc/follow-up` will assign a booking on 15th November 2025 3pm to Abhijay s/o Abhi. The client Raj s/o Kumar (with slash for "son of") and the description is "follow-up". <br>
-  ![book messsage](images\bookMessage.jpg)
+  ![book messsage](images\bookMessage.jpg) <br>
   *Figure 9: Success message after creating a new booking*
 
 <div markdown="span" class="alert alert-warning">:exclamation: **Warning:**
