@@ -290,11 +290,10 @@ Format: <br>
 <div markdown="span" class="alert alert-warning">:exclamation: **Warning:**
 Each search parameter must preceded by its respective delimeter.
 
-If multiple tags are being searched for, each paramter must have its own `t/`  <br>
-`find t/teamLead t/friends` displays all persons with the `teamLead` tag OR the `friends` tag
+If multiple tags are being searched for, each parameter must have its own `t/`  <br>
+`find t/teamLead t/friends` displays all persons with the `teamLead` tag **OR** the `friends` tag
 </div>
 
-* Multiple fields are allowed, and will display all matches to each given parameter. e.g. `find n/Hans t/teamLead` will list every person whose name contains `Hans` AND tags contain `teamLead`.
 * Searching within a field with an empty parameter (e.g. `find n/`, `find t/` or `find d/`) will list all team members within FirstImpressions
 * The search for names and tags are case-insensitive. e.g `hans` will match `Hans`
 * Partial matches will be shown e.g. `find n/Ali` will find a person named `Alice`
@@ -304,7 +303,11 @@ Examples:
 * `find n/John` returns `john` and `John Doe` <br>
 * `find d/2026-08-18` returns `Alex Yeoh`, `David Li`<br>
 * `find t/` returns all team members in FirstImpressions <br>
-*
+
+ <div markdown="span" class="alert alert-primary">:bulb: **Tip:** Use different fields within the command format to cover more area! For exmaple: <br>
+ `find n/Alice t/friends` shows all results for `Alice` and `friends`
+ </div>
+
 <img src="images/findMessage-UG.png" width="400px" alt="find message">
 
   *Figure 6: Search results showing team members matching the search criteria*
