@@ -578,14 +578,14 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | `* * *`  | user                                       | find a person by name or tag                         | locate details of persons without having to go through the entire list |
 | `*`      | user with many persons in the address book | sort persons by name                                 | locate a person easily                                                 |
 
-### Use cases
+# Use cases
 
-#### **Use Case: Add a Person**
+### **Use Case: Add a Person**
 
 **System**: FirstImpressions
 **Actor**: User
 
-**Main Success Scenario (MSS):**
+#### **Main Success Scenario (MSS):**
 1. User checks list of all persons
 2. User requests to add specific person in the list
 3. FirstImpressions adds person to the list
@@ -616,12 +616,12 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
     Use case ends
 
 
-#### **Use Case: Delete a Person**
+### **Use Case: Delete a Person**
 
 **System**: FirstImpressions \
 **Actor**: User
 
-**Main Success Scenario (MSS):**
+#### **Main Success Scenario (MSS):**
 1. User checks list of all persons
 2. User requests to delete specific person
 3. FirstImpressions deletes person in the list
@@ -640,12 +640,12 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
   Use case ends
 
 
-#### **Use Case: Book a Person**
+### **Use Case: Book a Person**
 
 **System**: FirstImpressions \
 **Actor**: User
 
-**Main Success Scenario (MSS):**
+#### **Main Success Scenario (MSS):**
 1. User checks list of all persons
 2. User requests to book client to team member at specific datetime
 3. FirstImpressions adds booking to team member
@@ -676,58 +676,157 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
   Use case ends
 
 
-#### **Use Case: Find a Person**
+### **Use Case: Find a Person**
 
-**System**: FirstImpressions \
+**System**: FirstImpressions
 **Actor**: User
 
-**Main Success Scenario (MSS):**
-1. User requests to find persons by **name**, **tag**, or **scheduled date** using the `find` command.
-2. *FirstImpressions* filters the contact list based on the provided search criteria.
-3. *FirstImpressions* displays a message indicating the number of persons found, e.g.
-   > “3 persons listed!”
-4. Use case ends.
+---
 
-<img src="images/find-DG.png" width="400px" alt="find person">
+#### **Main Success Scenario (MSS) - Finding by Name**
 
-#### **Delimeters & Usage**
+1. User requests to find persons by name using the `find n/NAME` command.
+2. *FirstImpressions* parses the name parameter and validates the format.
+3. *FirstImpressions* filters the contact list to show persons whose names contain the search term.
+4. *FirstImpressions* displays a message indicating the number of persons found, for example:
+> Searching for contacts with: <br>
+> Name containing: [Input Name] <br>
+> Found 3 person(s) matching your search!
+5. Use case ends. <br>
 
-- `n/` searches by **name** (case-insensitive, partial matches allowed, only 1 parameter allowed).
-- `t/` searches by **tag** (must match the full tag name, multiple parameters allowed).
-- `d/` searches by **scheduled date** (exact date match, in `YYYY-MM-DD` format, multiple parameters allowed).
-- Names can be separated by spaces (e.g., `find n/Alice Bob`).
-- If **no name** is provided (e.g., `find n/`), all persons are listed.
 
-#### **Extensions**
+#### **Extensions (Name search)**
 
-- **1a. Unknown or invalid parameter provided** \
-  FirstImpressions shows error: `"Invalid command format!"`  \
+- **1a.** Unknown or invalid prefix provided. \
+  FirstImpressions displays an error: "Invalid command format!" \
   Use case ends.
 
-- **3a. Person not found** \
-  FirstImpressions throws error "0 persons listed!" \
-  Use case ends
+- **3a.** No persons match the search criteria. \
+  FirstImpressions displays "0 persons listed!" \
+  Use case ends.
 
-- **3b. Empty name provided**  \
-  The user enters a valid prefix (`find n/`) but no keyword. \
-  Displays all persons in the list. \
-  Use case continues as in the main scenario.
+- **3b.** Valid prefix provided but no parameter (e.g., `find n/`). \
+  FirstImpressions lists all persons. Use case continues as in the main scenario.
 
-- **3c. Part of name provided**  \
-  The user enters part of name stored in FirstImpressions\
-  Displays all persons that contain given parameter in the list. \
-  Use case continues as in the main scenario.
+- **3c.** Partial name provided. \
+  FirstImpressions lists all persons whose names contain the given substring.
+
+#### **Main Success Scenario (MSS) - Finding by Tag**
+
+1. User requests to find persons by tag using the `find t/TAG` command.
+2. *FirstImpressions* parses the tag parameter and validates the format.
+3. *FirstImpressions* filters the contact list to show persons who have the specified tag.
+4. *FirstImpressions* displays a message indicating the number of persons found, for example:
+> Searching for contacts with: <br>
+> Tag containing: [Input Tag] <br>
+> Found 2 person(s) matching your search!
+5. Use case ends. <br>
+
+#### **Extensions (Tag search)**
+
+- **1a.** Unknown or invalid prefix provided. \
+  FirstImpressions displays an error: "Invalid command format!" \
+  Use case ends.
+
+- **3a.** No persons match the search criteria. \
+  FirstImpressions displays "0 persons listed!" \
+  Use case ends.
+
+- **3b.** Valid prefix provided but no parameter (e.g., `find t/`). \
+  FirstImpressions lists all persons. Use case continues as in the main scenario.
+
+- **3c.** Multiple valid prefixes provided. \
+  FirstImpressions combines criteria (logical OR semantics) to refine results.
 
 
+#### **Main Success Scenario (MSS) - Finding by Date**
+
+1. User requests to find persons by booking date using the `find d/YYYY-MM-DD` command.
+2. *FirstImpressions* parses the date parameter and validates the format.
+3. *FirstImpressions* filters the contact list to show persons who have bookings on the specified date.
+4. *FirstImpressions* displays a message indicating the number of persons found, for example:
+> Searching for contacts with: <br>
+> Booking date: [Input Date] <br>
+> Found 1 person(s) matching your search!
+5. Use case ends. <br>
+
+#### **Extensions (Date search)**
+
+- **1a.** Unknown or invalid prefix provided. \
+  FirstImpressions displays an error: "Invalid command format!" \
+  Use case ends.
+
+- **1b.** Invalid date format provided. \
+  FirstImpressions displays an error: "Invalid date!" \
+  Use case ends.
+
+- **3a.** No persons match the search criteria. \
+  FirstImpressions displays "0 persons listed!" \
+  Use case ends.
+
+- **3b.** Valid prefix provided but no parameter (e.g., `find d/`). \
+  FirstImpressions lists all persons. Use case continues as in the main scenario. <br>
+
+<img src="images/find-DG.png" width="400px" alt="find person">
+---
+
+### **Delimiters & Usage**
+
+-  **Name** (`n/`): Case-insensitive, supports partial matches. <br>
+  Rationale: Names are free-form text and substring matching keeps searches flexible without requiring complex tokenization. Multiple `n/` prefixes are allowed to ensure precise and intentional searches. With each acting as an alternative (OR) filter.
+
+- **Tag** (`t/`): case-insensitive, supports partial matches. <br>
+  Rationale: tags are atomic labels used for quick categorisation. Treating tags as separate tokens simplifies matching and aligns with user expectations. Multiple `t/` prefixes are allowed to ensure precise and intentional searches.
+
+- **Booking Date** (`d/`): strict `YYYY-MM-DD` format, exact match. <br>
+   Rationale: dates need a canonical representation for reliable parsing and comparison; the parser validates date format and rejects invalid inputs. Multiple `d/` prefixes are allowed to ensure precise and intentional searches.
+
+---
+### **Design Considerations**
+
+#### **Aspect: Where to Perform Input Validation**
+- **Alternative 1:** Validate parameters in `ClientContainsKeywordsPredicate`.
+  - *Pros:* Keeps `FindCommandParser` simpler.
+  - *Cons:* Predicate becomes responsible for input correctness instead of filtering logic.
+- **Alternative 2 (current choice):** Validate in `FindCommandParser` before predicate creation.
+  - *Pros:* Ensures only valid data reaches the model layer.
+  - *Cons:* Slightly increases parser complexity.
+
+**Chosen Approach:**
+Validation is performed in `FindCommandParser` for better separation of concerns — parsing vs filtering.
 
 
+#### **Aspect: Handling Multiple Prefixes**
+- **Alternative 1:** Search for results using a logical **AND** operation making search results more accurate and  easy to find specific team members
+- **Alternative 2 (current choice):** Search for results   using a logical **OR** operation to include as many results as possible to ensure user does not miss / mismatch any inputs and intended results
+  - *Pros:* Easier to find groups of people even with mismatched input (e.g. `find n/Alex Loh` returns results for `Alex Yeoh` and `Brian Loh`)
+  - *Cons:* Inability to find specific people among team members with similar names (e.g. When rearching for `Alex Yeoh` with a `teamLead` tag among mutiple `Alex Yeoh`s, doing `find n/Alex Yeoh t/teamLead` will list all results for both search parameters)
 
-#### **Use Case: Help Menu**
+**Chosen Approach:**
+`find` supports combining multiple prefixes using a logical **OR** relationship.
+  - e.g., `find n/Alex t/friend` returns persons whose name *contains "Alex"* **or** those who have the tag *"friend"*.
+- This makes it easier to find for users.
+
+
+#### **Aspect: Command Format**
+- **Alternative 1** Prefix before every value (current choice):
+  - Example: `find t/teamLead t/friends`
+  - Rationale: explicit field specifiers make tokenization deterministic, avoid ambiguity between multi-word values and separate parameters, and force deliberate searches (users must consciously mark each search term with its field).
+- **Alternative 2** Implicit multiple parameters without repeated prefixes:
+  - Example: `find t/ teamLead friends`
+  - Rationale: more concise for users but requires heuristics to decide whether `friends` is part of the first name or a separate name; complicates tokenizer and increases chance of surprising behavior for users.
+
+**Chosen approach:**
+Prefix before every value. It trades a small amount of typing for predictable parsing, maintainable code, and fewer surprising edge cases during tokenization and validation.
+
+---
+
+### **Use Case: Help Menu**
 
 **System**: FirstImpressions \
 **Actor**: User
 
-**Main Success Scenario (MSS):**
+#### **Main Success Scenario (MSS):**
 1. User requests for help menu
 2. FirstImpressions shows pop-up menu with all command usage
 3. Use case ends
