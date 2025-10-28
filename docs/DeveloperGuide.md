@@ -761,17 +761,21 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
   Use case ends.
 
 - **3b.** Valid prefix provided but no parameter (e.g., `find d/`). \
-  FirstImpressions lists all persons. Use case continues as in the main scenario.
+  FirstImpressions lists all persons. Use case continues as in the main scenario. <br>
 
 <img src="images/find-DG.png" width="400px" alt="find person">
 
 ### **Command Format**
-
-`find [n/NAME] [t/TAG] [d/DATE]`
+`find n/NAME1 [n/NAME2]...` <br>
+`find t/TAG1 [t/TAG2]...` <br>
+`find d/DATE1 [d/DATE2]...` <br>
 
 - Each prefix (`n/`, `t/`, `d/`) is **optional**, but at least one must be present.
-- Multiple prefixes can be combined (e.g., `find n/Alex t/friend`).
+  - Rationale: keeps parsing unambiguous and forces explicit field selection, avoiding free-form ambiguity.
+- Multiple parameters must each be preceded by its own field specifier (`n/`, `t/`, `d/`).
+  - Rationale: maintains uniformity and avoids ambiguity between multi-word values and separate parameters.
 - Providing a field but no parameters (e.g. `find n/`) lists all team members stored in FirstImpressions.
+  - Rationale: treats an empty field as a wildcard for that field, which is a simple shorthand for "match all". Enhances user experience.
 ---
 
 ### **Delimiters & Usage**
@@ -784,13 +788,40 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 ---
 
-### **Error Message Reference**
+### **Error messages — developer explanations**
 
-| Error Message             | Cause                                                       |
-| :------------------------ | :---------------------------------------------------------- |
-| `Invalid command format!` | Missing prefixes or invalid input pattern.                  |
-| `Invalid date!`           | Date does not follow `YYYY-MM-DD` or is an impossible date. |
-| `0 persons listed!`       | No matches found after filtering.                           |
+This section explains why the `find` command may surface certain errors so developers know where to look in the codebase and how to reason about fixes.
+
+`Invalid command format!`
+
+  #### Why it happens:
+  - The parser expects at least one known prefix (`n/`, `t/`, `d/`) to be present. Inputs without any prefix are treated as invalid.
+  - The tokenizer (`ArgumentTokenizer`) or `ArgumentMultimap` may reject malformed prefix usage (for example, `nt/Alice` or missing slash), or the parser's validation step rejects unexpected tokens.
+
+  #### Where to inspect in code:
+  - `seedu.address.logic.parser.FindCommandParser`'s method `parse(String)` checks whether `searchCriteria` is null and throws the parse error.
+  - `seedu.address.logic.parser.ArgumentTokenizer` / `ArgumentMultimap` — ensure prefixes are tokenized correctly and ready for use in the form of a `java.util.Map`
+
+`Invalid date!`
+
+  #### Why it happens:
+  - The parser performs defensive validation on date strings. A date is considered invalid if it does not conform to ISO date format (`YYYY-MM-DD`) or represents an impossible date (e.g., month 13, day 32).
+  - This check prevents downstream code from assuming valid LocalDate parsing and avoids runtime exceptions during filtering.
+  - The date format was chosen to synchronise with the library's default date format (for ease of use in future feature developments), and to maintain uniformity between all commands in FirstImpressions.
+
+  #### Where to inspect in code:
+  - `seedu.address.logic.parser.FindCommandParser`'s method `isValidDate(String)` calls `LocalDate.parse(...)` guarded by a try/catch.
+  - Any client-side validation logic or tests that exercise invalid date strings.
+
+ `0 persons listed!`
+
+  #### Why it happens:
+  - The predicate-based filtering runs but finds no Person objects matching the provided criteria. This is not an error per se but a reporting of an empty result set.
+  - Possible causes include overly narrow filters (e.g., searching for exact tag spelling) or mismatched semantics (AND vs OR) between keywords and fields.
+
+  #### Where to inspect in code:
+  - `seedu.address.model.person.ClientContainsKeywordsPredicate` — review matching logic for name/tag/date (substring vs exact match, case handling, AND/OR semantics).
+  - `seedu.address.model.Model#updateFilteredPersonList(Predicate)` — how predicates are applied to the underlying list.
 
 ---
 ### **Design Considerations**
@@ -806,7 +837,6 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 **Chosen Approach:**
 Validation is performed in `FindCommandParser` for better separation of concerns — parsing vs filtering.
 
----
 
 #### **Aspect: Handling Multiple Prefixes**
 - **Alternative 1:** Search for results using a logical **AND** operation making search results more accurate and  easy to find specific team members
@@ -819,14 +849,17 @@ Validation is performed in `FindCommandParser` for better separation of concerns
   - e.g., `find n/Alex t/friend` returns persons whose name *contains "Alex"* **or** those who have the tag *"friend"*.
 - This makes it easier to find for users.
 
----
 
-### **Summary**
+#### **Aspect: Command Format**
+- **Alternative 1:** Validate parameters in `ClientContainsKeywordsPredicate`.
+  - *Pros:* Keeps `FindCommandParser` simpler.
+  - *Cons:* Predicate becomes responsible for input correctness instead of filtering logic.
+- **Alternative 2 (current choice):** Validate in `FindCommandParser` before predicate creation.
+  - *Pros:* Ensures only valid data reaches the model layer.
+  - *Cons:* Slightly increases parser complexity.
 
-The `find` command offers a flexible way for users to filter the contact list by **name**, **tag**, and **scheduled date of bookings**.
-It performs robust input validation, rejecting malformed prefixes or invalid dates before filtering begins.
-This ensures reliability and clear feedback to users during search operations.
-
+**Chosen Approach:**
+Validation is performed in `FindCommandParser` for better separation of concerns — parsing vs filtering.
 
 ---
 
