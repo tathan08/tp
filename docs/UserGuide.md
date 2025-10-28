@@ -304,8 +304,8 @@ Examples:
 * `find d/2026-08-18` returns `Alex Yeoh`, `David Li`<br>
 * `find t/` returns all team members in FirstImpressions <br>
 
- <div markdown="span" class="alert alert-primary">:bulb: **Tip:** Use different fields within the command format to cover more area! For exmaple: <br>
- `find n/Alice t/friends` shows all results for `Alice` and `friends`
+ <div markdown="span" class="alert alert-primary">:bulb: **Tip:** Expeand your search by utilizing different fields! <br>
+ `find n/Alice t/teamLead` displays all team members containing `Alice` in their name **OR** team members whose tags contain `teamLead` within them.
  </div>
 
 <img src="images/findMessage-UG.png" width="400px" alt="find message">
