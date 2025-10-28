@@ -580,14 +580,14 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | `* * *`  | user                                       | find a person by name or tag                         | locate details of persons without having to go through the entire list |
 | `*`      | user with many persons in the address book | sort persons by name                                 | locate a person easily                                                 |
 
-### Use cases
+# Use cases
 
-#### **Use Case: Add a Person**
+### **Use Case: Add a Person**
 
 **System**: FirstImpressions
 **Actor**: User
 
-**Main Success Scenario (MSS):**
+#### **Main Success Scenario (MSS):**
 1. User checks list of all persons
 2. User requests to add specific person in the list
 3. FirstImpressions adds person to the list
@@ -618,12 +618,12 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
     Use case ends
 
 
-#### **Use Case: Delete a Person**
+### **Use Case: Delete a Person**
 
 **System**: FirstImpressions \
 **Actor**: User
 
-**Main Success Scenario (MSS):**
+#### **Main Success Scenario (MSS):**
 1. User checks list of all persons
 2. User requests to delete specific person
 3. FirstImpressions deletes person in the list
@@ -642,12 +642,12 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
   Use case ends
 
 
-#### **Use Case: Book a Person**
+### **Use Case: Book a Person**
 
 **System**: FirstImpressions \
 **Actor**: User
 
-**Main Success Scenario (MSS):**
+#### **Main Success Scenario (MSS):**
 1. User checks list of all persons
 2. User requests to book client to team member at specific datetime
 3. FirstImpressions adds booking to team member
@@ -678,14 +678,14 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
   Use case ends
 
 
-#### **Use Case: Find a Person**
+### **Use Case: Find a Person**
 
 **System:** FirstImpressions
 **Actor:** User
 
 ---
 
-### **Main Success Scenario (MSS)**
+#### **Main Success Scenario (MSS)**
 
 1. User requests to find persons by **name**, **tag**, or **scheduled date of booking** using the `find` command.
 2. *FirstImpressions* parses the user input, validating prefixes and parameter formats.
@@ -750,32 +750,60 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | **1a.** | Unknown or invalid prefix provided.                       | *FirstImpressions* displays an error: “Invalid command format!”. Use case ends.   |
 | **1b.** | Invalid date format provided.                             | *FirstImpressions* displays an error: “Invalid date!”. Use case ends.             |
 | **3a.** | No persons match the search criteria.                     | *FirstImpressions* displays “0 persons listed!”. Use case ends.                   |
-| **3b.** | Valid prefix provided but no parameter (e.g., `find n/`). | *FirstImpressions* lists all persons. Use case continues as in the main scenario. |
+| **3b.** | Valid prefix provided but no parameter (e.g., `find d/`). | *FirstImpressions* lists all persons. Use case continues as in the main scenario. |
 | **3c.** | Partial name provided.                                    | *FirstImpressions* lists all persons whose names contain the given substring.     |
-| **3d.** | Multiple valid prefixes provided.                         | *FirstImpressions* combines criteria (logical AND) to refine results.             |
+| **3d.** | Multiple valid prefixes provided.                         | *FirstImpressions* combines criteria (logical OR semantics) to refine results.             |
 
 ---
 
 ### **Mockup**
 
-<img src="images/findMockup.png" width="200px" alt="Find person mockup">
+<img src="images/find-DG.png" width="400px" alt="Find person mockup">
+
+---
+### **Design Considerations**
+
+#### **Aspect: Where to Perform Input Validation**
+- **Alternative 1:** Validate parameters in `ClientContainsKeywordsPredicate`.
+  - *Pros:* Keeps `FindCommandParser` simpler.
+  - *Cons:* Predicate becomes responsible for input correctness instead of filtering logic.
+- **Alternative 2 (current choice):** Validate in `FindCommandParser` before predicate creation.
+  - *Pros:* Ensures only valid data reaches the model layer.
+  - *Cons:* Slightly increases parser complexity.
+
+**Chosen Approach:**
+Validation is performed in `FindCommandParser` for better separation of concerns — parsing vs filtering.
+
+---
+
+#### **Aspect: Handling Multiple Prefixes**
+- **Alternative 1:** Search for results using a logical **AND** operation making search results more accurate and  easy to find specific team members
+- **Alternative 2 (current choice):** Search for results   using a logical **OR** operation to include as many results as possible to ensure user does not miss / mismatch any inputs and intended results
+  - *Pros:* Easier to find groups of people even with mismatched input (e.g. `find n/Alex Loh` returns results for `Alex Yeoh` and `Brian Loh`)
+  - *Cons:* Inability to find specific people among team members with similar names (e.g. When rearching for `Alex Yeoh` with a `teamLead` tag among mutiple `Alex Yeoh`s, doing `find n/Alex Yeoh t/teamLead` will list all results for both search parameters)
+
+**Chosen Approach:**
+`find` supports combining multiple prefixes using a logical **OR** relationship.
+  - e.g., `find n/Alex t/friend` returns persons whose name *contains "Alex"* **or** those who have the tag *"friend"*.
+- This makes it easier to find for users.
 
 ---
 
 ### **Summary**
 
-The `find` command offers a flexible way for users to filter the contact list by **name**, **tag**, and/or **scheduled date**.
+The `find` command offers a flexible way for users to filter the contact list by **name**, **tag**, and **scheduled date of bookings**.
 It performs robust input validation, rejecting malformed prefixes or invalid dates before filtering begins.
 This ensures reliability and clear feedback to users during search operations.
 
 
+---
 
-#### **Use Case: Help Menu**
+### **Use Case: Help Menu**
 
 **System**: FirstImpressions \
 **Actor**: User
 
-**Main Success Scenario (MSS):**
+#### **Main Success Scenario (MSS):**
 1. User requests for help menu
 2. FirstImpressions shows pop-up menu with all command usage
 3. Use case ends
