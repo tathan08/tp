@@ -851,15 +851,15 @@ Validation is performed in `FindCommandParser` for better separation of concerns
 
 
 #### **Aspect: Command Format**
-- **Alternative 1:** Validate parameters in `ClientContainsKeywordsPredicate`.
-  - *Pros:* Keeps `FindCommandParser` simpler.
-  - *Cons:* Predicate becomes responsible for input correctness instead of filtering logic.
-- **Alternative 2 (current choice):** Validate in `FindCommandParser` before predicate creation.
-  - *Pros:* Ensures only valid data reaches the model layer.
-  - *Cons:* Slightly increases parser complexity.
+- **Alternative 1** Prefix before every value (current choice):
+  - Example: `find t/teamLead t/friends`
+  - Rationale: explicit field specifiers make tokenization deterministic, avoid ambiguity between multi-word values and separate parameters, and force deliberate searches (users must consciously mark each search term with its field).
+- **Alternative 2** Implicit multiple parameters without repeated prefixes:
+  - Example: `find t/ teamLead friends`
+  - Rationale: more concise for users but requires heuristics to decide whether `friends` is part of the first name or a separate name; complicates tokenizer and increases chance of surprising behavior for users.
 
-**Chosen Approach:**
-Validation is performed in `FindCommandParser` for better separation of concerns — parsing vs filtering.
+**Chosen approach:**
+Prefix before every value. It trades a small amount of typing for predictable parsing, maintainable code, and fewer surprising edge cases during tokenization and validation.
 
 ---
 
