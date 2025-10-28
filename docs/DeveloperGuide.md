@@ -152,7 +152,7 @@ Classes used by multiple components are in the `seedu.address.commons` package.
 
 --------------------------------------------------------------------------------------------------------------------
 
-## **Implementation**
+## **Proposed Features**
 
 This section describes some noteworthy details on how certain features are implemented.
 
@@ -251,9 +251,8 @@ The reschedule mechanism allows users to update the datetime of an existing book
   - `Booking#setDateTime(LocalDateTime newDateTime)` — Updates the datetime field of a booking.
   - Optional undo support: Track changes in `VersionedAddressBook` to allow undo/redo of reschedules.
 
------
 
-## Usage Scenario
+#### Usage Scenario
 
 1.  The user views all bookings and identifies one to reschedule (e.g., a booking for Carl Kurz).
 
@@ -299,34 +298,30 @@ The reschedule mechanism allows users to update the datetime of an existing book
 
 <img src="images/RescheduleDiagram.png"/>
 
------
+#### Design Considerations
 
-## Design Considerations
-
-### Conflict Detection:
+**Conflict Detection:**
 
   - Ensure the updated datetime does not conflict with other bookings for the same team member.
   - Conflicts prevent the reschedule.
 
-### Undo/Redo Support:
+**Undo/Redo Support:**
 
   - Optional integration with **VersionedAddressBook**.
   - Call `Model#commitAddressBook()` after a successful reschedule.
 
-### Parameter Validation:
+**Parameter Validation:**
 
   - Booking ID exists.
   - **Team member name (`n/`) matches the name in the booking.** (New consideration)
   - New datetime is properly formatted and in the future.
   - Team member availability at the new datetime.
 
-### Atomicity:
+**Atomicity:**
 
   - Reschedule is **all-or-nothing**: either fully applied or not applied at all.
 
------
-
-## Extensions / Error Cases
+#### Extensions / Error Cases
 
   - **Booking does not exist:**
     Error: "Booking ID not found"
@@ -346,6 +341,8 @@ The reschedule mechanism allows users to update the datetime of an existing book
   - **Unknown parameter:**
     Error: "Unknown parameter. Valid parameters are b/ (booking ID), n/ (team member name), d/ (new datetime)" (Updated list)
 
+----
+
 ### \[Proposed\] Edit Booking Clients/Description
 
 #### Proposed Implementation
@@ -358,9 +355,9 @@ The edit booking mechanism allows users to update the client name or description
   - `Booking#setClientName(String newClientName)` — Updates the client name field of a booking.
   - `Booking#setDescription(String newDescription)` — Updates the description field of a booking.
 
------
 
-## Usage Scenario
+
+#### Usage Scenario
 
 1.  The user views all bookings and identifies one to edit (e.g., a booking for Carl Kurz).
 
@@ -405,28 +402,25 @@ The edit booking mechanism allows users to update the client name or description
 
       - **Failure Example:** Appropriate error message.
 
------
 
-## Design Considerations
+#### Design Considerations
 
-### Field Validation:
+**Field Validation:**
 
   - Client name must follow the same validation rules as new bookings.
   - Description must follow the same validation rules as new bookings.
   - At least one field must be provided for update.
 
-### Undo/Redo Support:
+**Undo/Redo Support:**
 
   - Integration with **VersionedAddressBook**.
   - Call `Model#commitAddressBook()` after a successful edit.
 
-### Atomicity:
+**Atomicity:**
 
   - Edit booking is **all-or-nothing**: either fully applied or not applied at all.
 
------
-
-## Extensions / Error Cases
+#### Extensions / Error Cases
 
   - **Booking does not exist:**
     Error: "Booking ID not found"
@@ -443,6 +437,8 @@ The edit booking mechanism allows users to update the client name or description
   - **Team member mismatch:**
     Error: "Team member name does not match the booking"
 
+---
+
 ### \[Proposed\] Timezone Support
 
 #### Proposed Implementation
@@ -455,9 +451,8 @@ The timezone mechanism allows users to work with bookings across different timez
   - `Booking#getDateTimeInTimezone(ZoneId timezone)` — Returns booking datetime converted to specified timezone.
   - `Booking#createBookingWithTimezone(String clientName, LocalDateTime datetime, String description, ZoneId timezone)` — Creates booking with timezone awareness.
 
------
 
-## Usage Scenario
+#### Usage Scenario
 
 1.  The user sets their preferred timezone:
 
@@ -481,37 +476,33 @@ The timezone mechanism allows users to work with bookings across different timez
 
     All booking times are automatically converted and displayed in the specified timezone.
 
------
+#### Design Considerations
 
-## Design Considerations
-
-### Timezone Storage:
+**Timezone Storage:**
 
   - Store all booking datetimes in UTC internally.
   - Convert to user's preferred timezone for display.
   - Allow temporary timezone switching for viewing.
 
-### User Preferences:
+**User Preferences:**
 
   - Store user's default timezone in `UserPrefs`.
   - Allow timezone changes without affecting existing bookings.
   - Provide timezone validation and error handling.
 
-### Display Format:
+**Display Format:**
 
   - Show timezone information in booking displays.
   - Provide clear indication when times are converted.
   - Support multiple timezone formats (e.g., UTC+8, Asia/Singapore).
 
-### Data Migration:
+**Data Migration:**
 
   - Existing bookings without timezone information default to UTC.
   - Provide migration tools for existing data.
   - Maintain backward compatibility.
 
------
-
-## Extensions / Error Cases
+#### Extensions / Error Cases
 
   - **Invalid timezone:**
     Error: "Invalid timezone format. Use format like 'Asia/Singapore' or 'UTC+8'"
@@ -524,6 +515,53 @@ The timezone mechanism allows users to work with bookings across different timez
 
   - **Missing timezone:**
     Error: "Please set your preferred timezone using 'settimezone' command"
+
+---
+
+### \[Proposed\] Find Booking
+
+#### Proposed Implementation
+
+Highlights relevant bookings to users based on their search criteria while using `find`.
+
+**Operations:**
+  
+  - `Model#`
+
+#### Usage Scenario
+
+1.  The user uses `find` command to search for bookings under a specific date.
+
+    ```
+    find dt/2025-12-15
+    ```
+
+2.  The user uses `find` command to search for bookings under a specific client.
+
+    ```
+    find c/Mr Tan
+    ```
+    
+#### Design Considerations
+
+**Display Format:**
+
+-  Provide clear indication to the relevant bookings by shifting it to the top of the booking list and with a highlight.
+-  Only list contacts with the search criteria.
+-  Ensure that all other bookings under the same contact are still present.
+
+**Booking Storage:**
+
+-  Ensure that the contents of the booking lists are not modified.
+-  Uses a copy of the list of booking to modify the display sequence.
+
+#### Extensions/ Error Cases
+
+ - **Date not found:** 
+    Error: "No bookings with the input date found."
+
+ - **Person not found:** 
+    Error: "No searches matching the input name found"
 
 
 --------------------------------------------------------------------------------------------------------------------
@@ -584,7 +622,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 #### **Use Case: Add a Person**
 
-**System**: FirstImpressions
+**System**: FirstImpressions \
 **Actor**: User
 
 **Main Success Scenario (MSS):**
