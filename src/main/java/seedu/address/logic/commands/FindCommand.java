@@ -2,12 +2,17 @@ package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import seedu.address.commons.ErrorMessage;
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
 import seedu.address.model.Model;
+import seedu.address.model.person.ClientContainsKeywordsPredicate;
 import seedu.address.model.person.Person;
 
 /**
@@ -49,7 +54,63 @@ public class FindCommand extends Command {
         // Ensure the count is non-negative
         assert resultCount >= 0 : "Result count of filtered list should never be negative";
 
-        return new CommandResult(String.format(Messages.MESSAGE_PERSONS_LISTED_OVERVIEW, resultCount));
+        String searchParamsMessage = formatSearchParameters();
+        String resultMessage = String.format(Messages.MESSAGE_PERSONS_LISTED_OVERVIEW, resultCount);
+
+        return new CommandResult(searchParamsMessage + "\n" + resultMessage);
+    }
+
+    /**
+     * Formats the search parameters into a user-friendly string.
+     */
+    private String formatSearchParameters() {
+        if (!(predicate instanceof ClientContainsKeywordsPredicate)) {
+            return "Searching with custom criteria";
+        }
+
+        ClientContainsKeywordsPredicate clientPredicate = (ClientContainsKeywordsPredicate) predicate;
+        Map<String, List<String>> searchCriteria = clientPredicate.getSearchCriteria();
+
+        if (searchCriteria.isEmpty()) {
+            return "Searching for: all contacts";
+        }
+
+        StringBuilder sb = new StringBuilder("Searching for contacts with:");
+
+        List<Map.Entry<String, List<String>>> entries = new ArrayList<>(searchCriteria.entrySet());
+        for (int i = 0; i < entries.size(); i++) {
+            Map.Entry<String, List<String>> entry = entries.get(i);
+            String fieldType = entry.getKey();
+            List<String> keywords = entry.getValue();
+
+            sb.append("\n  ");
+            switch (fieldType) {
+            case "name":
+                sb.append("Name containing: ");
+                break;
+            case "tag":
+                sb.append("Tag containing: ");
+                break;
+            case "date":
+                sb.append("Booking date: ");
+                break;
+            default:
+                sb.append(fieldType).append(": ");
+            }
+
+            if (keywords.isEmpty()) {
+                sb.append("any");
+            } else {
+                sb.append(keywords.stream().collect(Collectors.joining(", ")));
+            }
+
+            // Add " OR" if not the last entry
+            if (i < entries.size() - 1) {
+                sb.append(" OR");
+            }
+        }
+
+        return sb.toString();
     }
 
     @Override

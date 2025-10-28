@@ -93,4 +93,11 @@ public class ClientContainsKeywordsPredicate implements Predicate<Person> {
     public int hashCode() {
         return Objects.hash(searchCriteria);
     }
+
+    /**
+     * Returns the search criteria used in this predicate.
+     */
+    public Map<String, List<String>> getSearchCriteria() {
+        return searchCriteria;
+    }
 }
