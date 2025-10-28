@@ -716,6 +716,16 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 ---
 
+### **Error Message Reference**
+
+| Error Message             | Cause                                                       |
+| :------------------------ | :---------------------------------------------------------- |
+| `Invalid command format!` | Missing prefixes or invalid input pattern.                  |
+| `Invalid date!`           | Date does not follow `YYYY-MM-DD` or is an impossible date. |
+| `0 persons listed!`       | No matches found after filtering.                           |
+
+---
+
 ### **Examples**
 
 | User Input             | Description                                                             |
