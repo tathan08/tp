@@ -685,21 +685,89 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 ---
 
-#### **Main Success Scenario (MSS)**
+#### **Main Success Scenario (MSS) - Finding by Name**
 
-1. User requests to find persons by **name**, **tag**, or **scheduled date of booking** using the `find` command.
-2. *FirstImpressions* parses the user input, validating prefixes and parameter formats.
-3. *FirstImpressions* filters the contact list based on the provided search criteria.
+1. User requests to find persons by name using the `find n/NAME` command.
+2. *FirstImpressions* parses the name parameter and validates the format.
+3. *FirstImpressions* filters the contact list to show persons whose names contain the search term.
 4. *FirstImpressions* displays a message indicating the number of persons found, for example:
-   > “3 persons listed!”
-5. Use case ends.
+   > "3 persons listed!"
+5. Use case ends. <br>
 
-<img src="images/findMockup.png" width="400px" alt="find person">
+
+#### **Extensions (Name search)**
+
+- **1a.** Unknown or invalid prefix provided. \
+  FirstImpressions displays an error: "Invalid command format!" \
+  Use case ends.
+
+- **3a.** No persons match the search criteria. \
+  FirstImpressions displays "0 persons listed!" \
+  Use case ends.
+
+- **3b.** Valid prefix provided but no parameter (e.g., `find n/`). \
+  FirstImpressions lists all persons. Use case continues as in the main scenario.
+
+- **3c.** Partial name provided. \
+  FirstImpressions lists all persons whose names contain the given substring.
+
+#### **Main Success Scenario (MSS) - Finding by Tag**
+
+1. User requests to find persons by tag using the `find t/TAG` command.
+2. *FirstImpressions* parses the tag parameter and validates the format.
+3. *FirstImpressions* filters the contact list to show persons who have the specified tag.
+4. *FirstImpressions* displays a message indicating the number of persons found, for example:
+  > "2 persons listed!"
+5. Use case ends. <br>
+
+#### **Extensions (Tag search)**
+
+- **1a.** Unknown or invalid prefix provided. \
+  FirstImpressions displays an error: "Invalid command format!" \
+  Use case ends.
+
+- **3a.** No persons match the search criteria. \
+  FirstImpressions displays "0 persons listed!" \
+  Use case ends.
+
+- **3b.** Valid prefix provided but no parameter (e.g., `find t/`). \
+  FirstImpressions lists all persons. Use case continues as in the main scenario.
+
+- **3c.** Multiple valid prefixes provided. \
+  FirstImpressions combines criteria (logical OR semantics) to refine results.
+
+
+#### **Main Success Scenario (MSS) - Finding by Date**
+
+1. User requests to find persons by booking date using the `find d/YYYY-MM-DD` command.
+2. *FirstImpressions* parses the date parameter and validates the format.
+3. *FirstImpressions* filters the contact list to show persons who have bookings on the specified date.
+4. *FirstImpressions* displays a message indicating the number of persons found, for example:
+   > "1 person listed!"
+5. Use case ends. <br>
+
+#### **Extensions (Date search)**
+
+- **1a.** Unknown or invalid prefix provided. \
+  FirstImpressions displays an error: "Invalid command format!" \
+  Use case ends.
+
+- **1b.** Invalid date format provided. \
+  FirstImpressions displays an error: "Invalid date!" \
+  Use case ends.
+
+- **3a.** No persons match the search criteria. \
+  FirstImpressions displays "0 persons listed!" \
+  Use case ends.
+
+- **3b.** Valid prefix provided but no parameter (e.g., `find d/`). \
+  FirstImpressions lists all persons. Use case continues as in the main scenario.
+
+<img src="images/find-DG.png" width="400px" alt="find person">
 
 ### **Command Format**
 
 `find [n/NAME] [t/TAG] [d/DATE]`
-
 
 - Each prefix (`n/`, `t/`, `d/`) is **optional**, but at least one must be present.
 - Multiple prefixes can be combined (e.g., `find n/Alex t/friend`).
@@ -723,52 +791,6 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | `Invalid command format!` | Missing prefixes or invalid input pattern.                  |
 | `Invalid date!`           | Date does not follow `YYYY-MM-DD` or is an impossible date. |
 | `0 persons listed!`       | No matches found after filtering.                           |
-
----
-
-### **Examples**
-
-| User Input             | Description                                                             |
-| :--------------------- | :---------------------------------------------------------------------- |
-| `find n/Alex`          | Finds persons whose names contain “Alex”.                               |
-| `find t/friend`        | Finds all persons with the tag “friend”.                                |
-| `find t/`              | Finds all persons, since `/t` has no parameters                |
-| `find d/2025-12-15`    | Finds persons scheduled on 15 Dec 2025.                                 |
-| `find n/Alex t/friend` | Finds persons whose name contains “Alex” **or** have the tag “friend”. |
-| `find n/ t/friend`     | Finds all persons, since `/n` has no parameters                |
-| `find d/2025-12-12 d/2025-11-11`     | Finds all persons with bookings scheduled on `2025-12-12` and `2025-11-11`                |
-
----
-
-### **Input Validation**
-
-- **Invalid prefixes** (e.g., `x/Alice`) trigger a parse error:
-  > “Invalid command format!”
-- **Multiple fields per prefix** (e.g., `nt/Alice teamLead`) are not allowed and will throw a
-  > “Invalid command format!”
-- **Empty inputs** (e.g., `find` with no prefixes) will throw a
-  > “Invalid command format!”
-- **Invalid date formats** (e.g., `d/2025-13-40`) trigger a defensive check and show:
-  > “Invalid date!”
-
----
-
-### **Extensions**
-
-| Step    | Alternative Scenario                                      | System Behavior                                                                   |
-| :------ | :-------------------------------------------------------- | :-------------------------------------------------------------------------------- |
-| **1a.** | Unknown or invalid prefix provided.                       | *FirstImpressions* displays an error: “Invalid command format!”. Use case ends.   |
-| **1b.** | Invalid date format provided.                             | *FirstImpressions* displays an error: “Invalid date!”. Use case ends.             |
-| **3a.** | No persons match the search criteria.                     | *FirstImpressions* displays “0 persons listed!”. Use case ends.                   |
-| **3b.** | Valid prefix provided but no parameter (e.g., `find d/`). | *FirstImpressions* lists all persons. Use case continues as in the main scenario. |
-| **3c.** | Partial name provided.                                    | *FirstImpressions* lists all persons whose names contain the given substring.     |
-| **3d.** | Multiple valid prefixes provided.                         | *FirstImpressions* combines criteria (logical OR semantics) to refine results.             |
-
----
-
-### **Mockup**
-
-<img src="images/find-DG.png" width="400px" alt="Find person mockup">
 
 ---
 ### **Design Considerations**
