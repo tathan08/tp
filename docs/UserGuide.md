@@ -163,7 +163,7 @@ Always backup your `addressbook.json` file before making major changes. Data los
 
 Shows a short summary of available commands, with a link to access the User Guide.
 
-![help message](images/helpMessage.jpg) <br>
+![help message](images/help-DG.png) <br>
 *Figure 1: Help window showing available commands and User Guide link*
 
 Format: `help`
@@ -214,7 +214,8 @@ Examples:
 * `add n/Charlie Wong p/(123) 456-7890` <br> will add a Person called `Charlie Wong` with phone number `(123) 456-7890` to the contact list.
 * `add n/Germaine` <br> will add a Person called `Germaine` to the contact list.
 
-![add message](images\addMessage.jpg) <br>
+<img src="images/addMessage-UG.png" width="400px" alt="add message">
+
 *Figure 2: Success message after adding a new person to the contact list*
 
 ### Adding a tag to an existing person: `add`
@@ -233,7 +234,8 @@ Examples:
 
 * `add n/Alice Tan t/sales t/manager` <br> will add tags `sales` and `manager` to the Person called `Alice Tan`.
 
-![add tags](images\addTags.png) <br>
+<img src="images/addTags-UG.png" width="400px" alt="add tags">
+
 *Figure 3: Success message after adding tags to an existing person*
 
 ### Listing all persons : `list`
@@ -242,7 +244,8 @@ Shows the list of all persons in the contact list.
 
 Format: `list`
 
-![list message](images\listMessage.jpg) <br>
+<img src="images/list-UG.png" width="400px" alt="list">
+
 *Figure 4: Contact list showing all persons in the address book*
 
 ### Editing a person : `edit`
@@ -270,7 +273,8 @@ Examples:
 *  `edit n/Alice Tan p/+1 (555) 123-4567` Edits the phone number of `Alice Tan` to be `+1 (555) 123-4567`.
 *  `edit n/John Doe n/Jane Doe t/` Edits the name of `John Doe` to be `Jane Doe` and clears all existing tags.
 
-![edit message](images\editMessage.jpg) <br>
+<img src="images/editMessage-UG.png" width="400px" alt="edit message">
+
 *Figure 5: Success message after editing a person's details*
 
 ### Locating team members by name: `find`
@@ -300,7 +304,8 @@ Examples:
 * `find d/2026-08-18` returns `Alex Yeoh`, `David Li`<br>
 * `find t/` returns all team members in FirstImpressions <br>
 *
-  ![result for 'find alex david'](images/findAlexDavidResult.jpg) <br>
+<img src="images/findMessage-UG.png" width="400px" alt="find message">
+
   *Figure 6: Search results showing team members matching the search criteria*
 
 ### Deleting a person : `delete`
@@ -332,7 +337,8 @@ Examples:
 * `delete n/Alex t/vipHandler` will remove the tag `vipHandler` from `Alex` in the contact list.
 * `delete n/Alex Yeoh b/1` will remove the first booking from `Alex Yeoh` in the contact list.
 * `delete n/Alex Yeoh` will remove `Alex Yeoh` from the contact list entirely. <br>
-  ![delete message](images\deleteMessage.jpg)
+  <img src="images/deleteMessage-UG.png" width="400px" alt="delete message">
+
   *Figure 7: Success message after deleting a person from the contact list*
 
 ### Clearing all entries : `clear`
@@ -357,8 +363,14 @@ Examples:
 * `clear` - Shows a warning message without deleting any data
 * `clear f/` - Clears all entries from the contact list
 
-![clear message](images\clearMessage.jpg) <br>
-*Figure 8: Success message after clearing all entries from the contact list*
+<img src="images/clearMessage-UG.png" width="400px" alt="clear message warning">
+
+*Figure 8: Warning message after user types in `clear`*
+
+<img src="images/clearf_UG.png" width="400px" alt="clear message">
+
+*Figure 9: Success message after contact list has been cleared*
+
 
 ### Assigning a booking : `book`
 
@@ -391,8 +403,9 @@ Examples:
 * `book dt/2020-10-26 17:00 c/Mr Lim n/Alice Yeoh desc/backdated` will create a booking for a past date (26th October 2020). <br>
   The result message will be: "Booked: Alice Yeoh with client 'Mr Lim' at 2020-10-26 17:00 [backdated]. Note that this is a Booking that is in the past!"
 * `book dt/2025-11-15 15:00 c/Raj s/o Kumar n/Abhijay s/o Abhi desc/follow-up` will assign a booking on 15th November 2025 3pm to Abhijay s/o Abhi. The client Raj s/o Kumar (with slash for "son of") and the description is "follow-up". <br>
-  ![book messsage](images\bookMessage.jpg) <br>
-  *Figure 9: Success message after creating a new booking*
+  <img src="images/bookMessage-UG.png" width="400px" alt="clear message">
+
+  *Figure 10: Success message after creating a new booking*
 
 <div markdown="span" class="alert alert-warning">:exclamation: **Warning:**
 Double booking is not allowed. If you try to book the same person at the same time, you'll see: "This person already has a booking at this time. Please choose a different time slot."

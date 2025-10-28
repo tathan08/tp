@@ -1,31 +1,73 @@
-#copyButton, #helpMessage {
-    -fx-text-fill: white;
+/* Main Container */
+#helpWindowContainer {
+    -fx-background-color: #2b2b2b;
 }
 
+/* Scroll Pane */
+#scrollPane {
+    -fx-background-color: transparent;
+    -fx-background: #2b2b2b;
+}
+
+#scrollPane .viewport {
+    -fx-background-color: #2b2b2b;
+}
+
+#scrollPane .scroll-bar:vertical {
+    -fx-background-color: #3c3c3c;
+}
+
+#scrollPane .scroll-bar:vertical .thumb {
+    -fx-background-color: #555555;
+    -fx-background-radius: 5px;
+}
+
+#scrollPane .scroll-bar:vertical .thumb:hover {
+    -fx-background-color: #666666;
+}
+
+/* Help Message Text */
+#helpMessage {
+    -fx-text-fill: #e0e0e0;
+    -fx-font-size: 15px;
+    -fx-font-family: "Consolas", "Monaco", "Courier New", monospace;
+    -fx-line-spacing: 4px;
+    -fx-background-color: #2b2b2b;
+}
+
+/* Button Bar */
+#buttonBar {
+    -fx-background-color: #1e1e1e;
+    -fx-border-color: #404040;
+    -fx-border-width: 1px 0 0 0;
+}
+
+/* Buttons */
 #copyButton, #quitButton {
-    -fx-background-color: dimgray;
-    -fx-text-fill: white;
-    -fx-min-width: 80px;
-    -fx-pref-width: 80px;
-    -fx-padding: 8px 12px 8px 12px;
+    -fx-background-color: #3c3c3c;
+    -fx-text-fill: #e0e0e0;
+    -fx-font-size: 16px;
+    -fx-font-weight: 500;
+    -fx-min-height: 40px;
+    -fx-padding: 12px 30px 12px 30px;
+    -fx-background-radius: 5px;
+    -fx-cursor: hand;
 }
 
 #copyButton:hover, #quitButton:hover {
-    -fx-background-color: gray;
+    -fx-background-color: #4a4a4a;
+    -fx-text-fill: white;
 }
 
 #copyButton:armed, #quitButton:armed {
-    -fx-background-color: darkgray;
+    -fx-background-color: #555555;
 }
 
 #copyButton:focused, #quitButton:focused {
     -fx-background-color: #4A90E2;
+    -fx-text-fill: white;
     -fx-border-color: #357ABD;
     -fx-border-width: 2px;
-    -fx-border-radius: 3px;
-    -fx-background-radius: 3px;
-}
-
-#helpMessageContainer {
-    -fx-background-color: derive(#1d1d1d, 20%);
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
 }
