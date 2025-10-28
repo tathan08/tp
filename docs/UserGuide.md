@@ -29,34 +29,6 @@ FirstImpressions helps you:
 
 With FirstImpressions, no client request is too hard to handle as our system is able to search through multiple preferences, ensuring the perfect match for our customers.
 
-## Table of Contents
-
-- [Introduction](#introduction)
-  - [Target Users](#target-users)
-  - [User Proficiency Level](#user-proficiency-level)
-  - [What FirstImpressions Does](#what-firstimpressions-does)
-- [Table of Contents](#table-of-contents)
-- [Quick start](#quick-start)
-  - [Prerequisites](#prerequisites)
-  - [Installation Steps](#installation-steps)
-- [Features](#features)
-  - [Viewing help : `help`](#viewing-help--help)
-  - [Adding a person: `add`](#adding-a-person-add)
-  - [Adding a tag to an existing person: `add`](#adding-a-tag-to-an-existing-person-add)
-  - [Listing all persons : `list`](#listing-all-persons--list)
-  - [Editing a person : `edit`](#editing-a-person--edit)
-  - [Locating team members by name: `find`](#locating-team-members-by-name-find)
-  - [Deleting a person : `delete`](#deleting-a-person--delete)
-  - [Clearing all entries : `clear`](#clearing-all-entries--clear)
-  - [Assigning a booking : `book`](#assigning-a-booking--book)
-  - [Exiting the program : `exit`](#exiting-the-program--exit)
-- [Data Management](#data-management)
-  - [Saving the data](#saving-the-data)
-  - [Editing the data file](#editing-the-data-file)
-- [FAQ](#faq)
-- [Known issues](#known-issues)
-- [Command summary](#command-summary)
-
 --------------------------------------------------------------------------------------------------------------------
 
 ## Quick start
