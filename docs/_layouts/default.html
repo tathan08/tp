@@ -4,14 +4,282 @@
   {%- include head.html -%}
 
   <body>
+    <!-- Scroll Progress Bar -->
+    <div class="progress-container">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
 
-    {%- include header.html -%}
+    <!-- Combined Sidebar (Left) -->
+    <div class="toc-sidebar" id="tocSidebar">
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle Sidebar">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <div class="sidebar-content">
+        <!-- Navigation Section -->
+        <div class="nav-section">
+          <h4>Navigation</h4>
+          <ul id="navList">
+            <li><a href="/" class="nav-link">Home</a></li>
+            <li><a href="UserGuide.html" class="nav-link">User Guide</a></li>
+            <li><a href="DeveloperGuide.html" class="nav-link">Developer Guide</a></li>
+            <li><a href="AboutUs.html" class="nav-link">About Us</a></li>
+            <li><a href="https://github.com/AY2526S1-CS2103T-T08-4/tp" class="nav-link github-link" target="_blank" rel="noopener noreferrer">
+              <svg class="github-icon" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+              </svg>
+              GitHub Repository
+            </a></li>
+          </ul>
+        </div>
+
+        <!-- Table of Contents Section -->
+        <div class="toc-section">
+          <div class="toc-header">
+            <h4>On This Page</h4>
+          </div>
+          <div class="toc-content" id="tocContent">
+            <ul id="tocList"></ul>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <main class="page-content" aria-label="Content">
       <div class="wrapper">
         {{ content }}
       </div>
     </main>
+
+    <!-- Back to Top Button -->
+    <a href="#" class="back-to-top" id="backToTop" title="Back to Top">↑</a>
+
+    <!-- JavaScript for interactive features -->
+    <script>
+      // Progress Bar
+      window.addEventListener('scroll', function() {
+        const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+        const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const scrolled = (winScroll / height) * 100;
+        document.getElementById('progressBar').style.width = scrolled + '%';
+
+        // Show/hide back to top button
+        const backToTop = document.getElementById('backToTop');
+        if (winScroll > 300) {
+          backToTop.classList.add('show');
+        } else {
+          backToTop.classList.remove('show');
+        }
+      });
+
+      // Sidebar Toggle
+      const navToggle = document.getElementById('navToggle');
+      const tocSidebar = document.getElementById('tocSidebar');
+
+      navToggle.addEventListener('click', function() {
+        tocSidebar.classList.toggle('collapsed');
+      });
+
+      // Generate Hierarchical Table of Contents with Dropdowns
+      function generateTOC() {
+        const content = document.querySelector('.page-content');
+        if (!content) return;
+
+        const headings = content.querySelectorAll('h1, h2, h3, h4');
+        const tocList = document.getElementById('tocList');
+        const tocSidebar = document.getElementById('tocSidebar');
+
+        if (headings.length === 0) {
+          tocSidebar.style.display = 'none';
+          return;
+        }
+
+        tocList.innerHTML = ''; // Clear existing TOC
+
+        let stack = [{element: tocList, level: 0}];
+
+        headings.forEach((heading, index) => {
+          // Add ID to heading if it doesn't have one
+          if (!heading.id) {
+            const text = heading.textContent.toLowerCase()
+              .replace(/[^\w\s-]/g, '')
+              .replace(/\s+/g, '-')
+              .replace(/-+/g, '-');
+            heading.id = text || 'heading-' + index;
+          }
+
+          const level = parseInt(heading.tagName.charAt(1));
+
+          // Pop stack until we find the right parent level
+          while (stack.length > 1 && stack[stack.length - 1].level >= level) {
+            stack.pop();
+          }
+
+          const parent = stack[stack.length - 1].element;
+
+          // Create list item
+          const li = document.createElement('li');
+          li.className = 'toc-item level-' + level;
+
+          // Check if this heading has children (next heading has higher level)
+          let hasChildren = false;
+          if (index + 1 < headings.length) {
+            const nextLevel = parseInt(headings[index + 1].tagName.charAt(1));
+            hasChildren = nextLevel > level;
+          }
+
+          // Add toggle button if has children
+          if (hasChildren) {
+            li.classList.add('has-toggle');
+
+            const toggle = document.createElement('button');
+            toggle.className = 'toc-toggle';
+            toggle.innerHTML = '▼';
+            toggle.setAttribute('aria-label', 'Toggle subsections');
+
+            toggle.addEventListener('click', function(e) {
+              e.preventDefault();
+              e.stopPropagation();
+              li.classList.toggle('expanded');
+            });
+
+            li.appendChild(toggle);
+          }
+
+          // Create link
+          const a = document.createElement('a');
+          a.href = '#' + heading.id;
+          a.textContent = heading.textContent;
+          a.className = 'toc-link';
+          a.setAttribute('data-level', level);
+
+          // Smooth scroll on click and toggle expand/collapse
+          a.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            // Toggle expansion if has children
+            if (hasChildren) {
+              li.classList.toggle('expanded');
+            }
+
+            heading.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            history.pushState(null, null, '#' + heading.id);
+          });
+
+          li.appendChild(a);
+
+          // Add to parent
+          parent.appendChild(li);
+
+          // If has children, create nested ul and push to stack
+          if (hasChildren) {
+            const nestedUl = document.createElement('ul');
+            nestedUl.className = 'toc-nested';
+            li.appendChild(nestedUl);
+            stack.push({element: nestedUl, level: level});
+          }
+        });
+
+        // Start with all sections collapsed by default
+        // They will expand when scrolled to or clicked
+      }
+
+      // Highlight active section in TOC
+      function updateActiveTOC() {
+        const content = document.querySelector('.page-content');
+        if (!content) return;
+
+        const headings = content.querySelectorAll('h1, h2, h3, h4');
+        const tocLinks = document.querySelectorAll('.toc-link');
+
+        let activeHeading = null;
+        const scrollPos = window.scrollY + 150;
+
+        headings.forEach(heading => {
+          if (heading.offsetTop <= scrollPos) {
+            activeHeading = heading;
+          }
+        });
+
+        tocLinks.forEach(link => {
+          link.classList.remove('active');
+          if (activeHeading && link.getAttribute('href') === '#' + activeHeading.id) {
+            link.classList.add('active');
+
+            // Auto-expand parent sections when scrolling to this heading
+            let parentLi = link.closest('.toc-item');
+            if (parentLi) {
+              // Expand this item if it has children
+              if (parentLi.classList.contains('has-toggle')) {
+                parentLi.classList.add('expanded');
+              }
+
+              // Expand all parent items
+              let ancestor = parentLi.parentElement;
+              while (ancestor) {
+                if (ancestor.classList && ancestor.classList.contains('toc-nested')) {
+                  const parentItem = ancestor.closest('.toc-item');
+                  if (parentItem && parentItem.classList.contains('has-toggle')) {
+                    parentItem.classList.add('expanded');
+                  }
+                }
+                ancestor = ancestor.parentElement;
+              }
+            }
+
+            // Auto-scroll TOC to show active item
+            link.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          }
+        });
+      }
+
+      // Smooth scroll for back to top
+      document.getElementById('backToTop').addEventListener('click', function(e) {
+        e.preventDefault();
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
+      });
+
+      // Highlight current page in navigation
+      function highlightCurrentPage() {
+        const navLinks = document.querySelectorAll('.nav-link');
+        const currentPath = window.location.pathname;
+
+        navLinks.forEach(link => {
+          const linkPath = new URL(link.href).pathname;
+          if (currentPath.endsWith(linkPath) || (currentPath.endsWith('/') && linkPath.endsWith('/'))) {
+            link.classList.add('active');
+          }
+        });
+      }
+
+      // Initialize on page load
+      window.addEventListener('DOMContentLoaded', function() {
+        generateTOC();
+        updateActiveTOC();
+        highlightCurrentPage();
+
+        // Scroll to hash if present
+        if (window.location.hash) {
+          setTimeout(() => {
+            const target = document.querySelector(window.location.hash);
+            if (target) {
+              target.scrollIntoView({ behavior: 'smooth' });
+            }
+          }, 100);
+        }
+      });
+
+      // Update active section on scroll
+      let scrollTimeout;
+      window.addEventListener('scroll', function() {
+        clearTimeout(scrollTimeout);
+        scrollTimeout = setTimeout(updateActiveTOC, 50);
+      });
+    </script>
 
   </body>
 

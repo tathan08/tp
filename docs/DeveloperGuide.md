@@ -2,8 +2,6 @@
 layout: page
 title: Developer Guide
 ---
-* Table of Contents
-{:toc}
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -795,9 +793,9 @@ testers are expected to do more *exploratory* testing.
        Expected: The most recent window size and location is retained.
 
 1. **Command line launch**
-   
+
    1. Open a command terminal and navigate to the folder containing the jar file.
-   
+
    1. Run `java -jar firstimpressions.jar`<br>
       Expected: Application launches successfully with the GUI.
 
