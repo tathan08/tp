@@ -46,25 +46,19 @@ public class ClientContainsKeywordsPredicate implements Predicate<Person> {
 
     private boolean matchesName(Person person, List<String> keywords) {
         String fullName = person.getName().fullName.toLowerCase();
-        return keywords.stream()
-                .map(String::toLowerCase)
-                .anyMatch(fullName::contains); // OR logic - match any keyword
+        return keywords.stream().map(String::toLowerCase).anyMatch(fullName::contains);
     }
 
     private boolean matchesTag(Person person, List<String> keywords) {
-        return keywords.stream()
-                .map(String::toLowerCase)
-                .anyMatch(kw -> person.getTags().stream()
-                        .map(tag -> tag.tagName.toLowerCase())
-                        .anyMatch(tag -> tag.contains(kw))); // OR logic - match any keyword
+        return keywords.stream().map(String::toLowerCase).anyMatch(kw -> person.getTags().stream()
+                                        .map(tag -> tag.tagName.toLowerCase()).anyMatch(tag -> tag.contains(kw)));
     }
 
     private boolean matchesDate(Person person, List<String> keywords) {
-        return keywords.stream().anyMatch(dateStr ->
-            person.getBookings().stream().anyMatch(booking -> {
-                String bookingDate = booking.getDateTime().toLocalDate().toString();
-                return bookingDate.contains(dateStr);
-            })); // OR logic - match any keyword
+        return keywords.stream().anyMatch(dateStr -> person.getBookings().stream().anyMatch(booking -> {
+            String bookingDate = booking.getDateTime().toLocalDate().toString();
+            return bookingDate.contains(dateStr);
+        }));
     }
 
     @Override
@@ -72,32 +66,25 @@ public class ClientContainsKeywordsPredicate implements Predicate<Person> {
         if (other == this) {
             return true;
         }
-
         if (!(other instanceof ClientContainsKeywordsPredicate otherPredicate)) {
             return false;
         }
-
         return Objects.equals(this.searchCriteria, otherPredicate.searchCriteria);
     }
 
-    // ✅ toString() override
+    public Map<String, List<String>> getSearchCriteria() {
+        return searchCriteria;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("ClientContainsKeywordsPredicate with criteria: ");
-        searchCriteria.forEach((key, value) ->
-                sb.append(key).append("=").append(value).append("; "));
+        searchCriteria.forEach((key, value) -> sb.append(key).append("=").append(value).append("; "));
         return sb.toString();
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(searchCriteria);
-    }
-
-    /**
-     * Returns the search criteria used in this predicate.
-     */
-    public Map<String, List<String>> getSearchCriteria() {
-        return searchCriteria;
     }
 }
