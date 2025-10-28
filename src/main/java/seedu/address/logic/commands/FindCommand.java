@@ -2,6 +2,7 @@ package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
@@ -55,7 +56,7 @@ public class FindCommand extends Command {
 
         String searchParamsMessage = formatSearchParameters();
         String resultMessage = String.format(Messages.MESSAGE_PERSONS_LISTED_OVERVIEW, resultCount);
-        
+
         return new CommandResult(searchParamsMessage + "\n" + resultMessage);
     }
 
@@ -75,8 +76,13 @@ public class FindCommand extends Command {
         }
 
         StringBuilder sb = new StringBuilder("Searching for contacts with:");
-        
-        searchCriteria.forEach((fieldType, keywords) -> {
+
+        List<Map.Entry<String, List<String>>> entries = new ArrayList<>(searchCriteria.entrySet());
+        for (int i = 0; i < entries.size(); i++) {
+            Map.Entry<String, List<String>> entry = entries.get(i);
+            String fieldType = entry.getKey();
+            List<String> keywords = entry.getValue();
+
             sb.append("\n  ");
             switch (fieldType) {
             case "name":
@@ -91,13 +97,18 @@ public class FindCommand extends Command {
             default:
                 sb.append(fieldType).append(": ");
             }
-            
+
             if (keywords.isEmpty()) {
                 sb.append("any");
             } else {
                 sb.append(keywords.stream().collect(Collectors.joining(", ")));
             }
-        });
+
+            // Add " OR" if not the last entry
+            if (i < entries.size() - 1) {
+                sb.append(" OR");
+            }
+        }
 
         return sb.toString();
     }
