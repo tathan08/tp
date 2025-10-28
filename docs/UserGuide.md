@@ -282,9 +282,10 @@ Examples:
 Search and lists all people who contain the given parameter(s). <br>
 
 Format: <br>
-`find n/NAME1 n/NAME2...` <br>
-`find t/TAG1 t/TAG2...` <br>
-`find d/DATE1 d/DATE2...` <br>
+`find n/NAME1 [n/NAME2]...` <br>
+`find t/TAG1 [t/TAG2]...` <br>
+`find d/DATE1 [d/DATE2]...` <br>
+`
 
 <div markdown="span" class="alert alert-warning">:exclamation: **Warning:**
 Each search parameter must preceded by its respective delimeter.
