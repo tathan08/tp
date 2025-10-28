@@ -33,7 +33,7 @@
             </a></li>
           </ul>
         </div>
-        
+
         <!-- Table of Contents Section -->
         <div class="toc-section">
           <div class="toc-header">
@@ -63,7 +63,7 @@
         const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
         const scrolled = (winScroll / height) * 100;
         document.getElementById('progressBar').style.width = scrolled + '%';
-        
+
         // Show/hide back to top button
         const backToTop = document.getElementById('backToTop');
         if (winScroll > 300) {
@@ -76,7 +76,7 @@
       // Sidebar Toggle
       const navToggle = document.getElementById('navToggle');
       const tocSidebar = document.getElementById('tocSidebar');
-      
+
       navToggle.addEventListener('click', function() {
         tocSidebar.classList.toggle('collapsed');
       });
@@ -85,20 +85,20 @@
       function generateTOC() {
         const content = document.querySelector('.page-content');
         if (!content) return;
-        
+
         const headings = content.querySelectorAll('h1, h2, h3, h4');
         const tocList = document.getElementById('tocList');
         const tocSidebar = document.getElementById('tocSidebar');
-        
+
         if (headings.length === 0) {
           tocSidebar.style.display = 'none';
           return;
         }
-        
+
         tocList.innerHTML = ''; // Clear existing TOC
-        
+
         let stack = [{element: tocList, level: 0}];
-        
+
         headings.forEach((heading, index) => {
           // Add ID to heading if it doesn't have one
           if (!heading.id) {
@@ -108,70 +108,70 @@
               .replace(/-+/g, '-');
             heading.id = text || 'heading-' + index;
           }
-          
+
           const level = parseInt(heading.tagName.charAt(1));
-          
+
           // Pop stack until we find the right parent level
           while (stack.length > 1 && stack[stack.length - 1].level >= level) {
             stack.pop();
           }
-          
+
           const parent = stack[stack.length - 1].element;
-          
+
           // Create list item
           const li = document.createElement('li');
           li.className = 'toc-item level-' + level;
-          
+
           // Check if this heading has children (next heading has higher level)
           let hasChildren = false;
           if (index + 1 < headings.length) {
             const nextLevel = parseInt(headings[index + 1].tagName.charAt(1));
             hasChildren = nextLevel > level;
           }
-          
+
           // Add toggle button if has children
           if (hasChildren) {
             li.classList.add('has-toggle');
-            
+
             const toggle = document.createElement('button');
             toggle.className = 'toc-toggle';
             toggle.innerHTML = '▼';
             toggle.setAttribute('aria-label', 'Toggle subsections');
-            
+
             toggle.addEventListener('click', function(e) {
               e.preventDefault();
               e.stopPropagation();
               li.classList.toggle('expanded');
             });
-            
+
             li.appendChild(toggle);
           }
-          
+
           // Create link
           const a = document.createElement('a');
           a.href = '#' + heading.id;
           a.textContent = heading.textContent;
           a.className = 'toc-link';
           a.setAttribute('data-level', level);
-          
+
           // Smooth scroll on click and toggle expand/collapse
           a.addEventListener('click', function(e) {
             e.preventDefault();
-            
+
             // Toggle expansion if has children
             if (hasChildren) {
               li.classList.toggle('expanded');
             }
-            
+
             heading.scrollIntoView({ behavior: 'smooth', block: 'start' });
             history.pushState(null, null, '#' + heading.id);
           });
-          
+
           li.appendChild(a);
-          
+
           // Add to parent
           parent.appendChild(li);
-          
+
           // If has children, create nested ul and push to stack
           if (hasChildren) {
             const nestedUl = document.createElement('ul');
@@ -180,7 +180,7 @@
             stack.push({element: nestedUl, level: level});
           }
         });
-        
+
         // Start with all sections collapsed by default
         // They will expand when scrolled to or clicked
       }
@@ -189,24 +189,24 @@
       function updateActiveTOC() {
         const content = document.querySelector('.page-content');
         if (!content) return;
-        
+
         const headings = content.querySelectorAll('h1, h2, h3, h4');
         const tocLinks = document.querySelectorAll('.toc-link');
-        
+
         let activeHeading = null;
         const scrollPos = window.scrollY + 150;
-        
+
         headings.forEach(heading => {
           if (heading.offsetTop <= scrollPos) {
             activeHeading = heading;
           }
         });
-        
+
         tocLinks.forEach(link => {
           link.classList.remove('active');
           if (activeHeading && link.getAttribute('href') === '#' + activeHeading.id) {
             link.classList.add('active');
-            
+
             // Auto-expand parent sections when scrolling to this heading
             let parentLi = link.closest('.toc-item');
             if (parentLi) {
@@ -214,7 +214,7 @@
               if (parentLi.classList.contains('has-toggle')) {
                 parentLi.classList.add('expanded');
               }
-              
+
               // Expand all parent items
               let ancestor = parentLi.parentElement;
               while (ancestor) {
@@ -227,7 +227,7 @@
                 ancestor = ancestor.parentElement;
               }
             }
-            
+
             // Auto-scroll TOC to show active item
             link.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
           }
@@ -247,7 +247,7 @@
       function highlightCurrentPage() {
         const navLinks = document.querySelectorAll('.nav-link');
         const currentPath = window.location.pathname;
-        
+
         navLinks.forEach(link => {
           const linkPath = new URL(link.href).pathname;
           if (currentPath.endsWith(linkPath) || (currentPath.endsWith('/') && linkPath.endsWith('/'))) {
@@ -261,7 +261,7 @@
         generateTOC();
         updateActiveTOC();
         highlightCurrentPage();
-        
+
         // Scroll to hash if present
         if (window.location.hash) {
           setTimeout(() => {
