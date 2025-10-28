@@ -46,19 +46,25 @@ public class ClientContainsKeywordsPredicate implements Predicate<Person> {
 
     private boolean matchesName(Person person, List<String> keywords) {
         String fullName = person.getName().fullName.toLowerCase();
-        return keywords.stream().map(String::toLowerCase).anyMatch(fullName::contains);
+        return keywords.stream()
+                .map(String::toLowerCase)
+                .anyMatch(fullName::contains); // OR logic - match any keyword
     }
 
     private boolean matchesTag(Person person, List<String> keywords) {
-        return person.getTags().stream().anyMatch(tag -> keywords.stream().map(String::toLowerCase)
-                                        .anyMatch(tag.tagName.toLowerCase()::contains));
+        return keywords.stream()
+                .map(String::toLowerCase)
+                .anyMatch(kw -> person.getTags().stream()
+                        .map(tag -> tag.tagName.toLowerCase())
+                        .anyMatch(tag -> tag.contains(kw))); // OR logic - match any keyword
     }
 
     private boolean matchesDate(Person person, List<String> keywords) {
-        return person.getBookings().stream().anyMatch(booking -> {
-            String bookingDate = booking.getDateTime().toLocalDate().toString();
-            return keywords.stream().anyMatch(bookingDate::contains);
-        });
+        return keywords.stream().anyMatch(dateStr ->
+            person.getBookings().stream().anyMatch(booking -> {
+                String bookingDate = booking.getDateTime().toLocalDate().toString();
+                return bookingDate.contains(dateStr);
+            })); // OR logic - match any keyword
     }
 
     @Override

@@ -33,7 +33,9 @@ public class FindCommandParser implements Parser<FindCommand> {
         Map<String, List<String>> searchCriteria = new HashMap<>();
 
         // === NAME ===
-        List<String> allNames = argMultimap.getValue(PREFIX_NAME).map(String::trim).map(List::of).orElse(List.of());
+        List<String> allNames = argMultimap.getAllValues(PREFIX_NAME).stream()
+                .map(String::trim)
+                .toList();
 
         boolean nameWildcard = allNames.stream().anyMatch(String::isEmpty);
         if (nameWildcard) {
@@ -43,7 +45,9 @@ public class FindCommandParser implements Parser<FindCommand> {
         }
 
         // === TAG ===
-        List<String> allTags = argMultimap.getValue(PREFIX_TAG).map(String::trim).map(List::of).orElse(List.of());
+        List<String> allTags = argMultimap.getAllValues(PREFIX_TAG).stream()
+                .map(String::trim)
+                .toList();
 
         boolean tagWildcard = allTags.stream().anyMatch(String::isEmpty);
         if (tagWildcard) {
