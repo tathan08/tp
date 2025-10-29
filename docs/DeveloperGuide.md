@@ -604,21 +604,24 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | -------- | ------------------------------------------ | ---------------------------------------------------- | ---------------------------------------------------------------------- |
 | `*`      | potential user                             | preview the app's features and interface             | evaluate if it meets my needs before committing to use it              |
 | `* * *`  | new user                                   | see usage instructions                               | refer to instructions when I forget how to use the app                 |
-| `* * *`  | new user                                   | see all the different available team members         | I can see the options for what I need                                  |
 | `* * *`  | new user                                   | have quick scheduling tools                          | I can plan my time smoothly and efficiently                            |
 | `* *`    | new user                                   | import my existing contact list in bulk              | start using the app immediately without manual data entry              |
 | `*`      | new user                                   | have the system remember my initial choices          | I don’t have to re-enter them each time                                |
 | `* * *`  | regular user                               | monitor team members' current booking status         | make informed decisions about workload distribution                    |
 | `* *`    | regular user                               | view my booking history and past matches             | quickly rebook the same professionals for repeat clients               |
-| `* * *`  | long-time user                             | reschedule appointments with minimal clicks          | save time when managing multiple booking changes                       |
+| `* *`    | long-time user                             | reschedule appointments with minimal effort          | save time when managing multiple booking changes                       |
+| `* *`    | long-time user                             | edit team member details easily                      | saves effort on deleting and adding the member again                   |
 | `*`      | long-time user                             | receive suggestions based on the allocations I made  | make faster decisions with personalized recommendations                |
 | `*`      | long-time user                             | update my search preferences easily                  | adapt to changing business needs without losing efficiency             |
-| `*`      | at-risk user                               | report issues and receive prompt responses           | resolve problems quickly and continue using the service                |
+| `* *`    | at-risk user                               | report issues and receive prompt responses           | resolve problems quickly and continue using the service                |
 | `*`      | at-risk user                               | receive updates on how my feedback was addressed     | know that my input contributes to service improvement                  |
 | `* * *`  | user                                       | add new team members with their details              | maintain an up-to-date roster of available professionals               |
 | `* * *`  | user                                       | delete a person                                      | remove entries that I no longer need                                   |
-| `* * *`  | user                                       | find a person by name or tag                         | locate details of persons without having to go through the entire list |
-| `*`      | user with many persons in the address book | sort persons by name                                 | locate a person easily                                                 |
+| `* * *`  | user                                       | delete a booking                                     | remove specific bookings that have been completed                      |
+| `* * *`  | user                                       | find a person by name, tag or date                   | locate a team member without having to go through the entire list      |
+| `* * *`  | user                                       | see all the different available team members         | I can see the options for what I need                                  |
+| `* *`    | user                                       | add descriptions to bookings                         | I can add context to assigned bookings                                 |
+| `*`      | user with many team members                | sort persons by name                                 | locate a person easily                                                 |
 
 # Use cases
 
