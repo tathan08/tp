@@ -6,6 +6,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
@@ -115,13 +116,40 @@ public class DeleteCommand extends Command {
 
         if (targetBooking > 0) {
             List<Booking> bookingList = personToDelete.getBookings();
-            if (bookingList.size() < targetBooking) {
+            
+            // Sort bookings using the same comparator as the UI
+            // Future bookings first (ascending), then past bookings (ascending)
+            Comparator<Booking> bookingComparator = (b1, b2) -> {
+                boolean b1IsFuture = Booking.isFutureDateTime(b1.getDateTime());
+                boolean b2IsFuture = Booking.isFutureDateTime(b2.getDateTime());
+                
+                if (b1IsFuture && b2IsFuture) {
+                    // Both future: sort ascending
+                    return b1.getDateTime().compareTo(b2.getDateTime());
+                } else if (!b1IsFuture && !b2IsFuture) {
+                    // Both past: sort ascending
+                    return b1.getDateTime().compareTo(b2.getDateTime());
+                } else {
+                    // One future, one past: future comes first
+                    return b1IsFuture ? -1 : 1;
+                }
+            };
+            
+            // Sort the booking list to match display order before accessing by index
+            List<Booking> sortedBookings = new ArrayList<>(bookingList);
+            sortedBookings.sort(bookingComparator);
+            
+            if (sortedBookings.size() < targetBooking) {
                 throw new CommandException(String.format(MESSAGE_DELETE_BOOKING_NOT_FOUND,
                         personToDelete.getName().fullName, targetBooking));
             }
+            
+            // Get the booking to remove based on display order
+            Booking removedBooking = sortedBookings.get(targetBooking - 1);
+            
+            // Remove the booking from the original storage order
             List<Booking> newBookings = new ArrayList<>(bookingList);
-            Booking removedBooking = newBookings.get(targetBooking - 1);
-            newBookings.remove(targetBooking - 1);
+            newBookings.remove(removedBooking);
 
             Person updatedPerson = new Person(
                     personToDelete.getName(),
