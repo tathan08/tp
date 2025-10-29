@@ -171,9 +171,8 @@ Examples:
 * `add n/Germaine` <br> will add a Person called `Germaine` to the contact list.
 
 * `add n/Alice Tan t/teamLead t/vipHandler` <br> will add a Person called `Alice Tan` with tags `teamLead` and `vipHandler` to the contact list. <br>
-<img src="images/addMessage-UG.png" width="700px" alt="add message">
-
-*Figure 2: Success message after adding a new person to the contact list*
+<img src="images/addMessage-UG.png" width="700px" alt="add message"> <br>
+*Figure 2: Adding a new person to the contact list*
 
 ### Adding a tag to an existing person: `add`
 
