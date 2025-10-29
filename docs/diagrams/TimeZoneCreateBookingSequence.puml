@@ -12,10 +12,10 @@ Participant ":Storage" as storage STORAGE_COLOR
 == Create booking (UTC storage) ==
 
 
-user -[USER_COLOR]> ui : "book d/2025-09-20 10:30 c/Madam Chen n/Bob Lee desc/consultation"
+user -[USER_COLOR]> ui : "book d/2025-09-20 10:30 c/Mdm Chen n/Bob Lee"
 activate ui UI_COLOR
 
-ui -[UI_COLOR]> logic : execute(book d/2025-09-20 10:30...)
+ui -[UI_COLOR]> logic : execute(book d/2025-09-20...)
 activate logic LOGIC_COLOR
 
 logic -[LOGIC_COLOR]> model : getUserTimezone()
@@ -23,10 +23,9 @@ activate model MODEL_COLOR
 model -[MODEL_COLOR]-> logic :
 deactivate model
 
-logic -[LOGIC_COLOR]> model : addBooking(...)
+logic -[LOGIC_COLOR]> model : createBookingWithTimeZone(client, datetime, desc, timezone)
 activate model MODEL_COLOR
 
-model -[MODEL_COLOR]> model : convert LocalDateTime
 model -[MODEL_COLOR]-> logic :
 deactivate model
 

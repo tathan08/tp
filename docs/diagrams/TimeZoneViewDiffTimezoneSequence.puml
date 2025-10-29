@@ -17,12 +17,11 @@ activate ui UI_COLOR
 ui -[UI_COLOR]> logic : execute(viewbookings timezone America/New_York)
 activate logic LOGIC_COLOR
 
-logic -[LOGIC_COLOR]> model : listBookings()
+logic -[LOGIC_COLOR]> model : getDateTimeInTimeZone(timezone)
 activate model MODEL_COLOR
 model -[MODEL_COLOR]-> logic :
 deactivate model
 
-logic -[LOGIC_COLOR]> logic : convert booking
 logic --[LOGIC_COLOR]> ui :
 deactivate logic
 

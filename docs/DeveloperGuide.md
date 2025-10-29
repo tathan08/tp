@@ -465,7 +465,7 @@ The timezone mechanism allows users to work with bookings across different timez
 2.  The user creates a booking:
 
     ```
-     book d/2025-09-20 10:30 c/Madam Chen n/Bob Lee desc/consultation
+     book d/2025-09-20 10:30 c/Madam Chen n/Bob Lee
     ```
 
     The system stores the booking in the user's timezone and can display it in other timezones when needed.
