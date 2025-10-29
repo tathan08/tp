@@ -552,7 +552,7 @@ Highlights relevant bookings to users based on their search criteria *(date/clie
     find c/Mr Tan
     ```
 
-<img src="images/FindBookingbyClientProposedSequence.png"/>  
+<img src="images/FindBookingbyClientProposedSequence.png"/>
 
 #### Design Considerations
 
