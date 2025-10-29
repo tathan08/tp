@@ -178,6 +178,9 @@ public class MainWindow extends UiPart<Stage> {
             logger.info("Result: " + commandResult.getFeedbackToUser());
             resultDisplay.setFeedbackToUser(commandResult.getFeedbackToUser());
 
+            // Force UI refresh to prevent display lag
+            personListPanel.getRoot().requestLayout();
+
             if (commandResult.isShowHelp()) {
                 handleHelp();
             }
