@@ -11,6 +11,7 @@ import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Optional;
@@ -264,6 +265,75 @@ public class DeleteCommandTest {
 
         assertThrows(CommandException.class, () -> deleteCommand.execute(model));
     }
+
+    @Test
+    public void execute_deleteB1_bugExists() throws CommandException {
+        // Create a fresh person with no existing bookings
+        Person personWithNoBookings = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        Name originalName = personWithNoBookings.getName();
+
+        // Create a unique name
+        Person freshPerson = new Person(
+                new Name(originalName.fullName + "Bug"),
+                personWithNoBookings.getPhone(),
+                personWithNoBookings.getEmail(),
+                personWithNoBookings.getTags(),
+                new ArrayList<>()
+        );
+
+        model.addPerson(freshPerson);
+
+        // Add a past booking first (stored at index 0)
+        LocalDateTime pastDateTime = LocalDateTime.of(2020, 1, 15, 10, 0);
+        Booking pastBooking = new Booking("Past Client", pastDateTime, "Past meeting");
+
+        // Add a future booking second (stored at index 1)
+        LocalDateTime futureDateTime = LocalDateTime.of(2026, 12, 25, 14, 30);
+        Booking futureBooking = new Booking("Future Client", futureDateTime, "Future meeting");
+
+        List<Booking> bookings = new ArrayList<>();
+        bookings.add(pastBooking);
+        bookings.add(futureBooking);
+
+        Person personWithBothBookings = new Person(
+                freshPerson.getName(),
+                freshPerson.getPhone(),
+                freshPerson.getEmail(),
+                freshPerson.getTags(),
+                bookings
+        );
+        model.setPerson(freshPerson, personWithBothBookings);
+
+        // Verify both bookings exist
+        Person beforeDeletion = model.getFilteredPersonList().stream()
+                .filter(p -> p.getName().equals(freshPerson.getName()))
+                .findFirst()
+                .orElse(null);
+        assertTrue(beforeDeletion != null, "Person should exist");
+        assertEquals(2, beforeDeletion.getBookings().size(), "Should have 2 bookings");
+
+        DeleteCommand deleteCommand = new DeleteCommand(personWithBothBookings.getName(), 1);
+        deleteCommand.execute(model);
+
+        // Verify which booking remains after deleting b/1
+        Person after = model.getFilteredPersonList().stream()
+                .filter(p -> p.getName().equals(freshPerson.getName()))
+                .findFirst()
+                .orElse(null);
+        assertTrue(after != null, "Person should still exist");
+        assertEquals(1, after.getBookings().size(), "Should have only 1 booking remaining");
+
+        Booking remainingBooking = after.getBookings().get(0);
+
+        // EXPECTED BEHAVIOR: After deleting b/1 (which should delete future booking in UI),
+        // the PAST booking should remain
+
+        assertEquals(pastBooking, remainingBooking,
+                "EXPECTED: After deleting b/1, the past booking should remain (but bug causes future to remain)");
+        assertFalse(Booking.isFutureDateTime(remainingBooking.getDateTime()),
+                "EXPECTED: Remaining booking should be past (but bug causes it to be future)");
+    }
+
 
 
     @Test
