@@ -296,7 +296,7 @@ The reschedule mechanism allows users to update the datetime of an existing book
       - **Failure Example:** Appropriate error message.
 
 
-<img src="images/RescheduleDiagram.png"/>
+<img src="images/RescheduleDiagram.png" width="500"/>
 
 #### Design Considerations
 
@@ -402,6 +402,7 @@ The edit booking mechanism allows users to update the client name or description
 
       - **Failure Example:** Appropriate error message.
 
+<img src="images/EditBookingProposedSequence.png"/>
 
 #### Design Considerations
 
@@ -460,6 +461,9 @@ The timezone mechanism allows users to work with bookings across different timez
      settimezone Asia/Singapore
     ```
 
+<img src="images/TimeZoneSetTimeZoneSequence.png"/>
+
+
 2.  The user creates a booking:
 
     ```
@@ -468,6 +472,8 @@ The timezone mechanism allows users to work with bookings across different timez
 
     The system stores the booking in the user's timezone and can display it in other timezones when needed.
 
+<img src="images/TimeZoneCreateBookingSequence.png"/>
+
 3.  The user views bookings in a different timezone:
 
     ```
@@ -475,6 +481,9 @@ The timezone mechanism allows users to work with bookings across different timez
     ```
 
     All booking times are automatically converted and displayed in the specified timezone.
+
+<img src="images/TimeZoneViewDiffTimezoneSequence.png"/>
+
 
 #### Design Considerations
 
@@ -522,11 +531,12 @@ The timezone mechanism allows users to work with bookings across different timez
 
 #### Proposed Implementation
 
-Highlights relevant bookings to users based on their search criteria while using `find`.
+Highlights relevant bookings to users based on their search criteria *(date/client name)* while using `find`.
 
 **Operations:**
   
-  - `Model#`
+  - `Model#findBookingsbyDate(DateTime dt)` — Finds all bookings on a specified date
+  - `Model#findBookingsbyClient(String name)` — Finds all bookings with a specific client
 
 #### Usage Scenario
 
@@ -536,12 +546,16 @@ Highlights relevant bookings to users based on their search criteria while using
     find dt/2025-12-15
     ```
 
+<img src="images/FindBookingbyDateTimeProposedSequence.png"/>
+
 2.  The user uses `find` command to search for bookings under a specific client.
 
     ```
     find c/Mr Tan
     ```
-    
+
+<img src="images/FindBookingbyClientProposedSequence.png"/>    
+
 #### Design Considerations
 
 **Display Format:**
