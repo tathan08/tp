@@ -26,7 +26,7 @@ Refer to the guide [_Setting up and getting started_](SettingUp.md).
 
 ### Architecture
 
-<img src="images/ArchitectureDiagram.png" width="280" />
+<img src="images/ArchitectureDiagram.png"/>
 
 The ***Architecture Diagram*** given above explains the high-level design of the App.
 
@@ -51,7 +51,7 @@ The bulk of the app's work is done by the following four components:
 
 The *Sequence Diagram* below shows how the components interact with each other for the scenario where the user issues the command `delete 1`.
 
-<img src="images/ArchitectureSequenceDiagram.png" width="574" />
+<img src="images/ArchitectureSequenceDiagram.png"/>
 
 Each of the four main components (also shown in the diagram above),
 
@@ -60,7 +60,7 @@ Each of the four main components (also shown in the diagram above),
 
 For example, the `Logic` component defines its API in the `Logic.java` interface and implements its functionality using the `LogicManager.java` class which follows the `Logic` interface. Other components interact with a given component through its interface rather than the concrete class (reason: to prevent outside component's being coupled to the implementation of a component), as illustrated in the (partial) class diagram below.
 
-<img src="images/ComponentManagers.png" width="300" />
+<img src="images/ComponentManagers.png"/>
 
 The sections below give more details of each component.
 
@@ -87,7 +87,7 @@ The `UI` component,
 
 Here's a (partial) class diagram of the `Logic` component:
 
-<img src="images/LogicClassDiagram.png" width="550"/>
+<img src="images/LogicClassDiagram.png"/>
 
 The sequence diagram below illustrates the interactions within the `Logic` component, taking `execute("delete 1")` API call as an example.
 
@@ -106,7 +106,7 @@ How the `Logic` component works:
 
 Here are the other classes in `Logic` (omitted from the class diagram above) that are used for parsing a user command:
 
-<img src="images/ParserClasses.png" width="600"/>
+<img src="images/ParserClasses.png"/>
 
 How the parsing works:
 * When called upon to parse a user command, the `AddressBookParser` class creates an `XYZCommandParser` (`XYZ` is a placeholder for the specific command name e.g., `AddCommandParser`) which uses the other classes shown above to parse the user command and create a `XYZCommand` object (e.g., `AddCommand`) which the `AddressBookParser` returns back as a `Command` object.
@@ -115,7 +115,7 @@ How the parsing works:
 ### Model component
 **API** : [`Model.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/model/Model.java)
 
-<img src="images/ModelClassDiagram.png" width="450" />
+<img src="images/ModelClassDiagram.png"/>
 
 
 The `Model` component,
@@ -129,7 +129,7 @@ The `Model` component,
 
 <div markdown="span" class="alert alert-info">:information_source: **Note:** An alternative (arguably, a more OOP) model is given below. It has a `Tag` list in the `AddressBook`, which `Person` references. This allows `AddressBook` to only require one `Tag` object per unique tag, instead of each `Person` needing their own `Tag` objects.<br>
 
-<img src="images/BetterModelClassDiagram.png" width="450" />
+<img src="images/BetterModelClassDiagram.png"/>
 
 </div>
 
@@ -137,7 +137,7 @@ The `Model` component,
 
 **API** : [`Storage.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/storage/Storage.java)
 
-<img src="images/StorageClassDiagramNew.png" width="550" />
+<img src="images/StorageClassDiagramNew.png"/>
 
 The `Storage` component,
 * can save both address book data and user preference data in JSON format, and read them back into corresponding objects.
@@ -221,7 +221,7 @@ Step 6. The user executes `clear`, which calls `Model#commitAddressBook()`. Sinc
 
 The following activity diagram summarizes what happens when a user executes a new command:
 
-<img src="images/CommitActivityDiagram.png" width="250" />
+<img src="images/CommitActivityDiagram.png"/>
 
 #### Design considerations:
 
@@ -257,16 +257,16 @@ The reschedule mechanism allows users to update the datetime of an existing book
 2.  Executes the command:
 
     ```
-     reschedule 2 n/Carl d/2025-10-25 1100
+     reschedule n/Carl Kurz b/2 dt/2025-10-25 1400
     ```
 
     Where:
 
     `b/2` = booking ID
 
-    `n/Carl` = team member name (added for clarity and verification)
+    `n/Carl Kurz` = team member name (added for clarity and verification)
 
-    `d/2025-10-25 14:00` = new datetime
+    `t/2025-10-25 14:00` = new datetime
 
     The Logic component parses the command and calls:
 
@@ -293,8 +293,8 @@ The reschedule mechanism allows users to update the datetime of an existing book
 
       - **Failure Example:** Appropriate error message.
 
-
-<img src="images/RescheduleDiagram.png" width="500"/>
+#### Sequence Diagram for Reschedule Command
+<img src="images/RescheduleDiagram.png"/>
 
 #### Design Considerations
 
@@ -312,33 +312,6 @@ The reschedule mechanism allows users to update the datetime of an existing book
 
   - Booking ID exists.
   - **Team member name (`n/`) matches the name in the booking.** (New consideration)
-  - New datetime is properly formatted and in the future.
-  - Team member availability at the new datetime.
-
-**Atomicity:**
-
-  - Reschedule is **all-or-nothing**: either fully applied or not applied at all.
-
-#### Extensions / Error Cases
-
-  - **Booking does not exist:**
-    Error: "Booking ID not found"
-
-  - **Double booking:**
-    Error: "Team member is already booked at the requested time"
-
-  - **Invalid datetime format:**
-    Error: "Invalid datetime format. Use YYYY-MM-DD HH:MM"
-
-  - **Past datetime:**
-    Error: "Cannot reschedule booking to a past datetime"
-
-  - **Missing parameters:**
-    Error: "Booking ID and new datetime are required for rescheduling"
-
-  - **Unknown parameter:**
-    Error: "Unknown parameter. Valid parameters are b/ (booking ID), n/ (team member name), d/ (new datetime)" (Updated list)
-
 ----
 
 ### \[Proposed\] Edit Booking Clients/Description
@@ -362,14 +335,14 @@ The edit booking mechanism allows users to update the client name or description
 2.  Executes the command:
 
     ```
-     editbooking 2 n/Carl c/Madam Wong desc/Updated consultation details
+     editbooking n/Carl Kurz b/2 c/Madam Wong desc/Updated consultation details
     ```
 
     Where:
 
-    `2` = booking ID
+    `b/2` = booking ID
 
-    `n/Carl` = team member name (for verification)
+    `n/Carl Kurz` = team member name (for verification)
 
     `c/Madam Wong` = new client name
 
@@ -400,6 +373,7 @@ The edit booking mechanism allows users to update the client name or description
 
       - **Failure Example:** Appropriate error message.
 
+#### Sequence Diagram for Edit Booking Command
 <img src="images/EditBookingProposedSequence.png"/>
 
 #### Design Considerations
@@ -453,33 +427,23 @@ The timezone mechanism allows users to work with bookings across different timez
 
 #### Usage Scenario
 
-1.  The user sets their preferred timezone:
-
-    ```
-     settimezone Asia/Singapore
-    ```
-
+1.  The user sets their preferred timezone: `settimezone Asia/Singapore` <br>
+    
+#### Sequence Diagram for Setting Preferred Timezone
 <img src="images/TimeZoneSetTimeZoneSequence.png"/>
 
-
-2.  The user creates a booking:
-
-    ```
-     book d/2025-09-20 10:30 c/Madam Chen n/Bob Lee
-    ```
+2.  The user creates a booking: `book d/2025-09-20 10:30 c/Madam Chen n/Bob Lee` <br>
 
     The system stores the booking in the user's timezone and can display it in other timezones when needed.
 
+#### Sequence Diagram for Creating Booking with Timezone Preferences
 <img src="images/TimeZoneCreateBookingSequence.png"/>
 
-3.  The user views bookings in a different timezone:
-
-    ```
-     viewbookings timezone America/New_York
-    ```
+3.  The user views bookings in a different timezone: `settimezone timezone America/New_York` <br>
 
     All booking times are automatically converted and displayed in the specified timezone.
 
+#### Sequence Diagram for Viewing Bookings in Different Timezone
 <img src="images/TimeZoneViewDiffTimezoneSequence.png"/>
 
 
@@ -533,25 +497,19 @@ Highlights relevant bookings to users based on their search criteria *(date/clie
 
 **Operations:**
 
-  - `Model#findBookingsbyDate(DateTime dt)` — Finds all bookings on a specified date
-  - `Model#findBookingsbyClient(String name)` — Finds all bookings with a specific client
+  - `Model#markBookings(Predicate<Person> predicate)` — Mark all relevant bookings that match search criteria
+  - `UI#highlightBookings()` — Highlights all relevant bookings
 
 #### Usage Scenario
 
-1.  The user uses `find` command to search for bookings under a specific date.
+1.  The user uses `find` command to search for bookings under a specific date: `find dt/2025-12-15` <br>
 
-    ```
-    find dt/2025-12-15
-    ```
-
+#### Sequence Diagram for Finding Booking by Date
 <img src="images/FindBookingbyDateTimeProposedSequence.png"/>
 
-2.  The user uses `find` command to search for bookings under a specific client.
+2.  The user uses `find` command to search for bookings under a specific client: `find c/Mr Tan` <br>
 
-    ```
-    find c/Mr Tan
-    ```
-
+#### Sequence Diagram for Finding Booking by Client Name
 <img src="images/FindBookingbyClientProposedSequence.png"/>
 
 #### Design Considerations
@@ -634,7 +592,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 ### **Use Case: Add a Person**
 
-**System**: FirstImpressions \
+**System**: FirstImpressions
 **Actor**: User
 
 #### **Main Success Scenario (MSS):**
@@ -643,7 +601,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 3. FirstImpressions adds person to the list
 4. Use case ends
 
-<img src="images/add-DG.png" width="400px" alt="add person">
+<img src="images/add-DG.png" alt="add person">
 
 **Extensions**
 
@@ -670,7 +628,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 ### **Use Case: Delete a Person**
 
-**System**: FirstImpressions \
+**System**: FirstImpressions
 **Actor**: User
 
 #### **Main Success Scenario (MSS):**
@@ -679,7 +637,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 3. FirstImpressions deletes person in the list
 4. Use case ends
 
-<img src="images/delete-DG.png" width="400px" alt="delete person">
+<img src="images/delete-DG.png" alt="delete person">
 
 **Extensions**
 
@@ -694,7 +652,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 ### **Use Case: Book a Person**
 
-**System**: FirstImpressions \
+**System**: FirstImpressions
 **Actor**: User
 
 #### **Main Success Scenario (MSS):**
@@ -703,7 +661,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 3. FirstImpressions adds booking to team member
 4. Use case ends
 
-<img src="images/book-DG.png" width="400px" alt="book person">
+<img src="images/book-DG.png" alt="book person">
 
 **Extensions**
 
@@ -819,7 +777,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 - **3b.** Valid prefix provided but no parameter (e.g., `find d/`). \
   FirstImpressions lists all persons. Use case continues as in the main scenario. <br>
 
-<img src="images/find-DG.png" width="400px" alt="find person">
+<img src="images/find-DG.png" alt="find person">
 ---
 
 ### **Delimiters & Usage**
@@ -875,7 +833,7 @@ Prefix before every value. It trades a small amount of typing for predictable pa
 
 ### **Use Case: Help Menu**
 
-**System**: FirstImpressions \
+**System**: FirstImpressions
 **Actor**: User
 
 #### **Main Success Scenario (MSS):**
@@ -883,7 +841,7 @@ Prefix before every value. It trades a small amount of typing for predictable pa
 2. FirstImpressions shows pop-up menu with all command usage
 3. Use case ends
 
-<img src="images/help-DG.png" width="400px" alt="help">
+<img src="images/help-DG.png" alt="help">
 
 
 

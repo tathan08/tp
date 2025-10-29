@@ -14,13 +14,25 @@ activate ui UI_COLOR
 ui -[UI_COLOR]> logic : execute(find c/Mr Tan)
 activate logic LOGIC_COLOR
 
-logic -[LOGIC_COLOR]> model : findBookingsbyClient(name)
+logic -[LOGIC_COLOR]> model : FindCommand(name)
 activate model MODEL_COLOR
+
+model -[MODEL_COLOR]> model : markBookings(predicate)
+activate model MODEL_COLOR
+model --[MODEL_COLOR]> model :
+deactivate model MODEL_COLOR
+
 model -[MODEL_COLOR]-> logic :
 deactivate model
 
 logic --[LOGIC_COLOR]> ui :
 deactivate logic
+
+ui -[UI_COLOR]> ui : highlightBookings()
+activate ui UI_COLOR
+ui  --[UI_COLOR]> ui :
+deactivate ui
+
 ui --[UI_COLOR]> user :
 deactivate ui
 @enduml
