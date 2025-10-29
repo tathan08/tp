@@ -83,7 +83,7 @@ Do not move the .jar file after data has been created. The application stores da
    - Run: `java -jar firstimpressions.jar`
 
 4. **Verify successful launch:** A GUI similar to the below should appear in a few seconds. Note how the app contains some sample data.<br>
-   ![defaultUI](images/defaultUI.jpg)
+   ![Ui](images/Ui.png)
    <div markdown="span" class="alert alert-primary">:bulb: **Tip:** If the application doesn't start, ensure Java 17+ is properly installed and the .jar file is not corrupted.</div>
 
 <div markdown="span" class="alert alert-warning">:exclamation: **Important:**
