@@ -532,7 +532,7 @@ The timezone mechanism allows users to work with bookings across different timez
 Highlights relevant bookings to users based on their search criteria *(date/client name)* while using `find`.
 
 **Operations:**
-  
+
   - `Model#findBookingsbyDate(DateTime dt)` — Finds all bookings on a specified date
   - `Model#findBookingsbyClient(String name)` — Finds all bookings with a specific client
 
@@ -552,7 +552,7 @@ Highlights relevant bookings to users based on their search criteria *(date/clie
     find c/Mr Tan
     ```
 
-<img src="images/FindBookingbyClientProposedSequence.png"/>    
+<img src="images/FindBookingbyClientProposedSequence.png"/>  
 
 #### Design Considerations
 
@@ -569,10 +569,10 @@ Highlights relevant bookings to users based on their search criteria *(date/clie
 
 #### Extensions/ Error Cases
 
- - **Date not found:** 
+ - **Date not found:**
     Error: "No bookings with the input date found."
 
- - **Person not found:** 
+ - **Person not found:**
     Error: "No searches matching the input name found"
 
 

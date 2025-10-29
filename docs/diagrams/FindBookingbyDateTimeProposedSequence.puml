@@ -18,11 +18,8 @@ activate model MODEL_COLOR
 model -[MODEL_COLOR]-> logic :
 deactivate model
 
-
-
 logic --[LOGIC_COLOR]> ui :
 deactivate logic
 ui --[UI_COLOR]> user :
 deactivate ui
-
 @enduml
