@@ -268,17 +268,6 @@ public class DeleteCommandTest {
 
     @Test
     public void execute_deleteB1_bugExists() throws CommandException {
-        // BUG DEMONSTRATION TEST
-        // This test exposes a bug where b/1 refers to storage order, not display order
-
-        // UI displays bookings with: Future first (ID 1), then Past (ID 2)
-        // But DeleteCommand uses: Storage order (first added is ID 1)
-
-        // Scenario: Add past booking, then future booking
-        // User sees in UI: ID 1 = Future booking, ID 2 = Past booking
-        // User deletes b/1 expecting to delete Future booking
-        // BUG: Actually deletes Past booking (first in storage order)
-
         // Create a fresh person with no existing bookings
         Person personWithNoBookings = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
         Name originalName = personWithNoBookings.getName();
@@ -323,9 +312,6 @@ public class DeleteCommandTest {
         assertTrue(beforeDeletion != null, "Person should exist");
         assertEquals(2, beforeDeletion.getBookings().size(), "Should have 2 bookings");
 
-        // BUG: In UI, b/1 should refer to the FUTURE booking (shown first)
-        // But DeleteCommand uses storage order, so b/1 actually deletes the PAST booking
-        // This test demonstrates the incorrect behavior
         DeleteCommand deleteCommand = new DeleteCommand(personWithBothBookings.getName(), 1);
         deleteCommand.execute(model);
 
@@ -341,7 +327,7 @@ public class DeleteCommandTest {
 
         // EXPECTED BEHAVIOR: After deleting b/1 (which should delete future booking in UI),
         // the PAST booking should remain
-        // This test will FAIL because b/1 currently deletes the past booking (bug)
+
         assertEquals(pastBooking, remainingBooking,
                 "EXPECTED: After deleting b/1, the past booking should remain (but bug causes future to remain)");
         assertFalse(Booking.isFutureDateTime(remainingBooking.getDateTime()),
