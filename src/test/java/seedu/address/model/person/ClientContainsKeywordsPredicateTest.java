@@ -56,25 +56,36 @@ public class ClientContainsKeywordsPredicateTest {
     @Test
     public void test_nameMatching() {
         Map<String, List<String>> map = new HashMap<>();
-        map.put("name", List.of("Alice"));
+        map.put("name", List.of("Alice", "Bob"));
         ClientContainsKeywordsPredicate predicate = buildPredicate(map);
 
-        // matches
+        // matches - contains Alice (first keyword)
+        assertTrue(predicate.test(new PersonBuilder().withName("Alice Charlie").build()));
+        // matches - contains Bob (second keyword)
+        assertTrue(predicate.test(new PersonBuilder().withName("Bob Charlie").build()));
+        // matches - contains both keywords
         assertTrue(predicate.test(new PersonBuilder().withName("Alice Bob").build()));
         assertTrue(predicate.test(new PersonBuilder().withName("Bob Alice").build()));
 
-        // does not match
+        // does not match - contains neither keyword
         assertFalse(predicate.test(new PersonBuilder().withName("Charlie").build()));
     }
 
     @Test
     public void test_tagMatching() {
         Map<String, List<String>> map = new HashMap<>();
-        map.put("tag", List.of("vip"));
+        map.put("tag", List.of("vip", "friend"));
         ClientContainsKeywordsPredicate predicate = buildPredicate(map);
 
+        // matches - has both tags
         assertTrue(predicate.test(new PersonBuilder().withTags("vip", "friend").build()));
-        assertFalse(predicate.test(new PersonBuilder().withTags("friend").build()));
+        // matches - has vip tag only
+        assertTrue(predicate.test(new PersonBuilder().withTags("vip").build()));
+        // matches - has friend tag only
+        assertTrue(predicate.test(new PersonBuilder().withTags("friend").build()));
+
+        // does not match - no matching tags
+        assertFalse(predicate.test(new PersonBuilder().withTags("other").build()));
     }
 
     @Test

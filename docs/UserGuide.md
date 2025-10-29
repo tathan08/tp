@@ -29,34 +29,6 @@ FirstImpressions helps you:
 
 With FirstImpressions, no client request is too hard to handle as our system is able to search through multiple preferences, ensuring the perfect match for our customers.
 
-## Table of Contents
-
-- [Introduction](#introduction)
-  - [Target Users](#target-users)
-  - [User Proficiency Level](#user-proficiency-level)
-  - [What FirstImpressions Does](#what-firstimpressions-does)
-- [Table of Contents](#table-of-contents)
-- [Quick start](#quick-start)
-  - [Prerequisites](#prerequisites)
-  - [Installation Steps](#installation-steps)
-- [Features](#features)
-  - [Viewing help : `help`](#viewing-help--help)
-  - [Adding a person: `add`](#adding-a-person-add)
-  - [Adding a tag to an existing person: `add`](#adding-a-tag-to-an-existing-person-add)
-  - [Listing all persons : `list`](#listing-all-persons--list)
-  - [Editing a person : `edit`](#editing-a-person--edit)
-  - [Locating team members by name: `find`](#locating-team-members-by-name-find)
-  - [Deleting a person : `delete`](#deleting-a-person--delete)
-  - [Clearing all entries : `clear`](#clearing-all-entries--clear)
-  - [Assigning a booking : `book`](#assigning-a-booking--book)
-  - [Exiting the program : `exit`](#exiting-the-program--exit)
-- [Data Management](#data-management)
-  - [Saving the data](#saving-the-data)
-  - [Editing the data file](#editing-the-data-file)
-- [FAQ](#faq)
-- [Known issues](#known-issues)
-- [Command summary](#command-summary)
-
 --------------------------------------------------------------------------------------------------------------------
 
 ## Quick start
@@ -279,21 +251,21 @@ Examples:
 
 ### Locating team members by name: `find`
 
-Search and lists all people who contain the given parameter(s). <br>
+The `find` command offers a flexible way for users to filter the contact list by **name**, **tag**, and **scheduled date of bookings**. <br>
 
 Format: <br>
-`find n/NAME1 n/NAME2...` <br>
-`find t/TAG1 t/TAG2...` <br>
-`find d/DATE1 d/DATE2...` <br>
+`find n/NAME1 [n/NAME2]...` <br>
+`find t/TAG1 [t/TAG2]...` <br>
+`find d/DATE1 [d/DATE2]...` <br>
+
 
 <div markdown="span" class="alert alert-warning">:exclamation: **Warning:**
 Each search parameter must preceded by its respective delimeter.
 
-If multiple tags are being searched for, each paramter must have its own `t/`  <br>
-`find t/teamLead t/friends` displays all persons with the `teamLead` tag OR the `friends` tag
+If multiple tags are being searched for, each parameter must have its own `t/`  <br>
+`find t/teamLead t/friends` displays all persons with the `teamLead` tag **OR** the `friends` tag
 </div>
 
-* Multiple fields are allowed, and will display all matches to each given parameter. e.g. `find n/Hans t/teamLead` will list every person whose name contains `Hans` AND tags contain `teamLead`.
 * Searching within a field with an empty parameter (e.g. `find n/`, `find t/` or `find d/`) will list all team members within FirstImpressions
 * The search for names and tags are case-insensitive. e.g `hans` will match `Hans`
 * Partial matches will be shown e.g. `find n/Ali` will find a person named `Alice`
@@ -303,7 +275,11 @@ Examples:
 * `find n/John` returns `john` and `John Doe` <br>
 * `find d/2026-08-18` returns `Alex Yeoh`, `David Li`<br>
 * `find t/` returns all team members in FirstImpressions <br>
-*
+
+ <div markdown="span" class="alert alert-primary">:bulb: **Tip:** Expeand your search by utilizing different fields! <br>
+ `find n/Alice t/teamLead` displays all team members containing `Alice` in their name **OR** team members whose tags contain `teamLead` within them.
+ </div>
+
 <img src="images/findMessage-UG.png" width="400px" alt="find message">
 
   *Figure 6: Search results showing team members matching the search criteria*
