@@ -122,9 +122,6 @@ Always backup your `addressbook.json` file before making major changes. Data los
 * Items with `…`​ after them can be used multiple times including zero times.<br>
   e.g. `[t/TAG​]…` can be used as ` ` (i.e. 0 times), `t/vipHandler`, `t/vipHandler t/teamLead` etc.
 
-* Parameters can be in any order.<br>
-  e.g. if the command specifies `n/NAME p/PHONE_NUMBER`, `p/PHONE_NUMBER n/NAME` is also acceptable.
-
 * Extraneous parameters for commands that do not take in parameters (such as `help`, `list`, and `exit`) will be ignored.<br>
   e.g. if the command specifies `help 123`, it will be interpreted as `help`.
 
@@ -136,7 +133,7 @@ Always backup your `addressbook.json` file before making major changes. Data los
 Shows a short summary of available commands, with a link to access the User Guide.
 
 ![help message](images/help-DG.png) <br>
-*Figure 1: Help window showing available commands and User Guide link*
+*Figure 1: Help window showing available commands and User Guide's link*
 
 Format: `help`
 
@@ -147,46 +144,34 @@ Adds a person to the contact list.
 
 Format: `add n/NAME [p/PHONE_NUMBER] [e/EMAIL] [t/TAG]…​`
 
-* Consecutive spaces in name are removed. e.g. "Alice&nbsp;&nbsp;Tan" will be saved as `Alice Tan`.
+* Consecutive spaces in name are removed. e.g. "Alice&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tan" will be saved as `Alice Tan`.
 * Names can contain letters, spaces, apostrophes, hyphens, and slashes. e.g. `s/o` (son of), `d/o` (daughter of).
-* Phone numbers can contain any characters including `+`, `()`, `-`, spaces, and letters. Only whitespace-only phone numbers are not allowed.
 * Tags must be alphanumeric and have no spaces.
 
 <div markdown="span" class="alert alert-warning">:exclamation: **Warning:**
-Duplicate names are not allowed. Each person in the contact list must have a unique name. If you try to add a person with an existing name, you'll see: "A person with this name already exists in your address book. Please use a different name or edit the existing contact."
+Duplicate names are not allowed. Each person in the contact list must have a unique name. <br>
+In this case, try customising the names in a way that is easily identifiable to you! <br>
+For example: 1-Alice Tan, 2-Alice Tan!
 </div>
 
 <div markdown="span" class="alert alert-warning">:exclamation: **Warning:**
-Tags must be alphanumeric only (no spaces, hyphens, or special characters). Use camelCase for multi-word tags (e.g., `vipHandler`, not `vip-handler` or `vip handler`). Invalid tags will show: "Tag names should only contain letters and numbers (no spaces or special characters). Examples: 'VIP', 'friend', 'colleague2024'"
+Tags must be alphanumeric only (no spaces, hyphens, or special characters)! <br>
+You can use camelCase for multi-word tags (e.g., `vipHandler`, instead of `vip-handler` or `vip handler`)
 </div>
 
-<div markdown="span" class="alert alert-info">:information_source: **Character Limits:**
-* Names: Maximum 100 characters (must start with a letter, can contain letters, spaces, apostrophes, hyphens, and slashes)
-* Phone: Can contain any characters (numbers, +, (), -, spaces, letters, etc.), cannot be whitespace-only
-* Email: Must be a valid email format (username@domain.com)
-* Tags: Alphanumeric only, use camelCase for multi-word tags
-* Client names (for bookings): 1-100 characters, must contain at least one letter
-* Booking descriptions: 1-500 characters
-</div>
-
-<div markdown="span" class="alert alert-primary">:bulb: **Tip:**
-A person can have any number of tags (including 0). <br>
-Use camelCase for multiword tags. e.g. teamLead
-</div>
-
-<div markdown="span" class="alert alert-primary">:bulb: **Tip:**
-Phone numbers are flexible! You can use any format that works for you: international format with `+` (e.g., `+65 9123 4567`), with parentheses and hyphens (e.g., `(123) 456-7890`), or plain numbers (e.g., `98765432`). Extensions and additional text are also supported (e.g., `123-456 ext. 789`).
+<div markdown="span" class="alert alert-info">:information_source: **Character Limits:** <br>
+* Names: Maximum 100 characters (must start with a letter) <br>
+* Phone: Can contain any characters (numbers, +, (), -, spaces, letters, etc.), but cannot be spaces only. <br>
+* Email: Must be a valid email format (username@domain.com) <br>
+* Tags: Letters and numbers only <br>
 </div>
 
 Examples:
 
-* `add n/Alice Tan p/98702930 e/alicetan@gmail.com t/teamLead t/vipHandler` <br> will add a Person called `Alice Tan`, with phone number `98702930`, with email `alicetan@gmail.com`, with tags `teamLead` and `vipHandler` to the contact list.
-* `add n/Bob Lee p/+65 9123 4567 t/mandarinSpeaking` <br> will add a Person called `Bob Lee` with phone number `+65 9123 4567` and tag `mandarinSpeaking` to the contact list.
-* `add n/Abhijay s/o Abhi p/91234567 e/abhijay@example.com t/family` <br> will add a Person called `Abhijay s/o Abhi` (with slash for "son of") with tag `family` to the contact list.
-* `add n/Charlie Wong p/(123) 456-7890` <br> will add a Person called `Charlie Wong` with phone number `(123) 456-7890` to the contact list.
 * `add n/Germaine` <br> will add a Person called `Germaine` to the contact list.
 
-<img src="images/addMessage-UG.png" width="400px" alt="add message">
+* `add n/Alice Tan t/teamLead t/vipHandler` <br> will add a Person called `Alice Tan` with tags `teamLead` and `vipHandler` to the contact list. <br>
+<img src="images/addMessage-UG.png" width="700px" alt="add message">
 
 *Figure 2: Success message after adding a new person to the contact list*
 
