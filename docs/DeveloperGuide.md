@@ -148,6 +148,48 @@ The `Storage` component,
 
 Classes used by multiple components are in the `seedu.address.commons` package.
 
+---
+
+
+### **Design Choices**
+
+#### Find Command
+
+##### **Aspect: Where to Perform Input Validation**
+- **Alternative 1:** Validate parameters in `ClientContainsKeywordsPredicate`.
+  - *Pros:* Keeps `FindCommandParser` simpler.
+  - *Cons:* Predicate becomes responsible for input correctness instead of filtering logic.
+- **Alternative 2 (current choice):** Validate in `FindCommandParser` before predicate creation.
+  - *Pros:* Ensures only valid data reaches the model layer.
+  - *Cons:* Slightly increases parser complexity.
+
+**Chosen Approach:**
+Validation is performed in `FindCommandParser` for better separation of concerns — parsing vs filtering.
+
+
+##### **Aspect: Handling Multiple Prefixes**
+- **Alternative 1:** Search for results using a logical **AND** operation making search results more accurate and  easy to find specific team members
+- **Alternative 2 (current choice):** Search for results   using a logical **OR** operation to include as many results as possible to ensure user does not miss / mismatch any inputs and intended results
+  - *Pros:* Easier to find groups of people even with mismatched input (e.g. `find n/Alex Loh` returns results for `Alex Yeoh` and `Brian Loh`)
+  - *Cons:* Inability to find specific people among team members with similar names (e.g. When rearching for `Alex Yeoh` with a `teamLead` tag among mutiple `Alex Yeoh`s, doing `find n/Alex Yeoh t/teamLead` will list all results for both search parameters)
+
+**Chosen Approach:**
+`find` supports combining multiple prefixes using a logical **OR** relationship.
+  - e.g., `find n/Alex t/friend` returns persons whose name *contains "Alex"* **or** those who have the tag *"friend"*.
+- This makes it easier to find for users.
+
+
+##### **Aspect: Command Format**
+- **Alternative 1** Prefix before every value (current choice):
+  - Example: `find t/teamLead t/friends`
+  - Rationale: explicit field specifiers make tokenization deterministic, avoid ambiguity between multi-word values and separate parameters, and force deliberate searches (users must consciously mark each search term with its field).
+- **Alternative 2** Implicit multiple parameters without repeated prefixes:
+  - Example: `find t/ teamLead friends`
+  - Rationale: more concise for users but requires heuristics to decide whether `friends` is part of the first name or a separate name; complicates tokenizer and increases chance of surprising behavior for users.
+
+**Chosen approach:**
+Prefix before every value. It trades a small amount of typing for predictable parsing, maintainable code, and fewer surprising edge cases during tokenization and validation.
+
 --------------------------------------------------------------------------------------------------------------------
 
 ## **Implementation**
@@ -768,56 +810,6 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
   FirstImpressions lists all persons. Use case continues as in the main scenario. <br>
 
 <img src="images/find-DG.png" width="400px" alt="find person">
----
-
-### **Delimiters & Usage**
-
--  **Name** (`n/`): Case-insensitive, supports partial matches. <br>
-  Rationale: Names are free-form text and substring matching keeps searches flexible without requiring complex tokenization. Multiple `n/` prefixes are allowed to ensure precise and intentional searches. With each acting as an alternative (OR) filter.
-
-- **Tag** (`t/`): case-insensitive, supports partial matches. <br>
-  Rationale: tags are atomic labels used for quick categorisation. Treating tags as separate tokens simplifies matching and aligns with user expectations. Multiple `t/` prefixes are allowed to ensure precise and intentional searches.
-
-- **Booking Date** (`d/`): strict `YYYY-MM-DD` format, exact match. <br>
-   Rationale: dates need a canonical representation for reliable parsing and comparison; the parser validates date format and rejects invalid inputs. Multiple `d/` prefixes are allowed to ensure precise and intentional searches.
-
----
-### **Design Considerations**
-
-#### **Aspect: Where to Perform Input Validation**
-- **Alternative 1:** Validate parameters in `ClientContainsKeywordsPredicate`.
-  - *Pros:* Keeps `FindCommandParser` simpler.
-  - *Cons:* Predicate becomes responsible for input correctness instead of filtering logic.
-- **Alternative 2 (current choice):** Validate in `FindCommandParser` before predicate creation.
-  - *Pros:* Ensures only valid data reaches the model layer.
-  - *Cons:* Slightly increases parser complexity.
-
-**Chosen Approach:**
-Validation is performed in `FindCommandParser` for better separation of concerns — parsing vs filtering.
-
-
-#### **Aspect: Handling Multiple Prefixes**
-- **Alternative 1:** Search for results using a logical **AND** operation making search results more accurate and  easy to find specific team members
-- **Alternative 2 (current choice):** Search for results   using a logical **OR** operation to include as many results as possible to ensure user does not miss / mismatch any inputs and intended results
-  - *Pros:* Easier to find groups of people even with mismatched input (e.g. `find n/Alex Loh` returns results for `Alex Yeoh` and `Brian Loh`)
-  - *Cons:* Inability to find specific people among team members with similar names (e.g. When rearching for `Alex Yeoh` with a `teamLead` tag among mutiple `Alex Yeoh`s, doing `find n/Alex Yeoh t/teamLead` will list all results for both search parameters)
-
-**Chosen Approach:**
-`find` supports combining multiple prefixes using a logical **OR** relationship.
-  - e.g., `find n/Alex t/friend` returns persons whose name *contains "Alex"* **or** those who have the tag *"friend"*.
-- This makes it easier to find for users.
-
-
-#### **Aspect: Command Format**
-- **Alternative 1** Prefix before every value (current choice):
-  - Example: `find t/teamLead t/friends`
-  - Rationale: explicit field specifiers make tokenization deterministic, avoid ambiguity between multi-word values and separate parameters, and force deliberate searches (users must consciously mark each search term with its field).
-- **Alternative 2** Implicit multiple parameters without repeated prefixes:
-  - Example: `find t/ teamLead friends`
-  - Rationale: more concise for users but requires heuristics to decide whether `friends` is part of the first name or a separate name; complicates tokenizer and increases chance of surprising behavior for users.
-
-**Chosen approach:**
-Prefix before every value. It trades a small amount of typing for predictable parsing, maintainable code, and fewer surprising edge cases during tokenization and validation.
 
 ---
 
@@ -857,6 +849,8 @@ Prefix before every value. It trades a small amount of typing for predictable pa
 
 
 *{More to be added}*
+
+---
 
 ### Glossary
 
