@@ -180,17 +180,16 @@ Adds a tag to an existing person.
 
 Format: `add n/NAME t/TAG…​`
 
-* Consecutive spaces in name are removed. e.g. "Alice&nbsp;&nbsp;Tan" will be saved as `Alice Tan`.
+* Consecutive spaces in name are removed. e.g. "Alice&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tan" will be read as `Alice Tan`.
 * Multiple  tags can be added at once by prefixing each tag with `t/`.
-* Tags must be alphanumeric and have no spaces.
+* Tags must contain only letters and numbers, without spaces.
 * If person does not already exist in FirstImpressions, the person is created.
-* Other tags e.g. `e/email@example.com` here will be ignored.
 
 Examples:
 
 * `add n/Alice Tan t/sales t/manager` <br> will add tags `sales` and `manager` to the Person called `Alice Tan`.
 
-<img src="images/addTags-UG.png" width="400px" alt="add tags">
+<img src="images/addTags-UG.png" width="700px" alt="add tags">
 
 *Figure 3: Success message after adding tags to an existing person*
 
