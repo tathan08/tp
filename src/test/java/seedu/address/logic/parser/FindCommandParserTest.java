@@ -17,36 +17,42 @@ class FindCommandParserTest {
     private final FindCommandParser parser = new FindCommandParser();
 
     @Test
+    // multiple name tokens under one prefix not allowed
     void parse_multipleNames_parseFailure() {
         String userInput = "n/Alice Bob"; // multiple names in a single prefix
         assertThrows(ParseException.class, () -> parser.parse(userInput));
     }
 
     @Test
+    // multiple tag tokens under one prefix not allowed
     void parse_multipleTags_parseFailure() {
         String userInput = "t/friend colleague"; // multiple tags
         assertThrows(ParseException.class, () -> parser.parse(userInput));
     }
 
     @Test
+    // multiple dates or invalid date formats rejected
     void parse_multipleDates_parseFailure() {
         String userInput = "d/2025-12-15 2026-12-15";
         assertThrows(ParseException.class, () -> parser.parse(userInput));
     }
 
     @Test
+    // invalid date format rejected
     void parse_invalidDate_parseFailure() {
         String userInput = "d/2025-13-40"; // invalid month and day
         assertThrows(ParseException.class, () -> parser.parse(userInput));
     }
 
     @Test
+    // missing any valid prefix rejected
     void parse_missingPrefix_throwsParseException() {
         String userInput = "Alice"; // no prefix at all
         assertThrows(ParseException.class, () -> parser.parse(userInput));
     }
 
     @Test
+    // mixed prefixes: ensure parsed predicate matches expected keys
     void parse_nameAndTag() throws Exception {
         // Input includes both name and tag, but we only assert tag in the
         // expected predicate

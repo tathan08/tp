@@ -48,6 +48,7 @@ public class EditCommandParserTest {
     private EditCommandParser parser = new EditCommandParser();
 
     @Test
+    // missing name / missing fields / both missing
     public void parse_missingParts_failure() {
         // no name specified
         assertParseFailure(parser, PHONE_DESC_AMY, MESSAGE_INVALID_FORMAT);
@@ -60,6 +61,7 @@ public class EditCommandParserTest {
     }
 
     @Test
+    // invalid old/new name, phone, email, tag; first-invalid precedence; tag-empty with valid tag
     public void parse_invalidValue_failure() {
         // invalid old name
         assertParseFailure(parser, INVALID_NAME_DESC + PHONE_DESC_AMY, Name.MESSAGE_CONSTRAINTS);
@@ -94,6 +96,7 @@ public class EditCommandParserTest {
     }
 
     @Test
+    // all fields specified (happy path)
     public void parse_allFieldsSpecified_success() {
         // Edit Bob's name to Amy, with all other fields specified
         String userInput = NAME_DESC_BOB + NAME_DESC_AMY + PHONE_DESC_BOB + TAG_DESC_HUSBAND
@@ -108,6 +111,7 @@ public class EditCommandParserTest {
     }
 
     @Test
+    // subset of fields specified (phone + email)
     public void parse_someFieldsSpecified_success() {
         // Edit Amy's phone and email only
         String userInput = NAME_DESC_AMY + PHONE_DESC_BOB + EMAIL_DESC_BOB;
@@ -120,6 +124,7 @@ public class EditCommandParserTest {
     }
 
     @Test
+    // exactly one field specified: name / phone / email / tags
     public void parse_oneFieldSpecified_success() {
         // name change only
         String userInput = NAME_DESC_BOB + NAME_DESC_AMY;
@@ -147,6 +152,7 @@ public class EditCommandParserTest {
     }
 
     @Test
+    // duplicate prefix occurrences and error message aggregation
     public void parse_multipleRepeatedFields_failure() {
         // More extensive testing of duplicate parameter detections is done in
         // AddCommandParserTest#parse_repeatedNonTagValue_failure()
@@ -178,6 +184,7 @@ public class EditCommandParserTest {
     }
 
     @Test
+    // explicit tag reset with empty tag prefix
     public void parse_resetTags_success() {
         String userInput = NAME_DESC_BOB + TAG_EMPTY;
 

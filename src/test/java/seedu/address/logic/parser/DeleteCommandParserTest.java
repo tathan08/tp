@@ -26,23 +26,27 @@ public class DeleteCommandParserTest {
 
     //Tests for parsing name
     @Test
+    // EP: valid name path
     public void parse_validArgs_returnsDeleteCommand() {
         assertParseSuccess(parser, "delete n/ Alex Yeoh",
                 new DeleteCommand(new Name("Alex Yeoh"), Optional.empty()));
     }
 
     @Test
+    // EP: missing/garbage args
     public void parse_invalidArgs_throwsParseException() {
         assertParseFailure(parser, "a", String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
     }
 
     @Test
+    // EP: empty or missing name token
     public void parse_emptyName_throwsParseException() {
         assertParseFailure(parser, "/n", String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
         assertParseFailure(parser, " ", String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
     }
 
     @Test
+    // EP: invalid name format (violates constraints)
     public void parse_invalidNameType_throwsParseException() {
         assertParseFailure(parser, "delete n/R@chel",
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, Name.MESSAGE_CONSTRAINTS));
@@ -50,6 +54,7 @@ public class DeleteCommandParserTest {
 
     //Tests for parsing tags
     @Test
+    // EP: single tag parsed
     public void parse_deleteTag_success() {
         String input = "delete n/Alex Yeoh t/tag";
         DeleteCommand expected = new DeleteCommand(new Name("Alex Yeoh"), Optional.of(Set.of(new Tag(("tag")))));
@@ -57,6 +62,7 @@ public class DeleteCommandParserTest {
     }
 
     @Test
+    // EP: multiple tags parsed
     public void parse_deleteMultipleTag_success() {
         String input = "delete n/Alex Yeoh t/tag1 t/tag2";
         DeleteCommand expected = new DeleteCommand(new Name("Alex Yeoh"),
@@ -65,6 +71,7 @@ public class DeleteCommandParserTest {
     }
 
     @Test
+    // EP: empty tag value after prefix
     public void parse_deleteEmptyTag_throwsParseException() {
         String input = "delete n/Alex Yeoh t/";
         assertParseFailure(parser, input, String.format(MESSAGE_INVALID_COMMAND_FORMAT,
@@ -72,6 +79,7 @@ public class DeleteCommandParserTest {
     }
 
     @Test
+    // EP: tag contains spaces (invalid tokenization)
     public void parse_tagWithSpace_throwsParseException() {
         String input = "delete n/Alex Yeoh t/ tag 1";
         assertParseFailure(parser, input, String.format(MESSAGE_INVALID_COMMAND_FORMAT,
@@ -80,6 +88,7 @@ public class DeleteCommandParserTest {
 
     //Tests for parsing bookings
     @Test
+    // EP: valid booking id prefix; BVA: minimal valid id (1)
     public void parse_deleteBooking_success() {
         String input = "delete n/Alex Yeoh b/1";
         DeleteCommand expected = new DeleteCommand(new Name("Alex Yeoh"), 1);
@@ -87,6 +96,7 @@ public class DeleteCommandParserTest {
     }
 
     @Test
+    // EP: empty booking value after prefix
     public void parse_deleteEmptyBooking_throwsParseException() {
         String input = "delete n/Alex Yeoh b/ ";
         assertParseFailure(parser, input, String.format(MESSAGE_INVALID_COMMAND_FORMAT,
@@ -94,6 +104,7 @@ public class DeleteCommandParserTest {
     }
 
     @Test
+    // conflicting prefixes (booking and tag together)
     public void parse_deleteBookingAndTag_throwsParseException() {
         String input = "delete n/Alex Yeoh b/1 t/1 ";
         assertParseFailure(parser, input, String.format(MESSAGE_INVALID_COMMAND_FORMAT,
