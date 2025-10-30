@@ -9,11 +9,11 @@ Participant ":Model" as model MODEL_COLOR
 Participant ":Storage" as storage STORAGE_COLOR
 
 ' User initiates reschedule command
-user -[USER_COLOR]> ui : "reschedule 2 n/Carl dt/2025-10-25 1100"
+user -[USER_COLOR]> ui : ("reschedule n/Carl Kurz b/2 dt/2025-10-25 11:00")
 activate ui UI_COLOR
 
 ' UI passes command to logic
-ui -[UI_COLOR]> logic : execute("reschedule 2 n/Carl dt/2025-10-25 1100")
+ui -[UI_COLOR]> logic : execute(reschedule n/Carl Kurz b/2 dt/2025-10-25 11:00)
 activate logic LOGIC_COLOR
 
 ' Logic calls model to perform reschedule
