@@ -37,6 +37,7 @@ public class EditCommandTest {
     private Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
 
     @Test
+    // all fields specified on unfiltered list (happy path)
     public void execute_allFieldsSpecifiedUnfilteredList_success() {
         Person editedPerson = new PersonBuilder().build();
         EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder(editedPerson).build();
@@ -53,6 +54,7 @@ public class EditCommandTest {
     }
 
     @Test
+    // some fields specified on unfiltered list
     public void execute_someFieldsSpecifiedUnfilteredList_success() {
         // Use GEORGE (the last person in typical persons list)
         Person lastPerson = GEORGE;
@@ -75,6 +77,7 @@ public class EditCommandTest {
     }
 
     @Test
+    // no fields specified retains existing values
     public void execute_noFieldSpecifiedUnfilteredList_success() {
         EditCommand editCommand = new EditCommand(ALICE.getName(), new EditPersonDescriptor());
         Person editedPerson = ALICE;
@@ -88,6 +91,7 @@ public class EditCommandTest {
     }
 
     @Test
+    // edit within filtered list succeeds
     public void execute_filteredList_success() {
         Person personInFilteredList = ALICE;
         Person editedPerson = new PersonBuilder(personInFilteredList).withName(VALID_NAME_BOB).build();
@@ -104,6 +108,7 @@ public class EditCommandTest {
     }
 
     @Test
+    // editing results in duplicate person (unfiltered)
     public void execute_duplicatePersonUnfilteredList_failure() {
         Person firstPerson = ALICE;
         EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder(firstPerson).build();
@@ -113,6 +118,7 @@ public class EditCommandTest {
     }
 
     @Test
+    // editing within filtered list results in duplicate
     public void execute_duplicatePersonFilteredList_failure() {
         // edit person in filtered list into a duplicate in address book
         Person personInList = BENSON;
@@ -123,6 +129,7 @@ public class EditCommandTest {
     }
 
     @Test
+    // target person (by old name) not found
     public void execute_personNotFoundUnfilteredList_failure() {
         Name nonExistentName = new Name("Nonexistent Person");
         EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder().withName(VALID_NAME_BOB).build();
@@ -133,6 +140,7 @@ public class EditCommandTest {
     }
 
     @Test
+    // bookings are preserved after editing non-booking fields
     public void execute_editPersonWithBookings_bookingsPreserved() {
         // CARL has bookings in the typical address book
         Person personWithBookings = model.getFilteredPersonList().stream()
@@ -172,6 +180,7 @@ public class EditCommandTest {
     }
 
     @Test
+    // edit succeeds for person with slash in name
     public void execute_editPersonWithSlash_success() {
         // Edit a person with slash in name
         Person personWithSlash = ABHIJAY;

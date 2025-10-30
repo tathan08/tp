@@ -38,6 +38,7 @@ public class DeleteCommandTest {
     private Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
 
     @Test
+    // valid deletion by name in unfiltered list
     public void execute_validDeletion_success() {
         Person personToDelete = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
         DeleteCommand deleteCommand = new DeleteCommand(personToDelete.getName(), Optional.empty());
@@ -52,6 +53,7 @@ public class DeleteCommandTest {
     }
 
     @Test
+    // name not found in unfiltered list
     public void execute_invalidNameUnfilteredList_throwsCommandException() {
         Name nonexistentName = new Name("Nonexistent Person");
         DeleteCommand deleteCommand = new DeleteCommand(nonexistentName, Optional.empty());
@@ -61,6 +63,7 @@ public class DeleteCommandTest {
     }
 
     @Test
+    // valid deletion when list is filtered to single person
     public void execute_validIndexFilteredList_success() {
         showPersonAtIndex(model, INDEX_FIRST_PERSON);
 
@@ -79,6 +82,7 @@ public class DeleteCommandTest {
 
     // Tests for deleting tags
     @Test
+    // delete all requested tags when all exist
     public void execute_deleteMultipleTags_success() throws CommandException {
         showPersonAtIndex(model, INDEX_FIRST_PERSON);
 
@@ -109,6 +113,7 @@ public class DeleteCommandTest {
     }
 
     @Test
+    // delete subset of requested tags; others remain
     public void execute_deleteSomeTags_success() throws CommandException {
         showPersonAtIndex(model, INDEX_FIRST_PERSON);
 
@@ -144,6 +149,7 @@ public class DeleteCommandTest {
     }
 
     @Test
+    // some requested tags missing → feedback includes missing; present removed
     public void execute_deleteTags_someMissing() throws CommandException {
         showPersonAtIndex(model, INDEX_FIRST_PERSON);
 
@@ -179,6 +185,7 @@ public class DeleteCommandTest {
     }
 
     @Test
+    // all requested tags missing → throw
     public void execute_deleteTag_allMissing() throws CommandException {
         showPersonAtIndex(model, INDEX_FIRST_PERSON);
 
@@ -208,6 +215,7 @@ public class DeleteCommandTest {
 
     // Tests for deleting bookings
     @Test
+    // valid booking id → booking removed
     public void execute_deleteBooking_success() throws CommandException {
         showPersonAtIndex(model, INDEX_FIRST_PERSON);
 
@@ -239,6 +247,7 @@ public class DeleteCommandTest {
     }
 
     @Test
+    // booking id does not exist → throw
     public void execute_deleteBooking_noSuchID() throws CommandException {
         showPersonAtIndex(model, INDEX_FIRST_PERSON);
 
