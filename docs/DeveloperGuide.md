@@ -291,10 +291,11 @@ The reschedule mechanism allows users to update the datetime of an existing book
         Booking rescheduled successfully: Carl Kurz, new datetime: 2025-10-25 14:00
         ```
 
-      - **Failure Example:** Appropriate error message.
-
-#### Sequence Diagram for Reschedule Command
-<img src="images/RescheduleDiagram.png"/>
+      - **Failure Example:** Appropriate error message. <br>
+    
+    <img src="images/RescheduleDiagram.png"/> <br>
+    
+    **Sequence Diagram for Reschedule Command**
 
 #### Design Considerations
 
