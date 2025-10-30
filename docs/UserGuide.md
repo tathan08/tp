@@ -186,10 +186,8 @@ Format: `add n/NAME t/TAG…​`
 
 Examples:
 
-* `add n/Alice Tan t/sales t/manager` <br> will add tags `sales` and `manager` to the Person called `Alice Tan`.
-
-<img src="images/addTags-UG.png" width="700px" alt="add tags">
-
+* `add n/Alice Tan t/chineseSpeaking t/closer` <br> will add, to an existing Person `Alice Tan`, the tags `chineseSpeaking` and `closer`. It will be added onto her current tags <br>
+<img src="images/addTags-UG.png" width="700px" alt="add tags"> <br>
 *Figure 3: Success message after adding tags to an existing person*
 
 ### Listing all persons : `list`
