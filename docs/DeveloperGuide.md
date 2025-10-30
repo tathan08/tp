@@ -251,7 +251,7 @@ The reschedule mechanism allows users to update the datetime of an existing book
 2.  Executes the command:
 
     ```
-     reschedule n/Carl Kurz b/2 dt/2025-10-25 1400
+     reschedule n/Carl Kurz b/2 dt/2025-10-25 14:00
     ```
 
     Where:
@@ -260,7 +260,7 @@ The reschedule mechanism allows users to update the datetime of an existing book
 
     `n/Carl Kurz` = team member name (added for clarity and verification)
 
-    `t/2025-10-25 14:00` = new datetime
+    `dt/2025-10-25 14:00` = new datetime
 
     The Logic component parses the command and calls:
 
@@ -493,7 +493,7 @@ The timezone mechanism allows users to work with bookings across different timez
 
 #### Proposed Implementation
 
-Highlights relevant bookings to users based on their search criteria *(date/client name)* while using `find`.
+Highlights relevant bookings to users searching by client name using `find`.
 
 **Operations:**
 
@@ -502,13 +502,7 @@ Highlights relevant bookings to users based on their search criteria *(date/clie
 
 #### Usage Scenario
 
-1.  The user uses `find` command to search for bookings under a specific date: `find dt/2025-12-15` <br>
-    <img src="images/FindBookingbyDateTimeProposedSequence.png"/> <br>
-
-    **Sequence Diagram for Finding Booking by Date**
-
-
-2.  The user uses `find` command to search for bookings under a specific client: `find c/Mr Tan` <br>
+1.  The user uses `find` command to search for bookings under a specific client: `find c/Mr Tan` <br>
     <img src="images/FindBookingbyClientProposedSequence.png"/> <br>
 
     **Sequence Diagram for Finding Booking by Client Name**
@@ -1041,7 +1035,7 @@ testers are expected to do more *exploratory* testing.
 
    1. Prerequisites: Multiple persons and bookings exist in the address book.
 
-   2. Test case: `clear`<br>
+   2. Test case: `clear f/`<br>
       Expected: All persons and bookings are removed. Success message shown. Contact list becomes empty.
 
 ### Saving data
