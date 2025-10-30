@@ -890,21 +890,18 @@ testers are expected to do more *exploratory* testing.
 
    1. Download the jar file and copy into an empty folder
 
-   1. Double-click the jar file Expected: Shows the GUI with a set of sample contacts. The window size may not be optimum.
+   1. Open a command terminal and navigate to the folder containing the jar file.
+
+   1. Run `java -jar firstimpressions.jar` <br>
+      Expected: Application launches successfully with the GUI. Shows the GUI with a set of sample contacts. The window size may not be optimum.
 
 1. Saving window preferences
 
    1. Resize the window to an optimum size. Move the window to a different location. Close the window.
 
-   1. Re-launch the app by double-clicking the jar file.<br>
+   2. Re-launch the app by double-clicking the jar file.<br>
        Expected: The most recent window size and location is retained.
 
-1. **Command line launch**
-
-   1. Open a command terminal and navigate to the folder containing the jar file.
-
-   1. Run `java -jar firstimpressions.jar`<br>
-      Expected: Application launches successfully with the GUI.
 
 ### Adding a person
 
