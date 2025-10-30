@@ -132,7 +132,7 @@ Always backup your `addressbook.json` file before making major changes. Data los
 
 Shows a short summary of available commands, with a link to access the User Guide.
 
-![help message](images/help-DG.png) <br>
+<img src="images/help-DG.png" width="700px" alt="help-command"> <br>
 *Figure 1: Help window showing available commands and User Guide's link*
 
 Format: `help`
