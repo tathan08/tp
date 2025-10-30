@@ -142,6 +142,48 @@ The `Storage` component,
 
 Classes used by multiple components are in the `seedu.address.commons` package.
 
+---
+
+
+### **Design Choices**
+
+#### Find Command
+
+##### **Aspect: Where to Perform Input Validation**
+- **Alternative 1:** Validate parameters in `ClientContainsKeywordsPredicate`.
+  - *Pros:* Keeps `FindCommandParser` simpler.
+  - *Cons:* Predicate becomes responsible for input correctness instead of filtering logic.
+- **Alternative 2 (current choice):** Validate in `FindCommandParser` before predicate creation.
+  - *Pros:* Ensures only valid data reaches the model layer.
+  - *Cons:* Slightly increases parser complexity.
+
+**Chosen Approach:**
+Validation is performed in `FindCommandParser` for better separation of concerns — parsing vs filtering.
+
+
+##### **Aspect: Handling Multiple Prefixes**
+- **Alternative 1:** Search for results using a logical **AND** operation making search results more accurate and  easy to find specific team members
+- **Alternative 2 (current choice):** Search for results   using a logical **OR** operation to include as many results as possible to ensure user does not miss / mismatch any inputs and intended results
+  - *Pros:* Easier to find groups of people even with mismatched input (e.g. `find n/Alex Loh` returns results for `Alex Yeoh` and `Brian Loh`)
+  - *Cons:* Inability to find specific people among team members with similar names (e.g. When rearching for `Alex Yeoh` with a `teamLead` tag among mutiple `Alex Yeoh`s, doing `find n/Alex Yeoh t/teamLead` will list all results for both search parameters)
+
+**Chosen Approach:**
+`find` supports combining multiple prefixes using a logical **OR** relationship.
+  - e.g., `find n/Alex t/friend` returns persons whose name *contains "Alex"* **or** those who have the tag *"friend"*.
+- This makes it easier to find for users.
+
+
+##### **Aspect: Command Format**
+- **Alternative 1** Prefix before every value (current choice):
+  - Example: `find t/teamLead t/friends`
+  - Rationale: explicit field specifiers make tokenization deterministic, avoid ambiguity between multi-word values and separate parameters, and force deliberate searches (users must consciously mark each search term with its field).
+- **Alternative 2** Implicit multiple parameters without repeated prefixes:
+  - Example: `find t/ teamLead friends`
+  - Rationale: more concise for users but requires heuristics to decide whether `friends` is part of the first name or a separate name; complicates tokenizer and increases chance of surprising behavior for users.
+
+**Chosen approach:**
+Prefix before every value. It trades a small amount of typing for predictable parsing, maintainable code, and fewer surprising edge cases during tokenization and validation.
+
 --------------------------------------------------------------------------------------------------------------------
 
 ## **Proposed Features**
@@ -567,21 +609,19 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | -------- | ------------------------------------------ | ---------------------------------------------------- | ---------------------------------------------------------------------- |
 | `*`      | potential user                             | preview the app's features and interface             | evaluate if it meets my needs before committing to use it              |
 | `* * *`  | new user                                   | see usage instructions                               | refer to instructions when I forget how to use the app                 |
-| `* * *`  | new user                                   | see all the different available team members         | I can see the options for what I need                                  |
-| `* * *`  | new user                                   | have quick scheduling tools                          | I can plan my time smoothly and efficiently                            |
-| `* *`    | new user                                   | import my existing contact list in bulk              | start using the app immediately without manual data entry              |
-| `*`      | new user                                   | have the system remember my initial choices          | I don’t have to re-enter them each time                                |
+| `* * *`  | new user                                   | promptly schedule clients with team members          | I can match clients and team members smoothly and efficiently          |
 | `* * *`  | regular user                               | monitor team members' current booking status         | make informed decisions about workload distribution                    |
-| `* *`    | regular user                               | view my booking history and past matches             | quickly rebook the same professionals for repeat clients               |
-| `* * *`  | long-time user                             | reschedule appointments with minimal clicks          | save time when managing multiple booking changes                       |
+| `* *`    | long-time user                             | reschedule appointments with minimal effort          | save time when managing multiple booking changes                       |
+| `* *`    | long-time user                             | edit team member details easily                      | saves effort on deleting and adding the member again                   |
 | `*`      | long-time user                             | receive suggestions based on the allocations I made  | make faster decisions with personalized recommendations                |
-| `*`      | long-time user                             | update my search preferences easily                  | adapt to changing business needs without losing efficiency             |
-| `*`      | at-risk user                               | report issues and receive prompt responses           | resolve problems quickly and continue using the service                |
-| `*`      | at-risk user                               | receive updates on how my feedback was addressed     | know that my input contributes to service improvement                  |
 | `* * *`  | user                                       | add new team members with their details              | maintain an up-to-date roster of available professionals               |
-| `* * *`  | user                                       | delete a person                                      | remove entries that I no longer need                                   |
-| `* * *`  | user                                       | find a person by name or tag                         | locate details of persons without having to go through the entire list |
-| `*`      | user with many persons in the address book | sort persons by name                                 | locate a person easily                                                 |
+| `* * *`  | user                                       | delete a person                                      | remove a people when they exit the team                                |
+| `* * *`  | user                                       | delete a booking                                     | remove specific bookings that have been cancelled                      |
+| `* * *`  | user                                       | find a person by name                                | look up a team member's skillset and current bookings                  |
+| `* * *`  | user                                       | find a person by tag                                 | quickly filter out team memebers with suitable skills for a client     |
+| `* * *`  | user                                       | find a person by date                                | see which team members are available to take on a client               |
+| `* * *`  | user                                       | see all the different available team members         | I can see the options for what I need                                  |
+| `* *`    | user                                       | add descriptions to bookings                         | I can add context to assigned bookings                                 |
 
 # Use cases
 
@@ -776,57 +816,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 - **3b.** Valid prefix provided but no parameter (e.g., `find d/`). \
   FirstImpressions lists all persons. Use case continues as in the main scenario. <br>
 
-<img src="images/find-DG.png" alt="find person" width="700">
----
-
-### **Delimiters & Usage**
-
--  **Name** (`n/`): Case-insensitive, supports partial matches. <br>
-  Rationale: Names are free-form text and substring matching keeps searches flexible without requiring complex tokenization. Multiple `n/` prefixes are allowed to ensure precise and intentional searches. With each acting as an alternative (OR) filter.
-
-- **Tag** (`t/`): case-insensitive, supports partial matches. <br>
-  Rationale: tags are atomic labels used for quick categorisation. Treating tags as separate tokens simplifies matching and aligns with user expectations. Multiple `t/` prefixes are allowed to ensure precise and intentional searches.
-
-- **Booking Date** (`d/`): strict `YYYY-MM-DD` format, exact match. <br>
-   Rationale: dates need a canonical representation for reliable parsing and comparison; the parser validates date format and rejects invalid inputs. Multiple `d/` prefixes are allowed to ensure precise and intentional searches.
-
----
-### **Design Considerations**
-
-#### **Aspect: Where to Perform Input Validation**
-- **Alternative 1:** Validate parameters in `ClientContainsKeywordsPredicate`.
-  - *Pros:* Keeps `FindCommandParser` simpler.
-  - *Cons:* Predicate becomes responsible for input correctness instead of filtering logic.
-- **Alternative 2 (current choice):** Validate in `FindCommandParser` before predicate creation.
-  - *Pros:* Ensures only valid data reaches the model layer.
-  - *Cons:* Slightly increases parser complexity.
-
-**Chosen Approach:**
-Validation is performed in `FindCommandParser` for better separation of concerns — parsing vs filtering.
-
-
-#### **Aspect: Handling Multiple Prefixes**
-- **Alternative 1:** Search for results using a logical **AND** operation making search results more accurate and  easy to find specific team members
-- **Alternative 2 (current choice):** Search for results   using a logical **OR** operation to include as many results as possible to ensure user does not miss / mismatch any inputs and intended results
-  - *Pros:* Easier to find groups of people even with mismatched input (e.g. `find n/Alex Loh` returns results for `Alex Yeoh` and `Brian Loh`)
-  - *Cons:* Inability to find specific people among team members with similar names (e.g. When rearching for `Alex Yeoh` with a `teamLead` tag among mutiple `Alex Yeoh`s, doing `find n/Alex Yeoh t/teamLead` will list all results for both search parameters)
-
-**Chosen Approach:**
-`find` supports combining multiple prefixes using a logical **OR** relationship.
-  - e.g., `find n/Alex t/friend` returns persons whose name *contains "Alex"* **or** those who have the tag *"friend"*.
-- This makes it easier to find for users.
-
-
-#### **Aspect: Command Format**
-- **Alternative 1** Prefix before every value (current choice):
-  - Example: `find t/teamLead t/friends`
-  - Rationale: explicit field specifiers make tokenization deterministic, avoid ambiguity between multi-word values and separate parameters, and force deliberate searches (users must consciously mark each search term with its field).
-- **Alternative 2** Implicit multiple parameters without repeated prefixes:
-  - Example: `find t/ teamLead friends`
-  - Rationale: more concise for users but requires heuristics to decide whether `friends` is part of the first name or a separate name; complicates tokenizer and increases chance of surprising behavior for users.
-
-**Chosen approach:**
-Prefix before every value. It trades a small amount of typing for predictable parsing, maintainable code, and fewer surprising edge cases during tokenization and validation.
+<img src="images/find-DG.png" width="400px" alt="find person">
 
 ---
 
