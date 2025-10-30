@@ -8,23 +8,18 @@ Participant ":Logic" as logic LOGIC_COLOR
 Participant ":Model" as model MODEL_COLOR
 Participant ":Storage" as storage STORAGE_COLOR
 
-' User initiates reschedule command
-user -[USER_COLOR]> ui : ("reschedule n/Carl Kurz b/2 dt/2025-10-25 11:00")
+user -[USER_COLOR]> ui : "editbooking n/Carl Kurz b/2 c/Madam Wong desc/Updated consultation details"
 activate ui UI_COLOR
 
-' UI passes command to logic
-ui -[UI_COLOR]> logic : execute(reschedule n/Carl Kurz b/2 dt/2025-10-25 11:00)
+ui -[UI_COLOR]> logic : execute(editbooking n/Carl Kurz...)
 activate logic LOGIC_COLOR
 
-' Logic calls model to perform reschedule
-logic -[LOGIC_COLOR]> model : rescheduleBooking(id, newDateTime)
+logic -[LOGIC_COLOR]> model : editBooking(SelectedBooking, NewClient, NewDesc)
 activate model MODEL_COLOR
 
-' Model validates and updates booking
-model -[MODEL_COLOR]-> logic
+model -[MODEL_COLOR]-> logic :
 deactivate model
 
-' If needed, logic commits the change to storage
 logic -[LOGIC_COLOR]> storage : saveAddressBook(addressBook)
 activate storage STORAGE_COLOR
 
@@ -33,14 +28,13 @@ activate storage STORAGE_COLOR_T1
 storage --[STORAGE_COLOR]> storage
 deactivate storage
 
-storage --[STORAGE_COLOR]> logic
+storage --[STORAGE_COLOR]> logic :
 deactivate storage
 
-' Logic returns result to UI
-logic --[LOGIC_COLOR]> ui
+
+logic --[LOGIC_COLOR]> ui :
 deactivate logic
 
-' UI displays result to user
-ui--[UI_COLOR]> user
+ui --[UI_COLOR]> user :
 deactivate ui
 @enduml
