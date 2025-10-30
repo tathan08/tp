@@ -5,12 +5,6 @@ title: Developer Guide
 
 --------------------------------------------------------------------------------------------------------------------
 
-## **Acknowledgements**
-
-* {list here sources of all reused/adapted ideas, code, documentation, and third-party libraries -- include links to the original source as well}
-
---------------------------------------------------------------------------------------------------------------------
-
 ## **Setting up, getting started**
 
 Refer to the guide [_Setting up and getting started_](SettingUp.md).
@@ -600,6 +594,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 ### **Use Case: Add a Person**
 
 **System**: FirstImpressions
+
 **Actor**: User
 
 #### **Main Success Scenario (MSS):**
@@ -608,7 +603,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 3. FirstImpressions adds person to the list
 4. Use case ends
 
-<img src="images/add-DG.png" alt="add person">
+<img src="images/add-DG.png" alt="add person" width="700">
 
 **Extensions**
 
@@ -636,6 +631,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 ### **Use Case: Delete a Person**
 
 **System**: FirstImpressions
+
 **Actor**: User
 
 #### **Main Success Scenario (MSS):**
@@ -644,7 +640,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 3. FirstImpressions deletes person in the list
 4. Use case ends
 
-<img src="images/delete-DG.png" alt="delete person">
+<img src="images/delete-DG.png" alt="delete person" width="700">
 
 **Extensions**
 
@@ -660,6 +656,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 ### **Use Case: Book a Person**
 
 **System**: FirstImpressions
+
 **Actor**: User
 
 #### **Main Success Scenario (MSS):**
@@ -668,7 +665,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 3. FirstImpressions adds booking to team member
 4. Use case ends
 
-<img src="images/book-DG.png" alt="book person">
+<img src="images/book-DG.png" alt="book person" width="700">
 
 **Extensions**
 
@@ -696,6 +693,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 ### **Use Case: Find a Person**
 
 **System**: FirstImpressions
+
 **Actor**: User
 
 ---
@@ -784,7 +782,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 - **3b.** Valid prefix provided but no parameter (e.g., `find d/`). \
   FirstImpressions lists all persons. Use case continues as in the main scenario. <br>
 
-<img src="images/find-DG.png" alt="find person">
+<img src="images/find-DG.png" alt="find person" width="700">
 ---
 
 ### **Delimiters & Usage**
@@ -841,6 +839,7 @@ Prefix before every value. It trades a small amount of typing for predictable pa
 ### **Use Case: Help Menu**
 
 **System**: FirstImpressions
+
 **Actor**: User
 
 #### **Main Success Scenario (MSS):**
@@ -848,7 +847,7 @@ Prefix before every value. It trades a small amount of typing for predictable pa
 2. FirstImpressions shows pop-up menu with all command usage
 3. Use case ends
 
-<img src="images/help-DG.png" alt="help">
+<img src="images/help-DG.png" alt="help" width="700">
 
 
 
@@ -872,8 +871,6 @@ Prefix before every value. It trades a small amount of typing for predictable pa
 16. Should log all system errors to a local file with timestamps.
 17. Should not exceed 100MB in log file size.
 
-
-*{More to be added}*
 
 ### Glossary
 
