@@ -146,17 +146,16 @@ Format: `add n/NAME [p/PHONE_NUMBER] [e/EMAIL] [t/TAG]…​`
 
 * Consecutive spaces in name are removed. e.g. "Alice&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tan" will be saved as `Alice Tan`.
 * Names can contain letters, spaces, apostrophes, hyphens, and slashes. e.g. `s/o` (son of), `d/o` (daughter of).
-* Tags must be alphanumeric and have no spaces.
 
 <div markdown="span" class="alert alert-warning">:exclamation: **Warning:**
 Duplicate names are not allowed. Each person in the contact list must have a unique name. <br>
 In this case, try customising the names in a way that is easily identifiable to you! <br>
-For example: 1-Alice Tan, 2-Alice Tan!
+For example: 1-Alice Tan, 2-Alice Tan
 </div>
 
 <div markdown="span" class="alert alert-warning">:exclamation: **Warning:**
-Tags must be alphanumeric only (no spaces, hyphens, or special characters)! <br>
-You can use camelCase for multi-word tags (e.g., `vipHandler`, instead of `vip-handler` or `vip handler`)
+Tags must contain only letters and numbers (no spaces, hyphens, or special characters)! <br>
+Try using camelCase for multi-word tags! (e.g. `vipHandler`, instead of `vip-handler` or `vip handler`)
 </div>
 
 <div markdown="span" class="alert alert-info">:information_source: **Character Limits:** <br>
