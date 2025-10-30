@@ -169,6 +169,7 @@ Examples:
 
 * `add n/Germaine` <br> will add a Person called `Germaine` to the contact list.
 
+
 * `add n/Alice Tan t/teamLead t/vipHandler` <br> will add a Person called `Alice Tan` with tags `teamLead` and `vipHandler` to the contact list. <br>
 <img src="images/addMessage-UG.png" width="700px" alt="add message"> <br>
 *Figure 2: Adding a new person to the contact list*
@@ -196,7 +197,7 @@ Shows the list of all persons in the contact list.
 
 Format: `list`
 
-<img src="images/list-UG.png" width="400px" alt="list">
+<img src="images/list-UG.png" width="700px" alt="list">
 
 *Figure 4: Contact list showing all persons in the address book*
 
@@ -206,27 +207,33 @@ Edits an existing person in the contact list.
 
 Format: `edit n/OLD_NAME [n/NEW_NAME] [p/PHONE] [e/EMAIL] [t/TAG]…​`
 
-* Edits the person identified by `OLD_NAME`. The name must exactly match (case-sensitive) a person in the contact list.
+* Edits the person identified by `OLD_NAME`. The name must exactly match (case-sensitive) a current person in the contact list.
 * At least one of the optional fields must be provided.
 * Existing values will be updated to the input values.
-* You can remove all the person's tags by typing `t/` without
-    specifying any tags after it.
+* You can remove all the person's tags by typing `t/` without specifying any tags after it.
 
 <div markdown="span" class="alert alert-warning">:exclamation: **Warning:**
-Person names are case-sensitive. `edit n/john doe` will not edit `John Doe`. Use the exact name as shown in the contact list. If the person is not found, you'll see: "Could not find anyone named 'john doe' in your address book. Please check the name and try again."
+Person names are case-sensitive. `edit n/john doe ...` will not edit `John Doe`. Use the exact name as shown in the contact list. <br>
+If the person is not found, you will see the error: "Could not find anyone named 'john doe' in your address book. Please check the name and try again."
 </div>
 
 <div markdown="span" class="alert alert-warning">:exclamation: **Warning:**
-When editing tags, the existing tags of the person will be **completely replaced** (not added to). If you want to keep existing tags, you must include them in the edit command. For example, if a person has tags `teamLead` and `sales`, using `edit n/John t/manager` will replace both tags with only `manager`. If you don't specify any changes, you'll see: "No changes specified! Please provide at least one field to edit (name, phone, email, or tags)."
+When editing tags, the existing tags of the person will be **completely replaced** (not added to). <br>
+If you want to keep existing tags, you must include them in the edit command. <br>
+For example, if a person has tags `teamLead` and `sales`, using `edit n/John t/manager` will replace both tags with only `manager`. <br>
+If you don't specify any changes, you'll see: "No changes specified! Please provide at least one field to edit (name, phone, email, or tags)."
 </div>
 
 Examples:
-*  `edit n/John Doe p/91234567 e/johntan@gmail.com` Edits the phone number and email address of the person named `John Doe` to be `91234567` and `johntan@gmail.com` respectively.
-*  `edit n/Alice Tan p/+1 (555) 123-4567` Edits the phone number of `Alice Tan` to be `+1 (555) 123-4567`.
-*  `edit n/John Doe n/Jane Doe t/` Edits the name of `John Doe` to be `Jane Doe` and clears all existing tags.
+*  `edit n/John Doe p/91234567 e/johntan@gmail.com` <br>
+Will edit the phone number and email address of the person named `John Doe` to be `91234567` and `johntan@gmail.com` respectively.
+*  `edit n/John Doe n/Jane Doe t/` <br>
+Will edit the name of `John Doe` to be `Jane Doe` and clears all of their existing tags.
 
-<img src="images/editMessage-UG.png" width="400px" alt="edit message">
 
+*  `edit n/Alice Tan p/+1 (555) 123-4567` <br>
+Edits the phone number of `Alice Tan` to be `+1 (555) 123-4567`. <br>
+<img src="images/editMessage-UG.png" width="700px" alt="edit message"> <br>
 *Figure 5: Success message after editing a person's details*
 
 ### Locating team members by name: `find`
