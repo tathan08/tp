@@ -250,7 +250,11 @@ Format: <br>
 Each search parameter must preceded by its respective delimeter.
 
 If multiple tags are being searched for, each parameter must have its own `t/`  <br>
-`find t/teamLead t/friends` displays all persons with the `teamLead` tag **OR** the `friends` tag
+`find t/teamLead t/vipHandler` displays all persons with the `teamLead` tag **OR** the `vipHandler` tag
+</div>
+
+<div markdown="span" class="alert alert-primary">:bulb: **Tip:** Expand your search by utilizing different fields! <br>
+`find n/Alice t/teamLead` displays all team members containing `Alice` in their name **OR** team members whose tags contain `teamLead` within them.
 </div>
 
 * Searching within a field with an empty parameter (e.g. `find n/`, `find t/` or `find d/`) will list all team members within FirstImpressions
@@ -259,17 +263,16 @@ If multiple tags are being searched for, each parameter must have its own `t/`  
 * Date must be in `YYYY-MM-DD` format.
 
 Examples:
-* `find n/John` returns `john` and `John Doe` <br>
-* `find d/2026-08-18` returns `Alex Yeoh`, `David Li`<br>
-* `find t/` returns all team members in FirstImpressions <br>
+* `find n/John` <br>
+returns `john` and `John Doe`, or any other Person with 'john' in their name, case-insensitively.
+* `find t/` <br>
+returns all team members in FirstImpressions as it searches for 'any' tag.
 
- <div markdown="span" class="alert alert-primary">:bulb: **Tip:** Expeand your search by utilizing different fields! <br>
- `find n/Alice t/teamLead` displays all team members containing `Alice` in their name **OR** team members whose tags contain `teamLead` within them.
- </div>
 
-<img src="images/findMessage-UG.png" width="400px" alt="find message">
-
-  *Figure 6: Search results showing team members matching the search criteria*
+* `find d/2026-08-18` <br>
+returns `Alice Tan` as she has a Booking on 2026-08-18 14:00. <br>
+<img src="images/findMessage-UG.png" width="700px" alt="find message"> <br>
+*Figure 6: Search results showing team members matching the search criteria*
 
 ### Deleting a person : `delete`
 
