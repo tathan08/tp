@@ -8,8 +8,6 @@ Participant ":Logic" as logic LOGIC_COLOR
 Participant ":Model" as model MODEL_COLOR
 Participant ":Storage" as storage STORAGE_COLOR
 
-
-== Set user timezone ==
 user -[USER_COLOR]> ui : "settimezone Asia/Singapore"
 activate ui UI_COLOR
 

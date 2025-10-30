@@ -7,7 +7,6 @@ Participant ":UI" as ui UI_COLOR
 Participant ":Logic" as logic LOGIC_COLOR
 Participant ":Model" as model MODEL_COLOR
 
-== Find by Date ==
 user -[USER_COLOR]> ui : "find dt/2025-12-15"
 activate ui UI_COLOR
 ui -[UI_COLOR]> logic : execute(find dt/2025-12-15)

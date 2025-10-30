@@ -373,8 +373,10 @@ The edit booking mechanism allows users to update the client name or description
 
       - **Failure Example:** Appropriate error message.
 
-#### Sequence Diagram for Edit Booking Command
-<img src="images/EditBookingProposedSequence.png"/>
+    <img src="images/EditBookingProposedSequence.png"/> <br>
+    
+    **Sequence Diagram for Edit Booking Command**
+
 
 #### Design Considerations
 
@@ -428,23 +430,23 @@ The timezone mechanism allows users to work with bookings across different timez
 #### Usage Scenario
 
 1.  The user sets their preferred timezone: `settimezone Asia/Singapore` <br>
-    
-#### Sequence Diagram for Setting Preferred Timezone
-<img src="images/TimeZoneSetTimeZoneSequence.png"/>
+    <img src="images/TimeZoneSetTimeZoneSequence.png"/> <br>
+
+    **Sequence Diagram for Setting Preferred Timezone**
 
 2.  The user creates a booking: `book d/2025-09-20 10:30 c/Madam Chen n/Bob Lee` <br>
 
-    The system stores the booking in the user's timezone and can display it in other timezones when needed.
+    The system stores the booking in the user's timezone and can display it in other timezones when needed. <br>
+    <img src="images/TimeZoneCreateBookingSequence.png"/> <br>
 
-#### Sequence Diagram for Creating Booking with Timezone Preferences
-<img src="images/TimeZoneCreateBookingSequence.png"/>
+    **Sequence Diagram for Creating Booking with Timezone Preferences**
 
 3.  The user views bookings in a different timezone: `settimezone timezone America/New_York` <br>
 
-    All booking times are automatically converted and displayed in the specified timezone.
+    All booking times are automatically converted and displayed in the specified timezone. <br>
+    <img src="images/TimeZoneViewDiffTimezoneSequence.png"/> <br>
 
-#### Sequence Diagram for Viewing Bookings in Different Timezone
-<img src="images/TimeZoneViewDiffTimezoneSequence.png"/>
+    **Sequence Diagram for Viewing Bookings in Different Timezone**
 
 
 #### Design Considerations
@@ -503,14 +505,15 @@ Highlights relevant bookings to users based on their search criteria *(date/clie
 #### Usage Scenario
 
 1.  The user uses `find` command to search for bookings under a specific date: `find dt/2025-12-15` <br>
+    <img src="images/FindBookingbyDateTimeProposedSequence.png"/> <br>
 
-#### Sequence Diagram for Finding Booking by Date
-<img src="images/FindBookingbyDateTimeProposedSequence.png"/>
+    **Sequence Diagram for Finding Booking by Date**
+
 
 2.  The user uses `find` command to search for bookings under a specific client: `find c/Mr Tan` <br>
+    <img src="images/FindBookingbyClientProposedSequence.png"/> <br>
 
-#### Sequence Diagram for Finding Booking by Client Name
-<img src="images/FindBookingbyClientProposedSequence.png"/>
+    **Sequence Diagram for Finding Booking by Client Name**
 
 #### Design Considerations
 

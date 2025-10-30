@@ -9,9 +9,6 @@ Participant ":Model" as model MODEL_COLOR
 Participant ":Storage" as storage STORAGE_COLOR
 
 
-== Create booking (UTC storage) ==
-
-
 user -[USER_COLOR]> ui : "book d/2025-09-20 10:30 c/Mdm Chen n/Bob Lee"
 activate ui UI_COLOR
 
