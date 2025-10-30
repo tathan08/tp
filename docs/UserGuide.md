@@ -68,29 +68,31 @@ With FirstImpressions, no client request is too hard to handle as our system is 
 
 ### Installation Steps
 
-1. **Download the latest `.jar` file** from [here](https://github.com/AY2526S1-CS2103T-T08-4/tp/releases).
+Step 1: **Download the latest `.jar` file** from [here](https://github.com/AY2526S1-CS2103T-T08-4/tp/releases).
 
-2. **Copy the file** to the folder you want to use as the _home folder_ for the app.
+Step 2: **Copy the file** to the folder you want to use as the _home folder_ for the app.
 
 <div markdown="span" class="alert alert-warning">:exclamation: **Warning:**
 Do not move the .jar file after data has been created. The application stores data relative to the .jar file location. Moving it may cause loss of access to your data.
 </div>
 
-3. **Run the application:**
+Step 3: **Run the application**
 
    - Open your command terminal, [as follows](#verify-java)
    - Navigate to the folder: `cd /path/to/your/folder`
    - Run: `java -jar firstimpressions.jar`
 
-4. **Verify successful launch:** A GUI similar to the below should appear in a few seconds. Note how the app contains some sample data.<br>
-   ![Ui](images/Ui.png)
-   <div markdown="span" class="alert alert-primary">:bulb: **Tip:** If the application doesn't start, ensure Java 17+ is properly installed and the .jar file is not corrupted.</div>
+Step 4: **Verify successful launch:** <br>
+A GUI similar to the below should appear in a few seconds. Note how the app contains some sample data.<br>
+![Ui](images/Ui.png)
+<div markdown="span" class="alert alert-primary">:bulb: **Tip:** If the application doesn't start, ensure Java 17+ is properly installed and the .jar file is not corrupted.</div>
 
 <div markdown="span" class="alert alert-warning">:exclamation: **Important:**
 Always backup your `addressbook.json` file before making major changes. Data loss cannot be recovered without a backup.
 </div>
 
-5. **Try your first commands:** Type the command in the command box and press Enter to execute it. e.g. typing **`help`** and pressing Enter will open the help window.<br>
+Step 5: **Try your first commands** <br>
+Type the command in the command box and press Enter to execute it. e.g. typing **`help`** and pressing Enter will open the help window.<br>
    Some example commands you can try:
 
    * `list` : Lists all contacts.
@@ -103,7 +105,8 @@ Always backup your `addressbook.json` file before making major changes. Data los
 
    * `exit` : Exits the app.
 
-6. **Explore more features:** Refer to the [Features](#features) below for details of each command.
+Step 6: **Explore more features** <br>
+Refer to the [Features](#features) below for details of each command.
 
 --------------------------------------------------------------------------------------------------------------------
 
