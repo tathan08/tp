@@ -9,10 +9,10 @@ Participant ":Model" as model MODEL_COLOR
 Participant ":Storage" as storage STORAGE_COLOR
 
 
-user -[USER_COLOR]> ui : "book d/2025-09-20 10:30 c/Mdm Chen n/Bob Lee"
+user -[USER_COLOR]> ui : "book dt/2025-09-20 10:30 c/Mdm Chen n/Bob Lee"
 activate ui UI_COLOR
 
-ui -[UI_COLOR]> logic : execute(book d/2025-09-20...)
+ui -[UI_COLOR]> logic : execute(book dt/2025-09-20...)
 activate logic LOGIC_COLOR
 
 logic -[LOGIC_COLOR]> model : getUserTimezone()

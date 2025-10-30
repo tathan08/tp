@@ -431,7 +431,7 @@ The timezone mechanism allows users to work with bookings across different timez
     **Sequence Diagram for Setting Preferred Timezone**
 
 
-2.  The user creates a booking: `book d/2025-09-20 10:30 c/Madam Chen n/Bob Lee` <br>
+2.  The user creates a booking: `book dt/2025-09-20 10:30 c/Madam Chen n/Bob Lee` <br>
 
     The system stores the booking in the user's timezone and can display it in other timezones when needed. <br>
     <img src="images/TimeZoneCreateBookingSequence.png"/> <br>
@@ -1006,24 +1006,24 @@ testers are expected to do more *exploratory* testing.
 
    1. Prerequisites: At least one person exists in the contact list.
 
-   2. Test case: `book d/2025-12-25 10:00 c/Madam Chen n/John Doe desc/Consultation`<br>
+   2. Test case: `book dt/2025-12-25 10:00 c/Madam Chen n/John Doe desc/Consultation`<br>
       Expected: Booking is created successfully. Success message shown. Booking appears in the person's details.
 
 2. **Creating a booking with past date**
 
-   1. Test case: `book d/2020-01-01 10:00 c/Madam Chen n/John Doe`<br>
+   1. Test case: `book dt/2020-01-01 10:00 c/Madam Chen n/John Doe`<br>
       Expected: Booking is created successfully. Success message shown with cautionary message. "Note that this is a Booking is in the past!"
 
 3. **Creating a double booking**
 
    1. Prerequisites: Person "John Doe" already has a booking at 2025-12-25 10:00.
 
-   2. Test case: `book d/2025-12-25 10:00 c/Mr Lim n/John Doe desc/Another consultation`<br>
+   2. Test case: `book dt/2025-12-25 10:00 c/Mr Lim n/John Doe desc/Another consultation`<br>
       Expected: Error message about double booking is shown.
 
 4. **Creating a booking for non-existent person**
 
-   1. Test case: `book d/2025-12-25 10:00 c/Madam Chen n/NonExistentPerson`<br>
+   1. Test case: `book dt/2025-12-25 10:00 c/Madam Chen n/NonExistentPerson`<br>
       Expected: Error message "Person not found" is shown.
 
 ### Clearing all entries
