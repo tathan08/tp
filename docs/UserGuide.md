@@ -276,36 +276,44 @@ returns `Alice Tan` as she has a Booking on 2026-08-18 14:00. <br>
 
 ### Deleting a person : `delete`
 
-Remove a person from the contact list, or remove specific tag(s) from a person, or remove specific booking(s) from a person.
+Remove a person from the contact list, or remove specific tag(s) from a person, or remove a specific booking from a person.
 
-Format: `delete n/PERSON_NAME [t/TAG]…​ [b/BOOKING_INDEX]…​`
+Format: `delete n/PERSON_NAME [t/TAG]…​ [b/BOOKING_INDEX]​`
 
 * If only `n/PERSON_NAME` is provided, then the person is removed from the contact list.
 * If both `n/PERSON_NAME` and `t/TAG` is provided, then the specific tag(s) will be removed.
-* If both `n/PERSON_NAME` and `b/BOOKING_INDEX` is provided, then the specific booking(s) will be removed.
+* If both `n/PERSON_NAME` and `b/BOOKING_INDEX` is provided, then the specific booking will be removed.
 * Only tags that currently belong to the person will be deleted.
-* Booking indices refer to the booking number shown in the person's booking list (starting from 1).
+* Booking indices refer to the booking number shown in the person's booking list (starting from 1) as shown in GUI.
 * The name provided must exactly match (case-sensitive) a person in the contact list. e.g. `delete n/Alex` will not delete `Alex Yeoh`
 
 <div markdown="span" class="alert alert-warning">:exclamation: **Warning:**
-Person names are case-sensitive. `delete n/alice` will not delete `Alice Tan`. Use the exact name as shown in the contact list. If the person is not found, you'll see: "Could not find anyone named 'alice' in your address book. Please check the name and try again."
+Person names are case-sensitive. <br>
+`delete n/alice` will not delete `Alice Tan`. Use the exact name as shown in the contact list. <br>
+If the person is not found, you'll see: "Could not find anyone named 'alice' in your address book. Please check the name and try again."
 </div>
 
 <div markdown="span" class="alert alert-warning">:exclamation: **Warning:**
-You cannot use both `t/` (tags) and `b/` (bookings) in the same delete command. The command will fail with: "You can only delete either tags (t/) OR bookings (b/), not both at the same time!"
+You cannot use both `t/` (tags) and `b/` (bookings) in the same delete command. <br>
+The command will fail with: "You can only delete either tags (t/) OR bookings (b/), not both at the same time!"
 </div>
 
 <div markdown="span" class="alert alert-warning">:exclamation: **Warning:**
-Tag names cannot contain spaces. If you want to delete multiple tags, use separate `t/` prefixes. Example: `delete n/John t/friend t/colleague`. If you use spaces in a tag name, you'll see: "Tag names cannot contain spaces! If you want to delete multiple tags, use separate t/ prefixes."
+Tag names cannot contain spaces. If you want to delete multiple tags, use separate `t/` prefixes. Example: `delete n/John t/friend t/colleague`. <br>
+If you use spaces in a tag name, you'll see: "Tag names cannot contain spaces! If you want to delete multiple tags, use separate t/ prefixes."
 </div>
 
 Examples:
-* `delete n/Alex t/vipHandler` will remove the tag `vipHandler` from `Alex` in the contact list.
-* `delete n/Alex Yeoh b/1` will remove the first booking from `Alex Yeoh` in the contact list.
-* `delete n/Alex Yeoh` will remove `Alex Yeoh` from the contact list entirely. <br>
-  <img src="images/deleteMessage-UG.png" width="400px" alt="delete message">
+* `delete n/Alex t/vipHandler` <br>
+will remove the tag `vipHandler` from `Alex` in the contact list.
+* `delete n/Alex Yeoh` <br>
+will remove `Alex Yeoh` from the contact list entirely. 
 
-  *Figure 7: Success message after deleting a person from the contact list*
+
+* `delete n/Alex Yeoh b/1` <br>
+will remove the first booking from `Alex Yeoh` in the contact list. <br>
+<img src="images/deleteMessage-UG.png" width="700px" alt="delete message"> <br>
+*Figure 7: Success message after deleting a person from the contact list*
 
 ### Clearing all entries : `clear`
 
@@ -315,7 +323,7 @@ Format: `clear f/`
 
 * The command `clear` without the `f/` flag will display a warning message and will NOT delete any data.
 * You must use `clear f/` to confirm and execute the deletion of all contacts and bookings.
-* This two-step process helps prevent accidental data loss.
+* We did this to prevent users from accidentally deleting all their important data!
 
 <div markdown="span" class="alert alert-warning">:exclamation: **Warning:**
 The `clear f/` command permanently deletes ALL contacts and bookings. This action cannot be undone. Make sure to backup your data before using this command.
@@ -326,15 +334,13 @@ If you accidentally type `clear`, don't worry! The system will show you a warnin
 </div>
 
 Examples:
-* `clear` - Shows a warning message without deleting any data
-* `clear f/` - Clears all entries from the contact list
-
-<img src="images/clearMessage-UG.png" width="400px" alt="clear message warning">
-
+* `clear` - Shows a warning message without deleting any data <br>
+<img src="images/clearMessage-UG.png" width="400px" alt="clear message warning"> <br>
 *Figure 8: Warning message after user types in `clear`*
 
-<img src="images/clearf_UG.png" width="400px" alt="clear message">
 
+* `clear f/` - Clears all entries from the contact list <br>
+<img src="images/clearf_UG.png" width="400px" alt="clear message"> <br>
 *Figure 9: Success message after contact list has been cleared*
 
 
