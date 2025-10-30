@@ -1000,7 +1000,7 @@ testers are expected to do more *exploratory* testing.
    2. Test case: `delete n/john doe`<br>
       Expected: Error message "Person not found" is shown (case-sensitive).
 
-### Booking appointments
+### Booking Appointments
 
 1. **Creating a booking**
 
@@ -1012,7 +1012,7 @@ testers are expected to do more *exploratory* testing.
 2. **Creating a booking with past date**
 
    1. Test case: `book d/2020-01-01 10:00 c/Madam Chen n/John Doe`<br>
-      Expected: Error message "Invalid date: must be in format YYYY-MM-DD HH:MM and in the future" is shown.
+      Expected: Booking is created successfully. Success message shown with cautionary message. "Note that this is a Booking is in the past!"
 
 3. **Creating a double booking**
 
