@@ -353,34 +353,42 @@ Format: `book dt/DATETIME c/CLIENT_NAME n/PERSON_NAME [desc/DESCRIPTION]`
 * Name of person provided must be in the current contact list.
 * Client name can contain letters, numbers, spaces, apostrophes, hyphens, periods, and slashes. e.g. `s/o` (son of), `d/o` (daughter of). Must be 1-100 characters and contain at least one letter.
 * Datetime must be in `YYYY-MM-DD HH:MM` format in 24-hour notation.
+* The keyword (delimiter) here is `dt/` as it includes both date and time.
 
 <div markdown="span" class="alert alert-info">:information_source: **Time Format:**
-Time must be in 24-hour format (HH:MM). Use `14:00` for 2:00 PM, `09:00` for 9:00 AM. Minutes are required even for on-the-hour times (e.g., `10:00`, not `10`).
+Time must be in 24-hour format (HH:MM). <br>
+Use `14:00` for 2:00 PM, `09:00` for 9:00 AM. <br>
+Minutes are required even for on-the-hour times (e.g., `10:00`, not `10`).
 </div>
 
 <div markdown="span" class="alert alert-info">:information_source: **Past Dates:**
-Bookings can be created for past dates, for record-keeping purposes. When booking a past date, a warning message will be displayed: "Note that this is a Booking that is in the past!" to remind you that this appointment has already occurred.
+Bookings can be created for past dates, for record-keeping purposes. <br>
+When booking a past date, a warning message will be displayed: "Note that this is a Booking that is in the past!" to remind you that this appointment has already occurred.
 
-Additionally, past bookings will appear greyed out (with reduced opacity) in the contact list to visually distinguish them from future appointments. The bookings are sorted with future bookings at the top (in chronological order) and past bookings at the bottom (also in chronological order).
+Additionally, past bookings will appear greyed out (with reduced opacity) in the contact list to visually distinguish them from future appointments. <br>
+The bookings are sorted with future bookings at the top (in chronological order) and past bookings at the bottom (also in chronological order).
 </div>
 
 <div markdown="span" class="alert alert-warning">:exclamation: **Warning:**
-Dates must be valid calendar dates. Invalid dates like 2026-02-31 will be rejected with: "Invalid date/time format or value! Please use the format: YYYY-MM-DD HH:MM (e.g., 2024-12-25 14:30).
+Dates must be valid calendar dates. <br>
+Invalid dates like 2026-02-31 will be rejected with: "Invalid date/time format or value! Please use the format: YYYY-MM-DD HH:MM (e.g., 2024-12-25 14:30)."
 </div>
 
 Examples:
 
-* `book dt/2025-09-20 10:30 c/Madam Chen n/Bob Lee` will assign a booking on 20th September 2025 10.30am to Bob Lee. The client will be Madam Chen.
-* `book dt/2025-10-18 14:00 c/Mr Lim n/Alice Tan desc/first consultation` will assign a booking on 18th October 2025 2pm to Alice Tan. The client will be Mr Lim and the description is "first consultation".
-* `book dt/2020-10-26 17:00 c/Mr Lim n/Alice Yeoh desc/backdated` will create a booking for a past date (26th October 2020). <br>
-  The result message will be: "Booked: Alice Yeoh with client 'Mr Lim' at 2020-10-26 17:00 [backdated]. Note that this is a Booking that is in the past!"
-* `book dt/2025-11-15 15:00 c/Raj s/o Kumar n/Abhijay s/o Abhi desc/follow-up` will assign a booking on 15th November 2025 3pm to Abhijay s/o Abhi. The client Raj s/o Kumar (with slash for "son of") and the description is "follow-up". <br>
-  <img src="images/bookMessage-UG.png" width="400px" alt="clear message">
+* `book dt/2020-10-26 17:00 c/Mr Lim n/Alice Yeoh desc/backdated` <br>
+will create a booking for a past date (26th October 2020). <br>
+The result message will be: "Booked: Alice Yeoh with client 'Mr Lim' at 2020-10-26 17:00 [backdated]. Note that this is a Booking that is in the past!"
 
-  *Figure 10: Success message after creating a new booking*
+
+* `book dt/2025-09-20 10:30 c/Madam Chen n/Bob Lee` <br>
+will assign a booking on 20th September 2025 10.30am to Bob Lee. The client will be Madam Chen. <br>
+<img src="images/bookMessage-UG.png" width="700px" alt="clear message"> <br>
+*Figure 10: Success message after creating a new booking*
 
 <div markdown="span" class="alert alert-warning">:exclamation: **Warning:**
-Double booking is not allowed. If you try to book the same person at the same time, you'll see: "This person already has a booking at this time. Please choose a different time slot."
+Double booking is not allowed! <br>
+If you try to add a Booking to someone who's busy at the same date and time, you'll see: "This person already has a booking at this time. Please choose a different time slot."
 </div>
 
 ### Exiting the program : `exit`
@@ -452,14 +460,14 @@ If you do want an empty phone number, set the phone number to "-"!
 
 --------------------------------------------------------------------------------------------------------------------
 
-## Known issues
+## Known Issues
 
 1. **When using multiple screens**, if you move the application to a secondary screen, and later switch to using only the primary screen, the GUI will open off-screen. The remedy is to delete the `preferences.json` file created by the application before running the application again.
 2. **If you minimize the Help Window** and then run the `help` command (or use the `Help` menu, or the keyboard shortcut `F1`) again, the original Help Window will remain minimized, and no new Help Window will appear. The remedy is to manually restore the minimized Help Window.
 
 --------------------------------------------------------------------------------------------------------------------
 
-## Command summary
+## Command Summary
 
 Action | Format, Examples
 --------|------------------
@@ -467,7 +475,7 @@ Action | Format, Examples
 **Add** | `add n/NAME p/PHONE_NUMBER e/EMAIL [t/TAG]…​` <br> e.g., `add n/Alice Tan p/98702930 e/alicetan@gmail.com t/teamLead t/vipHandler`
 **List** | `list`
 **Edit** | `edit n/OLD_NAME [n/NEW_NAME] [p/PHONE_NUMBER] [e/EMAIL] [t/TAG]…​`<br> e.g.,`edit n/John Doe n/Jane Doe p/91234567 e/janedoe@example.com`
-**Find** | `find n/NAME` or `find t/TAG1 t/TAG2...` or `find d/DATE1 d/DATE2...`<br> e.g., `find n/John` or `find d/2025-08-18`
+**Find** | `find n/NAME` or `find t/TAG1 [t/TAG2]…` or `find d/DATE1 [d/DATE2]…`<br> e.g., `find n/John` or `find d/2025-08-18`
 **Delete** | `delete n/PERSON_NAME [t/TAG]…​ [b/BOOKING_INDEX]…​`<br> e.g., `delete n/Alex Yeoh` or `delete n/Alex t/vipHandler` or `delete n/Alex Yeoh b/1`
 **Clear** | `clear f/`
 **Book** | `book dt/DATETIME c/CLIENT_NAME n/PERSON_NAME [desc/DESCRIPTION]` <br> e.g., `book dt/2025-09-18 14:00 c/Mr Lim n/Alice Tan desc/first consultation`
