@@ -83,7 +83,7 @@ public class ParserUtilTest {
     // BVA: name length 101 (invalid)
     public void parseName_exceedsMaxLength_throwsParseException() {
         String hundredOneAs = "A".repeat(101);
-        assertThrows(ParseException.class, () -> ParserUtil.parseName(hundredOneAs));
+        assertThrows(IllegalArgumentException.class, () -> ParserUtil.parseName(hundredOneAs));
     }
 
     @Test
