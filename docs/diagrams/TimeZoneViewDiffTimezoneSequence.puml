@@ -7,7 +7,7 @@ Participant ":UI" as ui UI_COLOR
 Participant ":Logic" as logic LOGIC_COLOR
 Participant ":Model" as model MODEL_COLOR
 
-user -[USER_COLOR]> ui : "viewbookings timezone America/New_York"
+user -[USER_COLOR]> ui : "settimezone timezone America/New_York"
 activate ui UI_COLOR
 
 ui -[UI_COLOR]> logic : execute(settimezone)
