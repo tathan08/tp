@@ -313,6 +313,7 @@ The reschedule mechanism allows users to update the datetime of an existing book
 
   - Booking ID exists.
   - Team member name (`n/`) matches the name in the booking. (New consideration)
+
 ----
 
 ### \[Proposed\] Edit Booking Clients/Description
