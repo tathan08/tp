@@ -5,12 +5,6 @@ title: Developer Guide
 
 --------------------------------------------------------------------------------------------------------------------
 
-## **Acknowledgements**
-
-* {list here sources of all reused/adapted ideas, code, documentation, and third-party libraries -- include links to the original source as well}
-
---------------------------------------------------------------------------------------------------------------------
-
 ## **Setting up, getting started**
 
 Refer to the guide [_Setting up and getting started_](SettingUp.md).
@@ -26,7 +20,7 @@ Refer to the guide [_Setting up and getting started_](SettingUp.md).
 
 ### Architecture
 
-<img src="images/ArchitectureDiagram.png" width="280" />
+<img src="images/ArchitectureDiagram.png"/>
 
 The ***Architecture Diagram*** given above explains the high-level design of the App.
 
@@ -51,7 +45,7 @@ The bulk of the app's work is done by the following four components:
 
 The *Sequence Diagram* below shows how the components interact with each other for the scenario where the user issues the command `delete 1`.
 
-<img src="images/ArchitectureSequenceDiagram.png" width="574" />
+<img src="images/ArchitectureSequenceDiagram.png"/>
 
 Each of the four main components (also shown in the diagram above),
 
@@ -60,7 +54,7 @@ Each of the four main components (also shown in the diagram above),
 
 For example, the `Logic` component defines its API in the `Logic.java` interface and implements its functionality using the `LogicManager.java` class which follows the `Logic` interface. Other components interact with a given component through its interface rather than the concrete class (reason: to prevent outside component's being coupled to the implementation of a component), as illustrated in the (partial) class diagram below.
 
-<img src="images/ComponentManagers.png" width="300" />
+<img src="images/ComponentManagers.png"/>
 
 The sections below give more details of each component.
 
@@ -87,7 +81,7 @@ The `UI` component,
 
 Here's a (partial) class diagram of the `Logic` component:
 
-<img src="images/LogicClassDiagram.png" width="550"/>
+<img src="images/LogicClassDiagram.png"/>
 
 The sequence diagram below illustrates the interactions within the `Logic` component, taking `execute("delete 1")` API call as an example.
 
@@ -106,7 +100,7 @@ How the `Logic` component works:
 
 Here are the other classes in `Logic` (omitted from the class diagram above) that are used for parsing a user command:
 
-<img src="images/ParserClasses.png" width="600"/>
+<img src="images/ParserClasses.png"/>
 
 How the parsing works:
 * When called upon to parse a user command, the `AddressBookParser` class creates an `XYZCommandParser` (`XYZ` is a placeholder for the specific command name e.g., `AddCommandParser`) which uses the other classes shown above to parse the user command and create a `XYZCommand` object (e.g., `AddCommand`) which the `AddressBookParser` returns back as a `Command` object.
@@ -115,7 +109,7 @@ How the parsing works:
 ### Model component
 **API** : [`Model.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/model/Model.java)
 
-<img src="images/ModelClassDiagram.png" width="450" />
+<img src="images/ModelClassDiagram.png"/>
 
 
 The `Model` component,
@@ -129,7 +123,7 @@ The `Model` component,
 
 <div markdown="span" class="alert alert-info">:information_source: **Note:** An alternative (arguably, a more OOP) model is given below. It has a `Tag` list in the `AddressBook`, which `Person` references. This allows `AddressBook` to only require one `Tag` object per unique tag, instead of each `Person` needing their own `Tag` objects.<br>
 
-<img src="images/BetterModelClassDiagram.png" width="450" />
+<img src="images/BetterModelClassDiagram.png"/>
 
 </div>
 
@@ -137,7 +131,7 @@ The `Model` component,
 
 **API** : [`Storage.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/storage/Storage.java)
 
-<img src="images/StorageClassDiagramNew.png" width="550" />
+<img src="images/StorageClassDiagramNew.png"/>
 
 The `Storage` component,
 * can save both address book data and user preference data in JSON format, and read them back into corresponding objects.
@@ -192,7 +186,7 @@ Prefix before every value. It trades a small amount of typing for predictable pa
 
 --------------------------------------------------------------------------------------------------------------------
 
-## **Implementation**
+## **Proposed Features**
 
 This section describes some noteworthy details on how certain features are implemented.
 
@@ -263,7 +257,7 @@ Step 6. The user executes `clear`, which calls `Model#commitAddressBook()`. Sinc
 
 The following activity diagram summarizes what happens when a user executes a new command:
 
-<img src="images/CommitActivityDiagram.png" width="250" />
+<img src="images/CommitActivityDiagram.png"/>
 
 #### Design considerations:
 
@@ -291,25 +285,24 @@ The reschedule mechanism allows users to update the datetime of an existing book
   - `Booking#setDateTime(LocalDateTime newDateTime)` — Updates the datetime field of a booking.
   - Optional undo support: Track changes in `VersionedAddressBook` to allow undo/redo of reschedules.
 
------
 
-## Usage Scenario
+#### Usage Scenario
 
 1.  The user views all bookings and identifies one to reschedule (e.g., a booking for Carl Kurz).
 
 2.  Executes the command:
 
     ```
-     reschedule 2 n/Carl d/2025-10-25 1100
+     reschedule n/Carl Kurz b/2 dt/2025-10-25 14:00
     ```
 
     Where:
 
     `b/2` = booking ID
 
-    `n/Carl` = team member name (added for clarity and verification)
+    `n/Carl Kurz` = team member name (added for clarity and verification)
 
-    `d/2025-10-25 14:00` = new datetime
+    `dt/2025-10-25 14:00` = new datetime
 
     The Logic component parses the command and calls:
 
@@ -334,57 +327,30 @@ The reschedule mechanism allows users to update the datetime of an existing book
         Booking rescheduled successfully: Carl Kurz, new datetime: 2025-10-25 14:00
         ```
 
-      - **Failure Example:** Appropriate error message.
+      - **Failure Example:** Appropriate error message. <br>
+    
+    <img src="images/RescheduleDiagram.png"/> <br>
+    
+    **Sequence Diagram for Reschedule Command**
 
+#### Design Considerations
 
-<img src="images/RescheduleDiagram.png"/>
-
------
-
-## Design Considerations
-
-### Conflict Detection:
+**Conflict Detection:**
 
   - Ensure the updated datetime does not conflict with other bookings for the same team member.
   - Conflicts prevent the reschedule.
 
-### Undo/Redo Support:
+**Undo/Redo Support:**
 
   - Optional integration with **VersionedAddressBook**.
   - Call `Model#commitAddressBook()` after a successful reschedule.
 
-### Parameter Validation:
+**Parameter Validation:**
 
   - Booking ID exists.
-  - **Team member name (`n/`) matches the name in the booking.** (New consideration)
-  - New datetime is properly formatted and in the future.
-  - Team member availability at the new datetime.
+  - Team member name (`n/`) matches the name in the booking. (New consideration)
 
-### Atomicity:
-
-  - Reschedule is **all-or-nothing**: either fully applied or not applied at all.
-
------
-
-## Extensions / Error Cases
-
-  - **Booking does not exist:**
-    Error: "Booking ID not found"
-
-  - **Double booking:**
-    Error: "Team member is already booked at the requested time"
-
-  - **Invalid datetime format:**
-    Error: "Invalid datetime format. Use YYYY-MM-DD HH:MM"
-
-  - **Past datetime:**
-    Error: "Cannot reschedule booking to a past datetime"
-
-  - **Missing parameters:**
-    Error: "Booking ID and new datetime are required for rescheduling"
-
-  - **Unknown parameter:**
-    Error: "Unknown parameter. Valid parameters are b/ (booking ID), n/ (team member name), d/ (new datetime)" (Updated list)
+----
 
 ### \[Proposed\] Edit Booking Clients/Description
 
@@ -398,23 +364,23 @@ The edit booking mechanism allows users to update the client name or description
   - `Booking#setClientName(String newClientName)` — Updates the client name field of a booking.
   - `Booking#setDescription(String newDescription)` — Updates the description field of a booking.
 
------
 
-## Usage Scenario
+
+#### Usage Scenario
 
 1.  The user views all bookings and identifies one to edit (e.g., a booking for Carl Kurz).
 
 2.  Executes the command:
 
     ```
-     editbooking 2 n/Carl c/Madam Wong desc/Updated consultation details
+     editbooking n/Carl Kurz b/2 c/Madam Wong desc/Updated consultation details
     ```
 
     Where:
 
-    `2` = booking ID
+    `b/2` = booking ID
 
-    `n/Carl` = team member name (for verification)
+    `n/Carl Kurz` = team member name (for verification)
 
     `c/Madam Wong` = new client name
 
@@ -445,28 +411,29 @@ The edit booking mechanism allows users to update the client name or description
 
       - **Failure Example:** Appropriate error message.
 
------
+    <img src="images/EditBookingProposedSequence.png"/> <br>
+    
+    **Sequence Diagram for Edit Booking Command**
 
-## Design Considerations
 
-### Field Validation:
+#### Design Considerations
+
+**Field Validation:**
 
   - Client name must follow the same validation rules as new bookings.
   - Description must follow the same validation rules as new bookings.
   - At least one field must be provided for update.
 
-### Undo/Redo Support:
+**Undo/Redo Support:**
 
   - Integration with **VersionedAddressBook**.
   - Call `Model#commitAddressBook()` after a successful edit.
 
-### Atomicity:
+**Atomicity:**
 
   - Edit booking is **all-or-nothing**: either fully applied or not applied at all.
 
------
-
-## Extensions / Error Cases
+#### Extensions / Error Cases
 
   - **Booking does not exist:**
     Error: "Booking ID not found"
@@ -483,6 +450,8 @@ The edit booking mechanism allows users to update the client name or description
   - **Team member mismatch:**
     Error: "Team member name does not match the booking"
 
+---
+
 ### \[Proposed\] Timezone Support
 
 #### Proposed Implementation
@@ -495,63 +464,58 @@ The timezone mechanism allows users to work with bookings across different timez
   - `Booking#getDateTimeInTimezone(ZoneId timezone)` — Returns booking datetime converted to specified timezone.
   - `Booking#createBookingWithTimezone(String clientName, LocalDateTime datetime, String description, ZoneId timezone)` — Creates booking with timezone awareness.
 
------
 
-## Usage Scenario
+#### Usage Scenario
 
-1.  The user sets their preferred timezone:
+1.  The user sets their preferred timezone: `settimezone Asia/Singapore` <br>
+    <img src="images/TimeZoneSetTimeZoneSequence.png"/> <br>
 
-    ```
-     settimezone Asia/Singapore
-    ```
+    **Sequence Diagram for Setting Preferred Timezone**
 
-2.  The user creates a booking:
 
-    ```
-     book d/2025-09-20 10:30 c/Madam Chen n/Bob Lee desc/consultation
-    ```
+2.  The user creates a booking: `book dt/2025-09-20 10:30 c/Madam Chen n/Bob Lee` <br>
 
-    The system stores the booking in the user's timezone and can display it in other timezones when needed.
+    The system stores the booking in the user's timezone and can display it in other timezones when needed. <br>
+    <img src="images/TimeZoneCreateBookingSequence.png"/> <br>
 
-3.  The user views bookings in a different timezone:
+    **Sequence Diagram for Creating Booking with Timezone Preferences**
 
-    ```
-     viewbookings timezone America/New_York
-    ```
 
-    All booking times are automatically converted and displayed in the specified timezone.
+3.  The user views bookings in a different timezone: `settimezone timezone America/New_York` <br>
 
------
+    All booking times are automatically converted and displayed in the specified timezone. <br>
+    <img src="images/TimeZoneViewDiffTimezoneSequence.png"/> <br>
 
-## Design Considerations
+    **Sequence Diagram for Viewing Bookings in Different Timezone**
 
-### Timezone Storage:
+
+#### Design Considerations
+
+**Timezone Storage:**
 
   - Store all booking datetimes in UTC internally.
   - Convert to user's preferred timezone for display.
   - Allow temporary timezone switching for viewing.
 
-### User Preferences:
+**User Preferences:**
 
   - Store user's default timezone in `UserPrefs`.
   - Allow timezone changes without affecting existing bookings.
   - Provide timezone validation and error handling.
 
-### Display Format:
+**Display Format:**
 
   - Show timezone information in booking displays.
   - Provide clear indication when times are converted.
   - Support multiple timezone formats (e.g., UTC+8, Asia/Singapore).
 
-### Data Migration:
+**Data Migration:**
 
   - Existing bookings without timezone information default to UTC.
   - Provide migration tools for existing data.
   - Maintain backward compatibility.
 
------
-
-## Extensions / Error Cases
+#### Extensions / Error Cases
 
   - **Invalid timezone:**
     Error: "Invalid timezone format. Use format like 'Asia/Singapore' or 'UTC+8'"
@@ -564,6 +528,47 @@ The timezone mechanism allows users to work with bookings across different timez
 
   - **Missing timezone:**
     Error: "Please set your preferred timezone using 'settimezone' command"
+
+---
+
+### \[Proposed\] Find Booking
+
+#### Proposed Implementation
+
+Highlights relevant bookings to users searching by client name using `find`.
+
+**Operations:**
+
+  - `Model#markBookings(Predicate<Person> predicate)` — Mark all relevant bookings that match search criteria
+  - `UI#highlightBookings()` — Highlights all relevant bookings
+
+#### Usage Scenario
+
+1.  The user uses `find` command to search for bookings under a specific client: `find c/Mr Tan` <br>
+    <img src="images/FindBookingbyClientProposedSequence.png"/> <br>
+
+    **Sequence Diagram for Finding Booking by Client Name**
+
+#### Design Considerations
+
+**Display Format:**
+
+-  Provide clear indication to the relevant bookings by shifting it to the top of the booking list and with a highlight.
+-  Only list contacts with the search criteria.
+-  Ensure that all other bookings under the same contact are still present.
+
+**Booking Storage:**
+
+-  Ensure that the contents of the booking lists are not modified.
+-  Uses a copy of the list of booking to modify the display sequence.
+
+#### Extensions/ Error Cases
+
+ - **Date not found:**
+    Error: "No bookings with the input date found."
+
+ - **Person not found:**
+    Error: "No searches matching the input name found"
 
 
 --------------------------------------------------------------------------------------------------------------------
@@ -623,6 +628,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 ### **Use Case: Add a Person**
 
 **System**: FirstImpressions
+
 **Actor**: User
 
 #### **Main Success Scenario (MSS):**
@@ -631,7 +637,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 3. FirstImpressions adds person to the list
 4. Use case ends
 
-<img src="images/add-DG.png" width="400px" alt="add person">
+<img src="images/add-DG.png" alt="add person" width="700">
 
 **Extensions**
 
@@ -658,7 +664,8 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 ### **Use Case: Delete a Person**
 
-**System**: FirstImpressions \
+**System**: FirstImpressions
+
 **Actor**: User
 
 #### **Main Success Scenario (MSS):**
@@ -667,7 +674,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 3. FirstImpressions deletes person in the list
 4. Use case ends
 
-<img src="images/delete-DG.png" width="400px" alt="delete person">
+<img src="images/delete-DG.png" alt="delete person" width="700">
 
 **Extensions**
 
@@ -682,7 +689,8 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 ### **Use Case: Book a Person**
 
-**System**: FirstImpressions \
+**System**: FirstImpressions
+
 **Actor**: User
 
 #### **Main Success Scenario (MSS):**
@@ -691,7 +699,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 3. FirstImpressions adds booking to team member
 4. Use case ends
 
-<img src="images/book-DG.png" width="400px" alt="book person">
+<img src="images/book-DG.png" alt="book person" width="700">
 
 **Extensions**
 
@@ -719,6 +727,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 ### **Use Case: Find a Person**
 
 **System**: FirstImpressions
+
 **Actor**: User
 
 ---
@@ -813,7 +822,8 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 ### **Use Case: Help Menu**
 
-**System**: FirstImpressions \
+**System**: FirstImpressions
+
 **Actor**: User
 
 #### **Main Success Scenario (MSS):**
@@ -821,7 +831,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 2. FirstImpressions shows pop-up menu with all command usage
 3. Use case ends
 
-<img src="images/help-DG.png" width="400px" alt="help">
+<img src="images/help-DG.png" alt="help" width="700">
 
 
 
@@ -845,10 +855,6 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 16. Should log all system errors to a local file with timestamps.
 17. Should not exceed 100MB in log file size.
 
-
-*{More to be added}*
-
----
 
 ### Glossary
 
@@ -874,21 +880,18 @@ testers are expected to do more *exploratory* testing.
 
    1. Download the jar file and copy into an empty folder
 
-   1. Double-click the jar file Expected: Shows the GUI with a set of sample contacts. The window size may not be optimum.
+   1. Open a command terminal and navigate to the folder containing the jar file.
+
+   1. Run `java -jar firstimpressions.jar` <br>
+      Expected: Application launches successfully with the GUI. Shows the GUI with a set of sample contacts. The window size may not be optimum.
 
 1. Saving window preferences
 
    1. Resize the window to an optimum size. Move the window to a different location. Close the window.
 
-   1. Re-launch the app by double-clicking the jar file.<br>
+   2. Re-launch the app by double-clicking the jar file.<br>
        Expected: The most recent window size and location is retained.
 
-1. **Command line launch**
-
-   1. Open a command terminal and navigate to the folder containing the jar file.
-
-   1. Run `java -jar firstimpressions.jar`<br>
-      Expected: Application launches successfully with the GUI.
 
 ### Adding a person
 
@@ -987,30 +990,30 @@ testers are expected to do more *exploratory* testing.
    2. Test case: `delete n/john doe`<br>
       Expected: Error message "Person not found" is shown (case-sensitive).
 
-### Booking appointments
+### Booking Appointments
 
 1. **Creating a booking**
 
    1. Prerequisites: At least one person exists in the contact list.
 
-   2. Test case: `book d/2025-12-25 10:00 c/Madam Chen n/John Doe desc/Consultation`<br>
+   2. Test case: `book dt/2025-12-25 10:00 c/Madam Chen n/John Doe desc/Consultation`<br>
       Expected: Booking is created successfully. Success message shown. Booking appears in the person's details.
 
 2. **Creating a booking with past date**
 
-   1. Test case: `book d/2020-01-01 10:00 c/Madam Chen n/John Doe`<br>
-      Expected: Error message "Invalid date: must be in format YYYY-MM-DD HH:MM and in the future" is shown.
+   1. Test case: `book dt/2020-01-01 10:00 c/Madam Chen n/John Doe`<br>
+      Expected: Booking is created successfully. Success message shown with cautionary message. "Note that this is a Booking is in the past!"
 
 3. **Creating a double booking**
 
    1. Prerequisites: Person "John Doe" already has a booking at 2025-12-25 10:00.
 
-   2. Test case: `book d/2025-12-25 10:00 c/Mr Lim n/John Doe desc/Another consultation`<br>
+   2. Test case: `book dt/2025-12-25 10:00 c/Mr Lim n/John Doe desc/Another consultation`<br>
       Expected: Error message about double booking is shown.
 
 4. **Creating a booking for non-existent person**
 
-   1. Test case: `book d/2025-12-25 10:00 c/Madam Chen n/NonExistentPerson`<br>
+   1. Test case: `book dt/2025-12-25 10:00 c/Madam Chen n/NonExistentPerson`<br>
       Expected: Error message "Person not found" is shown.
 
 ### Clearing all entries
@@ -1019,7 +1022,7 @@ testers are expected to do more *exploratory* testing.
 
    1. Prerequisites: Multiple persons and bookings exist in the address book.
 
-   2. Test case: `clear`<br>
+   2. Test case: `clear f/`<br>
       Expected: All persons and bookings are removed. Success message shown. Contact list becomes empty.
 
 ### Saving data
