@@ -3,6 +3,30 @@ layout: page
 title: User Guide
 ---
 
+<div class="print-toc" markdown="1">
+
+## Table of Contents
+
+* [Introduction](#introduction)
+* [Quick start](#quick-start)
+* [Features](#features)
+  * [Viewing help : `help`](#viewing-help--help)
+  * [Adding a person: `add`](#adding-a-person-add)
+  * [Adding a tag to an existing person: `add`](#adding-a-tag-to-an-existing-person-add)
+  * [Listing all persons : `list`](#listing-all-persons--list)
+  * [Editing a person : `edit`](#editing-a-person--edit)
+  * [Locating team members by name: `find`](#locating-team-members-by-name-find)
+  * [Deleting a person : `delete`](#deleting-a-person--delete)
+  * [Clearing all entries : `clear`](#clearing-all-entries--clear)
+  * [Assigning a booking : `book`](#assigning-a-booking--book)
+  * [Exiting the program : `exit`](#exiting-the-program--exit)
+* [Data Management](#data-management)
+* [FAQ](#faq)
+* [Known Issues](#known-issues)
+* [Command Summary](#command-summary)
+
+</div>
+
 ## Introduction
 
 **FirstImpressions** is a **desktop app for managing contacts, optimized for use via a Command Line Interface** (CLI) while still having the benefits of a Graphical User Interface (GUI).
@@ -310,7 +334,7 @@ Examples:
 * `delete n/Alex t/vipHandler` <br>
 will remove the tag `vipHandler` from `Alex` in the contact list.
 * `delete n/Alex Yeoh` <br>
-will remove `Alex Yeoh` from the contact list entirely. 
+will remove `Alex Yeoh` from the contact list entirely.
 
 
 * `delete n/Alex Yeoh b/1` <br>

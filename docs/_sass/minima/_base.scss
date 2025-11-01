@@ -291,5 +291,112 @@ table {
     content: "FirstImpressions";
     font-size: 32px;
   }
+
+  /**
+  * Hide sidebar completely when printing
+  */
+  .toc-sidebar {
+    display: none !important;
+  }
+
+  .nav-toggle {
+    display: none;
+  }
+
+  .progress-container {
+    display: none;
+  }
+
+  .back-to-top {
+    display: none;
+  }
+
+  /**
+  * Content takes full width when printing
+  */
+  .wrapper {
+    margin-left: auto !important;
+    margin-right: auto !important;
+    max-width: 100% !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+
+  .page-content {
+    margin-top: 0;
+    padding-top: 0;
+  }
+
+  /**
+  * Reduce space at top of page
+  */
+  .wrapper > h1:first-child,
+  .page-content h1:first-of-type {
+    margin-top: 5px !important;
+    padding-top: 5px !important;
+  }
+
+  /**
+  * Improved Table of Contents styling for print
+  */
+  .print-toc {
+    display: block !important;
+    margin-top: 5px;
+    margin-bottom: 30px;
+  }
+
+  .print-toc h2 {
+    font-size: 28px;
+    margin-bottom: 20px;
+    margin-top: 0;
+    color: #e46c0a;
+    border-bottom: 2px solid #333;
+    padding-bottom: 10px;
+  }
+
+  .print-toc > ul {
+    list-style: disc;
+    padding-left: 30px;
+    margin: 0;
+  }
+
+  .print-toc > ul > li {
+    margin: 8px 0;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .print-toc > ul > li > a {
+    color: #2196F3;
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  /* Nested list (subheadings under Features) */
+  .print-toc ul ul {
+    list-style: circle;
+    padding-left: 25px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+  }
+
+  .print-toc ul ul li {
+    margin: 5px 0;
+    font-size: 12px;
+    line-height: 1.5;
+  }
+
+  .print-toc ul ul li a {
+    color: #333;
+    text-decoration: none;
+    font-weight: normal;
+  }
+
+  .print-toc code {
+    background-color: #f0f0f0;
+    padding: 1px 4px;
+    border-radius: 3px;
+    font-size: 11px;
+  }
 }
 
