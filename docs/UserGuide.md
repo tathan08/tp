@@ -21,7 +21,7 @@ title: User Guide
   - [Adding tags to an existing person: `add`](#adding-tags-to-an-existing-person-add)
   - [Listing all persons : `list`](#listing-all-persons--list)
   - [Editing a person : `edit`](#editing-a-person--edit)
-  - [Locating team members by name: `find`](#locating-team-members-by-name-find)
+  - [Searching for persons or bookings : `find`](#searching-for-persons-or-bookings--find)
   - [Deleting a person : `delete`](#deleting-a-person--delete)
   - [Clearing all entries : `clear`](#clearing-all-entries--clear)
   - [Assigning a booking : `book`](#assigning-a-booking--book)
@@ -276,7 +276,7 @@ Edits the phone number of `Alice Tan` to be `+1 (555) 123-4567`. <br>
 <img src="images/editMessage-UG.png" width="700px" alt="edit message"> <br>
 *Figure 5: Success message after editing a person's details*
 
-### Locating team members by name: `find`
+### Searching for persons or bookings : `find`
 
 The `find` command offers a flexible way for users to filter the contact list by **name**, **tag**, and **scheduled date of bookings**. <br>
 
