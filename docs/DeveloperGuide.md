@@ -358,9 +358,9 @@ The reschedule mechanism allows users to update the datetime of an existing book
         ```
 
       - **Failure Example:** Appropriate error message. <br>
-    
+
     <img src="images/RescheduleDiagram.png"/> <br>
-    
+
     **Sequence Diagram for Reschedule Command**
 
 #### Design Considerations
@@ -442,9 +442,8 @@ The edit booking mechanism allows users to update the client name or description
       - **Failure Example:** Appropriate error message.
 
     <img src="images/EditBookingProposedSequence.png"/> <br>
-    
-    **Sequence Diagram for Edit Booking Command**
 
+    **Sequence Diagram for Edit Booking Command**
 
 #### Design Considerations
 

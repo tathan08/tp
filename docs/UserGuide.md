@@ -334,7 +334,7 @@ Examples:
 * `delete n/Alex t/vipHandler` <br>
 will remove the tag `vipHandler` from `Alex` in the contact list.
 * `delete n/Alex Yeoh` <br>
-will remove `Alex Yeoh` from the contact list entirely. 
+will remove `Alex Yeoh` from the contact list entirely.
 
 
 * `delete n/Alex Yeoh b/1` <br>
