@@ -7,23 +7,31 @@ title: User Guide
 
 ## Table of Contents
 
-* [Introduction](#introduction)
-* [Quick start](#quick-start)
-* [Features](#features)
-  * [Viewing help : `help`](#viewing-help--help)
-  * [Adding a person: `add`](#adding-a-person-add)
-  * [Adding a tag to an existing person: `add`](#adding-a-tag-to-an-existing-person-add)
-  * [Listing all persons : `list`](#listing-all-persons--list)
-  * [Editing a person : `edit`](#editing-a-person--edit)
-  * [Locating team members by name: `find`](#locating-team-members-by-name-find)
-  * [Deleting a person : `delete`](#deleting-a-person--delete)
-  * [Clearing all entries : `clear`](#clearing-all-entries--clear)
-  * [Assigning a booking : `book`](#assigning-a-booking--book)
-  * [Exiting the program : `exit`](#exiting-the-program--exit)
-* [Data Management](#data-management)
-* [FAQ](#faq)
-* [Known Issues](#known-issues)
-* [Command Summary](#command-summary)
+- [Table of Contents](#table-of-contents)
+- [Introduction](#introduction)
+  - [Target Users](#target-users)
+  - [User Proficiency Level](#user-proficiency-level)
+  - [What FirstImpressions Does](#what-firstimpressions-does)
+- [Quick start](#quick-start)
+  - [Prerequisites](#prerequisites)
+  - [Installation Steps](#installation-steps)
+- [Features](#features)
+  - [Viewing help : `help`](#viewing-help--help)
+  - [Adding a person: `add`](#adding-a-person-add)
+  - [Adding tags to an existing person: `add`](#adding-tags-to-an-existing-person-add)
+  - [Listing all persons : `list`](#listing-all-persons--list)
+  - [Editing a person : `edit`](#editing-a-person--edit)
+  - [Locating team members by name: `find`](#locating-team-members-by-name-find)
+  - [Deleting a person : `delete`](#deleting-a-person--delete)
+  - [Clearing all entries : `clear`](#clearing-all-entries--clear)
+  - [Assigning a booking : `book`](#assigning-a-booking--book)
+  - [Exiting the program : `exit`](#exiting-the-program--exit)
+- [Data Management](#data-management)
+  - [Saving the data](#saving-the-data)
+  - [Editing the data file](#editing-the-data-file)
+- [FAQ](#faq)
+- [Known Issues](#known-issues)
+- [Command Summary](#command-summary)
 
 </div>
 
@@ -201,16 +209,21 @@ Examples:
 <img src="images/addMessage-UG.png" width="700px" alt="add message"> <br>
 *Figure 2: Adding a new person to the contact list*
 
-### Adding a tag to an existing person: `add`
+### Adding tags to an existing person: `add`
 
-Adds a tag to an existing person.
+Adds tags to an existing person.
 
 Format: `add n/NAME t/TAG…​`
 
 * Consecutive spaces in name are removed. e.g. "Alice&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tan" will be read as `Alice Tan`.
-* Multiple  tags can be added at once by prefixing each tag with `t/`.
+* Multiple tags can be added at once by prefixing each tag with `t/`.
 * Tags must contain only letters and numbers, without spaces.
 * If person does not already exist in FirstImpressions, the person is created.
+
+<div markdown="span" class="alert alert-warning">:exclamation: **Warning:** Names used here must be case-sensitive! <br>
+`add n/Alice tan t/closer` will not add tags to `Alice Tan`. Use the exact name as shown in the contact list. <br>
+If the name does not match a current name in the contact list, a new Person will be created.
+</div>
 
 Examples:
 
