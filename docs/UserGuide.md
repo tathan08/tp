@@ -185,7 +185,7 @@ Format: `add n/NAME [p/PHONE_NUMBER] [e/EMAIL] [t/TAG]…​`
 <div markdown="span" class="alert alert-warning">:exclamation: **Warning:**
 Duplicate names are not allowed. Each person in the contact list must have a unique name. <br>
 In this case, try customising the names in a way that is easily identifiable to you! <br>
-For example: 1-Alice Tan, 2-Alice Tan
+For example: Alice Tan - Glasses, Alice Tan - No Glasses
 </div>
 
 <div markdown="span" class="alert alert-warning">:exclamation: **Warning:**
