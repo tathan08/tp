@@ -512,3 +512,14 @@ table tr:hover {
         height: 45px;
     }
 }
+
+/* ===== PRINT-ONLY TABLE OF CONTENTS ===== */
+.print-toc {
+    display: none;
+}
+
+@media screen {
+    .print-toc {
+        display: none !important;
+    }
+}
