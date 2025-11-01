@@ -3,6 +3,36 @@ layout: page
 title: Developer Guide
 ---
 
+<div class="print-toc" markdown="1">
+
+## Table of Contents
+
+* [Setting up, getting started](#setting-up-getting-started)
+* [Design](#design)
+  * [Architecture](#architecture)
+  * [UI component](#ui-component)
+  * [Logic component](#logic-component)
+  * [Model component](#model-component)
+  * [Storage component](#storage-component)
+  * [Common classes](#common-classes)
+  * [Design Choices](#design-choices)
+* [Proposed Features](#proposed-features)
+  * [[Proposed] Undo/redo feature](#proposed-undoredo-feature)
+  * [[Proposed] Reschedule Booking](#proposed-reschedule-booking)
+  * [[Proposed] Edit Booking Clients/Description](#proposed-edit-booking-clientsdescription)
+  * [[Proposed] Timezone Support](#proposed-timezone-support)
+  * [[Proposed] Find Booking](#proposed-find-booking)
+* [Documentation, logging, testing, configuration, dev-ops](#documentation-logging-testing-configuration-dev-ops)
+* [Appendix: Requirements](#appendix-requirements)
+  * [Product scope](#product-scope)
+  * [User stories](#user-stories)
+  * [Use cases](#use-cases)
+  * [Non-Functional Requirements](#non-functional-requirements)
+  * [Glossary](#glossary)
+* [Appendix: Instructions for manual testing](#appendix-instructions-for-manual-testing)
+
+</div>
+
 --------------------------------------------------------------------------------------------------------------------
 
 ## **Setting up, getting started**
@@ -623,15 +653,15 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | `* * *`  | user                                       | see all the different available team members         | I can see the options for what I need                                  |
 | `* *`    | user                                       | add descriptions to bookings                         | I can add context to assigned bookings                                 |
 
-# Use cases
+### Use cases
 
-### **Use Case: Add a Person**
+#### **Use Case: Add a Person**
 
 **System**: FirstImpressions
 
 **Actor**: User
 
-#### **Main Success Scenario (MSS):**
+##### **Main Success Scenario (MSS):**
 1. User checks list of all persons
 2. User requests to add specific person in the list
 3. FirstImpressions adds person to the list
@@ -662,13 +692,13 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
     Use case ends
 
 
-### **Use Case: Delete a Person**
+#### **Use Case: Delete a Person**
 
 **System**: FirstImpressions
 
 **Actor**: User
 
-#### **Main Success Scenario (MSS):**
+##### **Main Success Scenario (MSS):**
 1. User checks list of all persons
 2. User requests to delete specific person
 3. FirstImpressions deletes person in the list
@@ -687,13 +717,13 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
   Use case ends
 
 
-### **Use Case: Book a Person**
+#### **Use Case: Book a Person**
 
 **System**: FirstImpressions
 
 **Actor**: User
 
-#### **Main Success Scenario (MSS):**
+##### **Main Success Scenario (MSS):**
 1. User checks list of all persons
 2. User requests to book client to team member at specific datetime
 3. FirstImpressions adds booking to team member
@@ -724,7 +754,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
   Use case ends
 
 
-### **Use Case: Find a Person**
+#### **Use Case: Find a Person**
 
 **System**: FirstImpressions
 
@@ -732,7 +762,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 ---
 
-#### **Main Success Scenario (MSS) - Finding by Name**
+##### **Main Success Scenario (MSS) - Finding by Name**
 
 1. User requests to find persons by name using the `find n/NAME` command.
 2. *FirstImpressions* parses the name parameter and validates the format.
@@ -744,7 +774,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 5. Use case ends. <br>
 
 
-#### **Extensions (Name search)**
+**Extensions (Name search)**
 
 - **1a.** Unknown or invalid prefix provided. \
   FirstImpressions displays an error: "Invalid command format!" \
@@ -760,7 +790,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 - **3c.** Partial name provided. \
   FirstImpressions lists all persons whose names contain the given substring.
 
-#### **Main Success Scenario (MSS) - Finding by Tag**
+##### **Main Success Scenario (MSS) - Finding by Tag**
 
 1. User requests to find persons by tag using the `find t/TAG` command.
 2. *FirstImpressions* parses the tag parameter and validates the format.
@@ -771,7 +801,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 > Found 2 person(s) matching your search!
 5. Use case ends. <br>
 
-#### **Extensions (Tag search)**
+**Extensions (Tag search)**
 
 - **1a.** Unknown or invalid prefix provided. \
   FirstImpressions displays an error: "Invalid command format!" \
@@ -788,7 +818,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
   FirstImpressions combines criteria (logical OR semantics) to refine results.
 
 
-#### **Main Success Scenario (MSS) - Finding by Date**
+##### **Main Success Scenario (MSS) - Finding by Date**
 
 1. User requests to find persons by booking date using the `find d/YYYY-MM-DD` command.
 2. *FirstImpressions* parses the date parameter and validates the format.
@@ -799,7 +829,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 > Found 1 person(s) matching your search!
 5. Use case ends. <br>
 
-#### **Extensions (Date search)**
+**Extensions (Date search)**
 
 - **1a.** Unknown or invalid prefix provided. \
   FirstImpressions displays an error: "Invalid command format!" \
@@ -820,13 +850,13 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 ---
 
-### **Use Case: Help Menu**
+#### **Use Case: Help Menu**
 
 **System**: FirstImpressions
 
 **Actor**: User
 
-#### **Main Success Scenario (MSS):**
+##### **Main Success Scenario (MSS):**
 1. User requests for help menu
 2. FirstImpressions shows pop-up menu with all command usage
 3. Use case ends
